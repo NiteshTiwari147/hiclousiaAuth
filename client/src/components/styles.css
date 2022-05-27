@@ -1,0 +1,56 @@
+.container {
+    background-color: #f8f8f8;
+    width: 75%;
+}
+
+.navigationBar {
+    height: 5rem;
+    background-color: #ffffff;
+}
+
+.navigationBarContent {
+    margin: 0rem 1rem 0rem 4rem;
+    align-items: center;
+    justify-content: flex-start;
+}
+.companyLogo{
+    font-weight: 1000;
+    font-family: system-ui;
+    color: #1072EB !important;
+}
+
+.headerBtn {
+    color: #1072EB;
+    font-weight: 500;
+    font-size: large;
+}
+
+.headerText {
+    color: #1072EB;
+    font-size: small;
+    margin-top: 2px;
+    margin-right: 10px;
+}
+
+.signUp {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.signupbtn {
+    justify-content: center;
+    font-size: larger;
+    font-weight: 500;
+}
+
+.signUpTitle {
+    display: inline-table;
+    margin: 3rem;
+}
+
+.fillBox {
+    justify-content: center;
+    font-weight: 500;
+}
