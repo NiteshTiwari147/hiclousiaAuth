@@ -9,7 +9,7 @@ module.exports = app => {
     app.get('/fetch/Candidate', async function(req,res, done) {
         const basicInfo = mongoose.model('basicInfo');
         try {
-            if(req.user.googleId) {
+            if(req && req.user && req.user.googleId) {
                 const candidate = await basicInfo.findOne({googleId: req.user.googleId})
                 res.send(candidate);
             }

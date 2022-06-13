@@ -10,18 +10,6 @@ class CandidateForm extends Component {
 
         this.state = { errors: [], firstName: '', lastName: '', age: '', location: '', contactNumber: '', address: ''}
     }
-    componentDidMount() {
-        this.props.sendBasicInfo({          
-            value: {
-                firstName: 'Nitesh',
-                lastName: 'Tiwari',
-                age: '26',
-                location: 'bangalore',
-                contactNumber: '9131373287',
-                address: 'gwalior'
-            }      
-        });
-    }
     onSubmit() {
         this.props.sendBasicInfo({          
             value: {
