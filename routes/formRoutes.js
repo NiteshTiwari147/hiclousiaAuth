@@ -24,6 +24,7 @@ module.exports = app => {
         const basicInfo = mongoose.model('basicInfo');
         const { firstName, lastName, age, location, contactNumber, address } = req.body;
         const { googleId, email } = req.user;
+        console.log("Creting candidate updated")
         const response = await new basicInfo({googleId, email, firstName, lastName, age, location, contactNumber, address}).save(); 
         res.send(req.user);
     })
