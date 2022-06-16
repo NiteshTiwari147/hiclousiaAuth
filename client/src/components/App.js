@@ -15,6 +15,10 @@ const Dashboard = () => <SignUp />
 class App extends Component {
     componentDidMount() {
         this.props.fetchUser();
+        this.props.fetchCandidate();
+        this.props.fetchEducation();
+        this.props.fetchProject();
+        this.props.fetchExperience();
     }
     render() {
         return (
