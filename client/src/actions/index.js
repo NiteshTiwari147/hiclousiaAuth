@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FETCH_USER,FETCH_CANDIDATE } from './types';
+import { FETCH_USER,FETCH_CANDIDATE,FETCH_EDUCATION,FETCH_EXPERIENCE,FETCH_PROJECT } from './types';
 
 export const fetchUser = () => async dispatch => {
     const res = await axios.get('/api/current_user');
@@ -13,6 +13,30 @@ export const fetchCandidate = () => async dispatch => {
     const res = await axios.get('/fetch/Candidate');
     dispatch({
         type: FETCH_CANDIDATE,
+        payload: res.data
+    })
+}
+
+export const fetchProject = () => async dispatch => {
+    const res = await axios.get('/fetch/Project');
+    dispatch({
+        type: FETCH_PROJECT,
+        payload: res.data
+    })
+}
+
+export const fetchEducation = () => async dispatch => {
+    const res = await axios.get('/fetch/Education');
+    dispatch({
+        type: FETCH_EDUCATION,
+        payload: res.data
+    })
+}
+
+export const fetchExperience = () => async dispatch => {
+    const res = await axios.get('/fetch/Experience');
+    dispatch({
+        type: FETCH_EXPERIENCE,
         payload: res.data
     })
 }

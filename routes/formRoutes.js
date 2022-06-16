@@ -20,6 +20,53 @@ module.exports = app => {
             res.send({status: 204})
         }   
     })
+
+    app.get('/fetch/Education', async function(req,res, done) {
+        const basicInfo = mongoose.model('education');
+        try {
+            if(req && req.user && req.user.googleId) {
+                const candidate = await basicInfo.findOne({googleId: req.user.googleId})
+                res.send(candidate);
+            }
+            res.status({status: 204});
+        }
+        catch (err) {
+            console.log("candidate not found ",err);
+            res.send({status: 204})
+        }   
+    })
+
+    app.get('/fetch/Experience', async function(req,res, done) {
+        const basicInfo = mongoose.model('experiences');
+        try {
+            if(req && req.user && req.user.googleId) {
+                const candidate = await basicInfo.findOne({googleId: req.user.googleId})
+                res.send(candidate);
+            }
+            res.status({status: 204});
+        }
+        catch (err) {
+            console.log("candidate not found ",err);
+            res.send({status: 204})
+        }   
+    })
+
+    app.get('/fetch/Project', async function(req,res, done) {
+        const basicInfo = mongoose.model('projects');
+        try {
+            if(req && req.user && req.user.googleId) {
+                const candidate = await basicInfo.findOne({googleId: req.user.googleId})
+                res.send(candidate);
+            }
+            res.status({status: 204});
+        }
+        catch (err) {
+            console.log("candidate not found ",err);
+            res.send({status: 204})
+        }   
+    })
+
+
     app.post('/create/candidate', async function (req,res) {
         const basicInfo = mongoose.model('basicInfo');
         const { firstName, lastName, age, location, contactNumber, address } = req.body;
