@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import * as actions from '../../actions';
 import Datepicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -14,30 +13,24 @@ class CandidateForm extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { errors: [], Name: '', dateofbirth: '', phone: '',isvalid: false, Applyingfor: '', Experience: '',
-        selectOptions : [],id: "",name: '',MartialSelectoptions : [], Id:'', sttatus:'', Nationality: '', Address: '', City: '', states: '', zeep: ''}
+        this.state = { errors: [], Name: '', dateofbirth: '', phone: '',isvalid: false, applyingfor: '', experience: '',
+        selectOptions : [],id: "",name: '',MartialSelectoptions : [], Id:'', sttatus:'', nationality: '', address: '', city: '', states: '', zip: ''}
     }
 
     
-    onSubmit(e) {
-    //    const isValid = this.phoneValidation();
-    //    if( !isValid ) {   
-    //         e.preventDefault();
-    //         this.setState({isValid: true});
-    //         return false;
-    //    }
+    addCandidateInfo() {
         this.props.sendBasicInfo({          
             value: {
-                Name: this.state.Name,
-                dateofbirth: this.state.dateofbirth,
-                Phone: this.state.phone,
-                Applyingfor: this.state.Applyingfor,
-                Experience: this.state.Experience,
-                Nationality: this.state.Nationality,
-                Address: this.state.Address,
-                City: this.state.City,
-                State: this.state.states,
-                Zip: this.state.zeep,
+                name: this.state.Name,
+                dateOfBirth: this.state.dateofbirth,
+                phone: this.state.phone,
+                applyingFor: this.state.applyingfor,
+                experience: this.state.experience,
+                nationality: this.state.nationality,
+                address: this.state.address,
+                city: this.state.city,
+                state: this.state.states,
+                zip: this.state.zip,
             }      
         });
     }
@@ -78,22 +71,6 @@ class CandidateForm extends Component {
         this.setState({selectOptions: genderoptions})
         this.setState({MartialSelectoptions: Martialoptions})
       }
-
-    phoneValidation() {
-        if  (isValidPhoneNumber(this.state.phone)) {
-            this.setState({isvalid: true})
-        }
-        else {
-            this.setState({isvalid: false})
-        }
-    }
-
-    ghandleChange(e){
-        this.setState({id:e.value, name:e.label})
-       }
-    mhandleChange(e){
-        this.setState({Id:e.value, sttatus:e.label})
-       } 
     componentDidMount(){
            this.getOptions()
        }
@@ -105,7 +82,7 @@ class CandidateForm extends Component {
                 <h3>Fill Basic Information</h3>
             </div>
             <div className="row formContent">
-                <form className="col s16" onSubmit={this.onSubmit.bind(this)} >
+                <form className="col s16"S>
                     <div className="form_inputBox input-field">
                         <div className='formLabel_title'>
                             Name :
@@ -139,7 +116,6 @@ class CandidateForm extends Component {
                                 value={this.state.phone}
                                 onChange={(e) => {
                                     this.setState({ phone: e });
-                                    this.phoneValidation();
                                 }}
                             />
                             { this.state.isvalid && <label>Invalid Number</label>}  
@@ -151,8 +127,8 @@ class CandidateForm extends Component {
                         </div>
                         <div className='formInput'>
                             <input 
-                                value={this.state.Applyingfor}
-                                onChange={ e => this.setState({ Applyingfor: e.target.value })}
+                                value={this.state.applyingfor}
+                                onChange={ e => this.setState({ applyingfor: e.target.value })}
                             />    
                         </div>                    
                     </div>
@@ -162,25 +138,9 @@ class CandidateForm extends Component {
                         </div>
                         <div className='formInput'>
                             <input 
-                                value={this.state.Experience}
-                                onChange={ e => this.setState({ Experience: e.target.value })}
+                                value={this.state.experience}
+                                onChange={ e => this.setState({ experience: e.target.value })}
                             />    
-                        </div>                    
-                    </div>
-                    <div className="form_inputBox input-field">
-                        <div className='formLabel_title'>
-                            Gender :
-                        </div>
-                            <div>
-                                <Select options={this.state.selectOptions} onChange={this.ghandleChange.bind(this)} />
-                            </div>
-                        </div>
-                    <div className="form_inputBox input-field">
-                        <div className='formLabel_title'>
-                            Martial Status :
-                        </div>
-                        <div>
-                            <Select options={this.state.MartialSelectoptions} onChange={this.mhandleChange.bind(this)} />    
                         </div>                    
                     </div>
                     <div className="form_inputBox input-field">
@@ -189,8 +149,8 @@ class CandidateForm extends Component {
                         </div>
                         <div className='formInput'>
                             <input 
-                                value={this.state.Nationality}
-                                onChange={ e => this.setState({ Nationality: e.target.value })}
+                                value={this.state.nationality}
+                                onChange={ e => this.setState({ nationality: e.target.value })}
                             />    
                         </div>                    
                     </div>
@@ -200,8 +160,8 @@ class CandidateForm extends Component {
                         </div>
                         <div className='formInput'>
                             <input 
-                                value={this.state.Address}
-                                onChange={ e => this.setState({ Address: e.target.value })}
+                                value={this.state.address}
+                                onChange={ e => this.setState({ address: e.target.value })}
                             />    
                         </div>                    
                     </div>
@@ -211,8 +171,8 @@ class CandidateForm extends Component {
                         </div>
                         <div className='formInput'>
                             <input 
-                                value={this.state.City}
-                                onChange={ e => this.setState({ City: e.target.value })}
+                                value={this.state.city}
+                                onChange={ e => this.setState({ city: e.target.value })}
                             />    
                         </div>                    
                     </div>
@@ -233,14 +193,16 @@ class CandidateForm extends Component {
                         </div>
                         <div className='formInput'>
                             <input 
-                                value={this.state.zeep}
-                                onChange={ e => this.setState({ zeep: e.target.value })}
+                                value={this.state.zip}
+                                onChange={ e => this.setState({ zip: e.target.value })}
                             />    
                         </div>                    
                     </div>
-                    { this.state.isvalid && <button className="btn"><a href='/surveys' className='linkBtn'>
-                        Submit
-                    </a></button>}
+                    <div className='btnOption'>
+                        <button className="btn" onClick={this.addCandidateInfo.bind(this)}><a href='/surveys' className='linkBtn'>
+                            Submit
+                        </a></button>
+                    </div>
                 </form>
             </div>
         </div>

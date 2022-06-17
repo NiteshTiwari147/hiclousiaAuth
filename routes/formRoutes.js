@@ -69,31 +69,30 @@ module.exports = app => {
 
     app.post('/create/candidate', async function (req,res) {
         const basicInfo = mongoose.model('basicInfo');
-        const { firstName, lastName, age, location, contactNumber, address } = req.body;
+        const { name, dob, phone, applyingFor, experience, nationality, address, city, state, zip } = req.body;
         const { googleId, email } = req.user;
-        console.log("Creting candidate updated")
-        const response = await new basicInfo({googleId, email, firstName, lastName, age, location, contactNumber, address}).save(); 
-        res.send(req.user);
+        const response = await new basicInfo({googleId, email, name, dob, phone, applyingFor, experience, nationality, address, city, state, zip}).save(); 
+        res.send(response);
     })
     app.post('/create/project',async function (req,res) {
         const project =  mongoose.model('projects');
         const { title, description, start_date, end_date, skills, industry} = req.body;
         const { googleId, email } = req.user;
         const response = await new project({googleId, email, title, description, start_date, end_date, skills, industry}).save();
-        res.send(req.user);
+        res.send(response);
     })
     app.post('/create/education',async function (req,res) {
         const education =  mongoose.model('education');
         const { institute, course, field_of_course, start_date, end_date, industry, grade} = req.body;
         const { googleId, email } = req.user;
         const response = await new education({googleId, email, institute, course, field_of_course, start_date, end_date, industry, grade}).save();
-        res.send(req.user);
+        res.send(response);
     })
     app.post('/create/experience',async function (req,res) {
         const experience =  mongoose.model('experiences');
         const { company, designation, description, start_date, end_date, skills, industry} = req.body;
         const { googleId, email } = req.user;
         const response = await new experience({googleId, email, company, designation, description, start_date, end_date, skills, industry}).save();
-        res.send(req.user);
+        res.send(response);
     })
 }

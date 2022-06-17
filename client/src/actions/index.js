@@ -43,12 +43,16 @@ export const fetchExperience = () => async dispatch => {
 
 export const sendBasicInfo =  (props) => async dispatch => {
     const obj = {
-        firstName: props.value.firstName,
-        lastName: props.value.lastName,
-        age: props.value.age,
-        location: props.value.location, 
-        contactNumber: props.value.contactNumber, 
-        address: props.value.address
+        name: props.value.name,
+        dob: props.value.dateOfBirth,
+        phone: props.value.phone,
+        applyingFor: props.value.applyingFor,
+        experience: props.value.experience,
+        nationality: props.value.nationality,
+        address: props.value.address, 
+        city: props.value.city, 
+        state: props.value.state,
+        zip: props.value.zip
     }
     const res = await axios.post('/create/candidate', obj);
 }

@@ -13,6 +13,7 @@ import SignUp from './SignUp';
 const Dashboard = () => <SignUp />
 
 class App extends Component {
+
     componentDidMount() {
         this.props.fetchUser();
         this.props.fetchCandidate();
@@ -20,6 +21,7 @@ class App extends Component {
         this.props.fetchExperience();
         this.props.fetchProject();
     }
+    
     render() {
         return (
             <div className='container'>

@@ -4,7 +4,6 @@ import './styles.css'
 
 class SignUp extends Component {
     render() {
-        console.log('afpojpcsm')
         return (
             <div className='signUp'>  
                 <div className='signUpTitle'>

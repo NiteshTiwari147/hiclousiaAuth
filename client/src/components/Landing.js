@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import UpdateForm from './Forms/UpdateForm';
-import SignUp from './SignUp';
 
 import './styles.css';
 
 class Landing extends Component {
-
-    renderContent(name) {
+    
+    renderContent() {
         if(this.props.candidate) {
             return <div style={{ textAlign: 'center'}}>
                 <h1>
-                    Hello, {this.props.candidate.firstName}
+                    Hello, {this.props.candidate.name}
                 </h1>
                 <h2>Hiclousia helps you in </h2>
                 <h3>becoming the best</h3>
@@ -40,10 +38,9 @@ class Landing extends Component {
         </div>
     }
     render() {
-        const name = this.props.candidate?.firstName || null;
         return(
            <div>
-                {this.renderContent(name)}
+                {this.renderContent()}
            </div>
         )
     }
