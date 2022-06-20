@@ -5,12 +5,9 @@ import * as actions from '../../actions';
 import Landing from '../Landing';
 
 class GateWay extends Component {
-    componentDidMount() {
-        this.props.fetchCandidate();
-    }
     render() {
         return (
-            <Landing />
+                <Landing />
         )
     }
 };
