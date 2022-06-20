@@ -10,7 +10,7 @@ class ProjectForm extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { errors: [], tittle: '', desc: '', solution: '', start_year: '',skill: '',skills: [], end_year: '', Industryselectoptions: [], ID:"", Industryname:""}
+        this.state = { errors: [], tittle: '', file:'', fileName:"", setFile:'', setFileName:'', desc: '', solution: '', start_year: '',skill: '',skills: [], end_year: '', Industryselectoptions: [], ID:"", Industryname:""}
     }
 
     submitProject() {
@@ -21,7 +21,9 @@ class ProjectForm extends Component {
                 startDate: this.state.start_year,
                 endDate: this.state.end_year,
                 skills: this.state.skills,
-                industry: this.state.industry
+                industry: this.state.industry,
+                fileName: this.state.setFileName,
+                file: this.state.setFile
             }      
         });
     }
@@ -164,6 +166,14 @@ class ProjectForm extends Component {
                                 <Select options={this.state.Industryselectoptions} onChange={this.IndustryhandleChange.bind(this)} />    
                             </div>   
                         </div>                    
+                    </div>
+                    <div className="form_inputBox input-field">
+                        <div className='formLabel_title'>
+                            Upload Project
+                        </div>
+                        <div className="App">
+                            <input type="file" onChange={(e => this.setState({setFile: e.target.value[0], setFileName: e.target.value[0].name}))} />
+                        </div>                  
                     </div>
                     <div className='btnOption'>
                         <button className="btn" onClick={this.submitProject.bind(this)}><a href='/surveys' className='linkBtn'> Submit And Go

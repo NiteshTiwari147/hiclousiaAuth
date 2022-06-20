@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 const cookieSession = require('cookie-session');
 const passport = require('passport');
 const keys = require('./config/keys');
+const fileupload = require("express-fileupload");
+const cors = require("cors");
 require('./models/User');
 require('./services/passport');
 
@@ -21,6 +23,10 @@ app.use(
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.use(cors());
+app.use(fileupload());
+app.use(express.static("files"));
 
 app.use(passport.initialize());
 app.use(passport.session());
