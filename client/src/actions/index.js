@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FETCH_USER,FETCH_CANDIDATE } from './types';
+import { FETCH_USER,FETCH_CANDIDATE,FETCH_EDUCATION,FETCH_EXPERIENCE,FETCH_PROJECT } from './types';
 
 export const fetchUser = () => async dispatch => {
     const res = await axios.get('/api/current_user');
@@ -17,14 +17,42 @@ export const fetchCandidate = () => async dispatch => {
     })
 }
 
+export const fetchProject = () => async dispatch => {
+    const res = await axios.get('/fetch/Project');
+    dispatch({
+        type: FETCH_PROJECT,
+        payload: res.data
+    })
+}
+
+export const fetchEducation = () => async dispatch => {
+    const res = await axios.get('/fetch/Education');
+    dispatch({
+        type: FETCH_EDUCATION,
+        payload: res.data
+    })
+}
+
+export const fetchExperience = () => async dispatch => {
+    const res = await axios.get('/fetch/Experience');
+    dispatch({
+        type: FETCH_EXPERIENCE,
+        payload: res.data
+    })
+}
+
 export const sendBasicInfo =  (props) => async dispatch => {
     const obj = {
-        firstName: props.value.firstName,
-        lastName: props.value.lastName,
-        age: props.value.age,
-        location: props.value.location, 
-        contactNumber: props.value.contactNumber, 
-        address: props.value.address
+        name: props.value.name,
+        dob: props.value.dateOfBirth,
+        phone: props.value.phone,
+        applyingFor: props.value.applyingFor,
+        experience: props.value.experience,
+        nationality: props.value.nationality,
+        address: props.value.address, 
+        city: props.value.city, 
+        state: props.value.state,
+        zip: props.value.zip
     }
     const res = await axios.post('/create/candidate', obj);
 }

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom'
 import * as actions from '../../actions';
+import Datepicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 import './styles.css';
 
@@ -87,11 +89,9 @@ class EducationForm extends Component {
                         Year of starting
                     </div>
                     <div className='formInput'>
-                        <input 
-                            placeholder="Enter start year"
-                            value={this.state.start_year}
-                            onChange={ e => this.setState({ start_year: e.target.value })}
-                        />    
+                        <Datepicker selected={this.state.start_year} onChange={(date) => this.setState({ start_year: date})} 
+                            dateFormat='dd/MM/yyyy' isClearable showYearDropdown scrollableYearDropdown placeholderText="DD/MM/YYYY"
+                        />      
                     </div>                    
                 </div>
                 <div className="form_inputBox input-field">
@@ -99,11 +99,9 @@ class EducationForm extends Component {
                         Year of ending
                     </div>
                     <div className='formInput'>
-                        <input 
-                            placeholder="Enter end year"
-                            value={this.state.end_year}
-                            onChange={ e => this.setState({ end_year: e.target.value })}
-                        />    
+                        <Datepicker selected={this.state.end_year} onChange={(date) => this.setState({ end_year: date})} 
+                            dateFormat='dd/MM/yyyy' isClearable showYearDropdown scrollableYearDropdown placeholderText="DD/MM/YYYY"
+                        />   
                     </div>                    
                 </div>
                 <div className="form_inputBox input-field">
@@ -131,4 +129,3 @@ class EducationForm extends Component {
 };
 
 export default connect(null, actions)(EducationForm);
-

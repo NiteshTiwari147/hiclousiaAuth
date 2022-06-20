@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-
+import Datepicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import Select from 'react-select';
 import * as actions from '../../actions';
 
 class ProjectForm extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { errors: [], tittle: '', desc: '', solution: '', start_year: '',skill: '',skills: [], end_year: '', industry: ''}
+        this.state = { errors: [], tittle: '', desc: '', solution: '', start_year: '',skill: '',skills: [], end_year: '', Industryselectoptions: [], ID:"", Industryname:""}
     }
 
     submitProject() {
@@ -32,7 +34,6 @@ class ProjectForm extends Component {
                 startDate: this.state.start_year,
                 endDate: this.state.end_year,
                 skills: this.state.skills,
-                industry: this.state.industry
             }      
         })
         .then(res => window.location.reload())
@@ -47,8 +48,44 @@ class ProjectForm extends Component {
         this.setState({skills: coreSkills});
 
     }
+    
+    async getOptions(){
+        const IndustryData = [
+            {
+                ID: 0,
+                Industryname: 'IT'
+            },
+            {
+                ID: 1,
+                Industryname: "Mechanical"
+            },
+            {
+                ID: 2,
+                Industryname: "Chemical"
+            },
+            {
+                ID: 3,
+                Industryname: "Biology"
+            }
+        ];
 
-    render() {
+        const Industryoptions = IndustryData.map(d => ({
+          "value" : d.ID,
+          "label" : d.Industryname
+    
+        }))
+           this.setState({Industryselectoptions: Industryoptions})
+      }
+
+
+    IndustryhandleChange(e){
+        this.setState({ID:e.value, Industryname:e.label})
+       } 
+    componentDidMount(){
+           this.getOptions()
+       }
+    
+       render() {
         return (
             <div className='form_container'>
             <div className='form_title'>
@@ -103,11 +140,9 @@ class ProjectForm extends Component {
                                 Start date
                             </div>
                             <div className='formInput'>
-                                <input 
-                                    placeholder="Enter your designation"
-                                    value={this.state.start_year}
-                                    onChange={ e => this.setState({ start_year: e.target.value })}
-                                />    
+                                <Datepicker selected={this.state.start_year} onChange={(date) => this.setState({ start_year: date})} 
+                                  dateFormat='dd/MM/yyyy' isClearable showYearDropdown scrollableYearDropdown placeholderText="DD/MM/YYYY"
+                                />
                             </div>                    
                     </div>
                     <div className="form_inputBox input-field">
@@ -115,10 +150,8 @@ class ProjectForm extends Component {
                             End date
                         </div>
                         <div className='formInput'>
-                            <input 
-                                placeholder="Enter end year"
-                                value={this.state.end_year}
-                                onChange={ e => this.setState({ end_year: e.target.value })}
+                            <Datepicker selected={this.state.end_year} onChange={(date) => this.setState({ end_year: date})} 
+                                  dateFormat='dd/MM/yyyy' isClearable showYearDropdown scrollableYearDropdown placeholderText="DD/MM/YYYY"
                             />    
                         </div>                    
                     </div>
@@ -127,11 +160,9 @@ class ProjectForm extends Component {
                             Industry
                         </div>
                         <div className='formInput'>
-                            <input 
-                                placeholder="Enter Industry"
-                                value={this.state.industry}
-                                onChange={ e => this.setState({ industry: e.target.value })}
-                            />    
+                            <div>
+                                <Select options={this.state.Industryselectoptions} onChange={this.IndustryhandleChange.bind(this)} />    
+                            </div>   
                         </div>                    
                     </div>
                     <div className='btnOption'>

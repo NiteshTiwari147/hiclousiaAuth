@@ -4,12 +4,16 @@ const { Schema } = mongoose;
 const BISchema = new Schema({
     googleId: String,
     email: String,
-    firstName: String,
-    lastName: String,
-    age: String,
-    location: String,
-    contactNumber: String,
-    address: String
+    name: String,
+    dob: String,
+    phone: String,
+    applyingFor: String,
+    experience: String,
+    nationality: String,
+    address: String,
+    city: String,
+    state: String,
+    zip: String,
 });
 
 mongoose.model('basicInfo', BISchema);

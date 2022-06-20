@@ -2,11 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as actions from '../../actions';
+import Datepicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import Select from 'react-select';
 
 class ExperienceForm extends Component {
     constructor(props) {
         super(props);
-        this.state ={error: [],organization: '', position: '',desc: '', start_year: '',skill: '',skills: [], end_year: '', current: true, industry: ''}
+        this.state ={error: [],organization: '', position: '',desc: '', start_year: '',skill: '',skills: [], end_year: '', current: true, Industryselectoptions: [], ID:"", Industryname:""}
     }
 
     addCoreSkill(event) {
@@ -28,7 +31,6 @@ class ExperienceForm extends Component {
                 startDate: this.state.start_year,
                 endDate: this.state.end_year,
                 skills: this.state.skills,
-                industry: this.state.industry
             }      
         });
     }
@@ -47,6 +49,42 @@ class ExperienceForm extends Component {
         })
         .then(res => window.location.reload())
     }
+    async getOptions(){
+        const IndustryData = [
+            {
+                ID: 0,
+                Industryname: 'IT'
+            },
+            {
+                ID: 1,
+                Industryname: "Mechanical"
+            },
+            {
+                ID: 2,
+                Industryname: "Chemical"
+            },
+            {
+                ID: 3,
+                Industryname: "Biology"
+            }
+        ];
+
+        const Industryoptions = IndustryData.map(d => ({
+          "value" : d.ID,
+          "label" : d.Industryname
+    
+        }))
+           this.setState({Industryselectoptions: Industryoptions})
+      }
+
+
+    IndustryhandleChange(e){
+        this.setState({ID:e.value, Industryname:e.label})
+       } 
+    componentDidMount(){
+           this.getOptions()
+       }
+
     render() {
         return (
             <div className='form_container'>
@@ -114,11 +152,9 @@ class ExperienceForm extends Component {
                                 Start Year
                             </div>
                             <div className='formInput'>
-                                <input 
-                                    placeholder="Enter your designation"
-                                    value={this.state.start_year}
-                                    onChange={ e => this.setState({ start_year: e.target.value })}
-                                />    
+                                <Datepicker selected={this.state.start_year} onChange={(date) => this.setState({ start_year: date})} 
+                                  dateFormat='dd/MM/yyyy' isClearable showYearDropdown scrollableYearDropdown placeholderText="DD/MM/YYYY"
+                                />   
                             </div>                    
                         </div>
                         <div className="form_inputBox input-field">
@@ -149,11 +185,9 @@ class ExperienceForm extends Component {
                                 Industry
                             </div>
                             <div className='formInput'>
-                                <input 
-                                    placeholder="Enter Industry"
-                                    value={this.state.industry}
-                                    onChange={ e => this.setState({ industry: e.target.value })}
-                                />    
+                            <div>
+                                <Select options={this.state.Industryselectoptions} onChange={this.IndustryhandleChange.bind(this)} />    
+                            </div>
                             </div>                    
                         </div>
                         <div className='btnOption'>
