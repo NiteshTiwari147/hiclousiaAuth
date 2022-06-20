@@ -9,6 +9,10 @@ const ProjectInfoSchema = new Schema({
     start_date: String,
     end_date: String,
     skills: [String],
+    document: {
+        data: Buffer,
+        contentType: String
+    },
     industry: String
 });
 

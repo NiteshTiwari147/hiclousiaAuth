@@ -60,7 +60,10 @@ export const sendProjectInfo = (props) => async dispatch => {
         start_date: props.value.startDate,
         end_date: props.value.endDate,
         skills: props.value.skills,
-        industry: props.value.industry 
+        industry: props.value.industry,
+        document: {
+            file: props.value.file
+        }
     }
     const res = await axios.post('/create/project', obj);
 }

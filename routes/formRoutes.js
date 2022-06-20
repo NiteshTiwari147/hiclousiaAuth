@@ -77,7 +77,8 @@ module.exports = app => {
     })
     app.post('/create/project',async function (req,res) {
         const project =  mongoose.model('projects');
-        const { title, description, start_date, end_date, skills, industry} = req.body;
+        const { title, description, start_date, end_date, skills, industry, document} = req.body;
+        console.log(document)
         const { googleId, email } = req.user;
         const response = await new project({googleId, email, title, description, start_date, end_date, skills, industry}).save();
         res.send(req.user);
