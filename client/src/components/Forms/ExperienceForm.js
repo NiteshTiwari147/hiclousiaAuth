@@ -53,19 +53,19 @@ class ExperienceForm extends Component {
         const IndustryData = [
             {
                 ID: 0,
-                Industryname: 'IT'
+                Industryname: 'Backend'
             },
             {
                 ID: 1,
-                Industryname: "Mechanical"
+                Industryname: "Frontend"
             },
             {
                 ID: 2,
-                Industryname: "Chemical"
+                Industryname: "Data Science"
             },
             {
                 ID: 3,
-                Industryname: "Biology"
+                Industryname: "Quality/Testing"
             }
         ];
 

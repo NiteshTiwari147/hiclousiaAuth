@@ -1,0 +1,39 @@
+.basicInfoContainer {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 15rem;
+    height: fit-content;
+    margin-top: 2rem;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    border-radius: 15px;
+    background: white;
+}
+
+.profilePic {
+    width: 10rem;
+    height: 10rem;
+    border: 2px solid white;
+    border-radius: 50%;
+}
+
+.viewPortfolioBtn {
+    border-radius: 15px;
+    width: 10rem;
+    height: 2rem;
+    background: #e2efff;
+    font-weight: bold;
+    border: 2px solid #1072EB;
+    color: #1072EB;
+}
+
+.profileName {
+    margin: 0.5rem !important;
+}
+
+.profilePosition {
+    color: #1072EB;
+    margin: 0.5rem;
+}

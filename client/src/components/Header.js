@@ -26,7 +26,7 @@ class Header extends Component {
             <nav className='navigationBar'>
                  <div className="navigationBarContent">
                     <div >
-                        <Link to='/surveys' className="brand-logo companyLogo">
+                        <Link to='/dashboard' className="brand-logo companyLogo">
                             HICLOUSIA
                         </Link>
                     </div>

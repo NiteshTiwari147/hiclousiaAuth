@@ -1,0 +1,24 @@
+.pageBarContainer {
+    display: flex;
+    flex-wrap: wrap;
+    width: 40rem;
+    height: 3rem;
+    justify-content: space-evenly;
+    margin-top: 1rem;
+    border: 2px solid white !important;
+    border-radius: 6px;
+    background: white;
+}
+
+.pageBarBtn {
+    color: #1072EB;
+    font-weight: 1000;
+    font-size: large;
+    margin-left: 1rem;
+}
+
+.shadow {
+    border: 0.2px solid white;
+    padding: 10px;
+    box-shadow: 2px 2px #1072EB;
+}

@@ -38,12 +38,26 @@ const data = [
 
 class SkillPieChart extends Component {
     render() {
+        var skillData = [];
+        const skillSet = this.props.data;
+        console.log('skillSet ', skillSet);
+        skillSet.map((skill,index) => {
+            const colorVal = Math.floor(Math.random() * 300) + 50;
+            var obj = {
+                "id": skill.skillName,
+                "label": skill.skillName,
+                "value": skill.skillPoint,
+                "color":  "hsl("+colorVal+" 70%, 50%)"
+            }
+            skillData.push(obj); 
+        })
         return (
-            <div className='skillpiechartContainer'>
+            <div className='skillpiechartContainer shadow'>
+                <h5 style={{'textAlign': 'center', 'color': '#1072EB'}}>Skill Pie Chart</h5>
                 <ResponsivePie
-                    data={data}
-                    margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-                    innerRadius={0.5}
+                    data={skillData}
+                    margin={{top: 20,right: 30, bottom: 80, left: 30 }}
+                    innerRadius={0.45}
                     padAngle={0.7}
                     cornerRadius={3}
                     activeOuterRadiusOffset={8}
@@ -78,7 +92,7 @@ class SkillPieChart extends Component {
                     fill={[
                         {
                             match: {
-                                id: 'ruby'
+                                id: 'java'
                             },
                             id: 'dots'
                         },

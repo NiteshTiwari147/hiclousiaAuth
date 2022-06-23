@@ -16,7 +16,7 @@ class ProjectForm extends Component {
     submitProject() {
         this.props.sendProjectInfo({          
             value: {
-                company: this.state.tittle,
+                title: this.state.tittle,
                 desc: this.state.desc,
                 startDate: this.state.start_year,
                 endDate: this.state.end_year,

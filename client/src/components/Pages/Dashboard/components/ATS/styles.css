@@ -1,0 +1,43 @@
+.ATScontainer {
+    display: flex;
+    flex-wrap: wrap;
+    width: 40rem;
+    height: 16rem;
+    justify-content: space-evenly;
+    margin-top: 2rem;
+    border-radius: 15px;
+    border: 2px solid white !important;
+    background: white;
+}
+
+.miniBox {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 16rem;
+    height: 6rem;
+    margin-top: 0.51rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    border: 2px solid #1072EB;
+    background: #e2efff;
+    border-radius: 9px;
+}
+
+.headingATS {
+    display: flex;
+    flex-direction: column;
+    font-size: large;
+    align-items: flex-start;
+    margin-left: 1rem;
+    font-family: system-ui;
+    color: #1072EB;
+}
+
+.ATS_score {
+    font-weight: 1000;
+    font-size: large;
+    font-family: inherit;
+    color: #1072EB;
+}

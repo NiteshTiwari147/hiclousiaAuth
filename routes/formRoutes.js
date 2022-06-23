@@ -3,6 +3,7 @@ require('../models/BasicInfo');
 require('../models/projectInfo');
 require('../models/educationInfo');
 require('../models/experienceInfo');
+require('../models/skillSet');
 
 module.exports = app => {
 
@@ -19,6 +20,22 @@ module.exports = app => {
             console.log("candidate not found ",err);
             res.send({status: 204})
         }   
+    });
+
+    app.get('/fetch/skillSet', async function(req, res, done) {
+        const skillSet = mongoose.model('skillSet');
+        try {
+            const { googleId, email } = req.user;
+            if(req, req.user && req.user.googleId) {
+                const candidateSkillSet = await skillSet.findOne({googleId: req.user.googleId});
+                res.send(candidateSkillSet);
+            }
+            res.status({status: 200});   
+        }
+        catch (err) {
+            console.log("candidate skillset not found ",err);
+            res.send({status: 204})
+        } 
     })
 
     app.get('/fetch/Education', async function(req,res, done) {
@@ -52,11 +69,11 @@ module.exports = app => {
     })
 
     app.get('/fetch/Project', async function(req,res, done) {
-        const basicInfo = mongoose.model('projects');
+        const projects = mongoose.model('projects');
         try {
             if(req && req.user && req.user.googleId) {
-                const candidate = await basicInfo.findOne({googleId: req.user.googleId})
-                res.send(candidate);
+                const projectList = await projects.find({googleId: req.user.googleId})
+                res.send(projectList);
             }
             res.status({status: 204});
         }
@@ -74,11 +91,56 @@ module.exports = app => {
         const response = await new basicInfo({googleId, email, name, dob, phone, applyingFor, experience, nationality, address, city, state, zip}).save(); 
         res.send(response);
     })
+
     app.post('/create/project',async function (req,res) {
         const project =  mongoose.model('projects');
+        const skillSet = mongoose.model('skillSet');
         const { title, description, start_date, end_date, skills, industry} = req.body;
         const { googleId, email } = req.user;
-        const response = await new project({googleId, email, title, description, start_date, end_date, skills, industry}).save();
+        const candidateSkillSet = await skillSet.findOne({googleId: req.user.googleId});
+        var coreSkills = [];
+        if(candidateSkillSet != null) {
+            coreSkills = candidateSkillSet.coreSkills;
+            skills.map(skill => {
+                let found_flag = false;
+                for(var i=0;i<coreSkills.length; i++) {
+                    if(skill.toLowerCase().trim() === coreSkills[i].skillName) {
+                        found_flag = true;
+                        coreSkills[i].skillPoint++;
+                        break;
+                    }
+                }
+                if(found_flag === false) {
+                    coreSkills.push({
+                        skillName: skill.toLowerCase().trim(),
+                        skillPoint: 1
+                    })
+                }
+            });
+            skillSet.updateOne({
+                googleId,
+                email,
+                coreSkills
+            },function(err,result){
+                if(err){
+                    console.log(err);
+                }else{
+                    console.log("Skils Saved To database");
+                }
+            });
+        } 
+        else {
+            skills.map( skill => {
+                coreSkills.push({
+                    skillName: skill.toLowerCase().trim(),
+                    skillPoint: 1
+                })
+            })
+            const resposne = await new skillSet({googleId, email, coreSkills }).save();
+            console.log("New Skils Saved To database");
+        }
+
+        const response = await new project({googleId, email, title, description, start_date, end_date, skills, industry}).save();    
         res.send(response);
     })
     app.post('/create/education',async function (req,res) {
