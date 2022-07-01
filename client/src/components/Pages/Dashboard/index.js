@@ -7,18 +7,20 @@ import FormBar from './components/formBar';
 import Project from './components/project';
 import SkillPieChart from '../../visualization/skillPieChart';
 import Education from './components/education';
+import ExperienceTab from './components/experience';
+import Certificate from './components/certificates';
 
 import './styles.css';
 
 class Dashboard extends Component {
 
-    renderCandidateInfo() {
+    renderCandidateInfo(candidate) {
         const currentEmploymnt = {
             designation: 'SDE-2',
             company: 'PayPal'
         }
-        if(this.props.candidate) {
-            return <CandidateInfo name={this.props.candidate.name} email={this.props.candidate.email} currentEmploymnt={currentEmploymnt} />
+        if(candidate) {
+            return <CandidateInfo name={candidate.name} email={candidate.email} currentEmploymnt={currentEmploymnt} />
         }
     }
 
@@ -29,12 +31,13 @@ class Dashboard extends Component {
     }
 
     render() {
-        if(this.props.project && this.props.skillSet && this.props.candidate && this.props.education) {
-            const {project, skillSet, candidate, education } = this.props
+        if(this.props.project && this.props.skillSet && this.props.candidate && this.props.education && this.props.experience) {
+            const {project, skillSet, candidate, education, experience } = this.props
             return (
                 <div className='dashboardLayout'>
                     <div className='dashboardStack'>
-                        {this.renderCandidateInfo()}
+                        {this.renderCandidateInfo(candidate)}
+                        <ExperienceTab data={experience} />
                         <Education data={education}/>
                     </div>
                     <div className='dashboardStack'>
@@ -45,6 +48,7 @@ class Dashboard extends Component {
                     <div className='dashboardStack'>
                         <div>
                             <SkillPieChart data={skillSet.coreSkills} />
+                            <Certificate data={skillSet.coreSkills}/>
                         </div>
                     </div>
                 </div>

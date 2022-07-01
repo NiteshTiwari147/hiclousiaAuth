@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { ResponsivePie } from '@nivo/pie'
+import { ResponsivePie } from '@nivo/pie';
+import Divider from '@mui/material/Divider';
 
 import './styles.css';
 
@@ -54,6 +55,7 @@ class SkillPieChart extends Component {
         return (
             <div className='skillpiechartContainer shadow'>
                 <h5 style={{'textAlign': 'center', 'color': '#1072EB'}}>Skill Pie Chart</h5>
+                <Divider color='skyblue'/>
                 <ResponsivePie
                     data={skillData}
                     margin={{top: 20,right: 30, bottom: 80, left: 30 }}
