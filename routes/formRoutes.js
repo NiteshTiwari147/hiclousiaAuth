@@ -25,7 +25,6 @@ module.exports = app => {
     app.get('/fetch/skillSet', async function(req, res, done) {
         const skillSet = mongoose.model('skillSet');
         try {
-            const { googleId, email } = req.user;
             if(req, req.user && req.user.googleId) {
                 const candidateSkillSet = await skillSet.findOne({googleId: req.user.googleId});
                 res.send(candidateSkillSet);
@@ -42,7 +41,7 @@ module.exports = app => {
         const basicInfo = mongoose.model('education');
         try {
             if(req && req.user && req.user.googleId) {
-                const candidate = await basicInfo.findOne({googleId: req.user.googleId})
+                const candidate = await basicInfo.find({googleId: req.user.googleId})
                 res.send(candidate);
             }
             res.status({status: 204});
@@ -57,7 +56,7 @@ module.exports = app => {
         const basicInfo = mongoose.model('experiences');
         try {
             if(req && req.user && req.user.googleId) {
-                const candidate = await basicInfo.findOne({googleId: req.user.googleId})
+                const candidate = await basicInfo.find({googleId: req.user.googleId})
                 res.send(candidate);
             }
             res.status({status: 204});

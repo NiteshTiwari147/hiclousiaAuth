@@ -6,6 +6,7 @@ import ATS from './components/ATS';
 import FormBar from './components/formBar';
 import Project from './components/project';
 import SkillPieChart from '../../visualization/skillPieChart';
+import Education from './components/education';
 
 import './styles.css';
 
@@ -34,6 +35,7 @@ class Dashboard extends Component {
                 <div className='dashboardLayout'>
                     <div className='dashboardStack'>
                         {this.renderCandidateInfo()}
+                        <Education data={education}/>
                     </div>
                     <div className='dashboardStack'>
                         {this.renderATS()}
