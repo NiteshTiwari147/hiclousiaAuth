@@ -52,15 +52,15 @@ export const fetchExperience = () => async dispatch => {
 export const sendBasicInfo =  (props) => async dispatch => {
     const obj = {
         name: props.value.name,
-        dob: props.value.dateOfBirth,
-        phone: props.value.phone,
-        applyingFor: props.value.applyingFor,
-        experience: props.value.experience,
-        nationality: props.value.nationality,
-        address: props.value.address, 
-        city: props.value.city, 
-        state: props.value.state,
-        zip: props.value.zip
+        age: props.value.age,
+        city: props.value.city,
+        industry: props.value.industry,
+        department: props.value.department,
+        experienceYears: props.value.experienceYears,
+        experienceMonths: props.value.experienceMonths,
+        currentEmployment: props.value.currentEmployment,
+        companyName: props.value.companyName,
+        designation: props.value.designation, 
     };
     const res = await axios.post('/create/candidate', obj);
 }
@@ -72,7 +72,8 @@ export const sendProjectInfo = (props) => async dispatch => {
         start_date: props.value.startDate,
         end_date: props.value.endDate,
         skills: props.value.skills,
-        industry: props.value.industry 
+        industry: props.value.industry,
+        department: props.value.department
     };
     const res = await axios.post('/create/project', obj);
 }
@@ -81,11 +82,13 @@ export const sendExperienceInfo = (props) => async dispatch => {
     const obj = {
         company: props.value.company,
         designation: props.value.designation,
+        typeOfExperience: props.value.typeOfExperience,
         description: props.value.desc,
         start_date: props.value.startDate,
         end_date: props.value.endDate,
         skills: props.value.skills,
-        industry: props.value.industry 
+        industry: props.value.industry,
+        department: props.value.department
     };
     const res = await axios.post('/create/experience', obj);
 }
@@ -97,7 +100,6 @@ export const sendEducationInfo = (props) => async dispatch => {
         field_of_course: props.value.field_of_course,
         start_date: props.value.startDate,
         end_date: props.value.endDate,
-        industry: props.value.industry,
         grade: props.value.grade,
     };
     const res = await axios.post('/create/education', obj);

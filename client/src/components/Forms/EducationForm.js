@@ -21,7 +21,6 @@ class EducationForm extends Component {
                 field_of_course: this.state.field_of_course,
                 startDate: this.state.start_year,
                 endDate: this.state.end_year,
-                industry: this.state.industry,
                 grade: this.state.grade
             }      
         })
@@ -35,7 +34,6 @@ class EducationForm extends Component {
                 field_of_course: this.state.field_of_course,
                 startDate: this.state.start_year,
                 endDate: this.state.end_year,
-                industry: this.state.industry,
                 grade: this.state.grade
             }      
         })
@@ -62,11 +60,11 @@ class EducationForm extends Component {
                 </div>
                 <div className="form_inputBox input-field">
                     <div className='formLabel_title'>
-                        Course
+                        Programme   
                     </div>
                     <div className='formInput'>
                         <input 
-                            placeholder="Enter Course name"
+                            placeholder="Enter Programme name"
                             value={this.state.course}
                             onChange={ e => this.setState({ course: e.target.value })}
                         />    

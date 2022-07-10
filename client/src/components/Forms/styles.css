@@ -65,3 +65,15 @@
 .linkBtn {
     color: white
 }
+
+.industryAndDepartmentSelect {
+    display: flex;
+    width: 20rem;
+    margin: 1rem;
+}
+
+.candidateExperienceSelect {
+    display: flex;
+    width: 15rem;
+    margin: 1rem;
+}
