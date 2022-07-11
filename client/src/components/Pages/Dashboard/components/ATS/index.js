@@ -4,7 +4,7 @@ import './styles.css';
 
 class ATS extends Component {
     render() {
-        const { projectLen, skills, experience} = this.props;
+        const { projectLen, skills, experienceYears ,experienceMonths} = this.props;
         return (
             <div className='ATScontainer shadow'>
                 <div className="miniBox">
@@ -28,7 +28,7 @@ class ATS extends Component {
                         <h6 className="headingATS">Experience</h6> 
                     </div>
                     <h6 className="ATS_score" style={{marginRight: '1rem'}}>
-                        {experience}
+                        {experienceYears}.{experienceMonths} yrs
                     </h6>
                 </div>
                 <div className="miniBox">

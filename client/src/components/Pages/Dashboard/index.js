@@ -26,7 +26,7 @@ class Dashboard extends Component {
 
     renderATS() {
         if(this.props.project && this.props.skillSet && this.props.candidate) {
-            return <ATS projectLen={this.props.project.length} skills={this.props.skillSet.coreSkills.length} experience={this.props.candidate.experience} />
+            return <ATS projectLen={this.props.project.length} skills={this.props.skillSet.coreSkills.length} experienceYears={this.props.candidate.experienceYears} experienceMonths={this.props.candidate.experienceMonths} />
         }
     }
 
