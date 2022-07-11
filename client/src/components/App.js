@@ -4,13 +4,15 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 
 import Header from './Header';
-import dashboard from './Pages/Dashboard';
+import Dashboard from './Pages/Dashboard';
+import Jobs from './Pages/Jobs';
 import CandidateForm from './Forms/CandidateForm';
 import ProjectForm from './Forms/ProjectForm';
 import EducationForm from './Forms/EducationForm';
 import ExperienceForm from './Forms/ExperienceForm';
 import gateway from './utils/gateway';
 import SignUp from './SignUp';
+
 const signUp = () => <SignUp />
 
 class App extends Component {
@@ -31,7 +33,8 @@ class App extends Component {
                    <div>    
                         <Header />
                         <Route exact path="/" component={signUp} />
-                        <Route exact path="/dashboard" component={dashboard} />
+                        <Route exact path="/dashboard" component={Dashboard} />
+                        <Route exact path="/jobs" component={Jobs} />
                         <Route exact path="/surveys" component={gateway} />
                         <Route exact path="/form" component={CandidateForm} />
                         <Route exact path="/projectForm" component={ProjectForm} />

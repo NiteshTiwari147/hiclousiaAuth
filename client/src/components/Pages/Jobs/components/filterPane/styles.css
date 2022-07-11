@@ -1,0 +1,45 @@
+.filterContainer {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+    margin-top: 1rem;
+    margin-left: 1.5rem;
+    border-radius: 15px;
+    width: 82rem;
+    border: 2px solid white !important;
+    background: white;
+}
+
+.filter{
+    display: flex;
+    flex-direction: column;
+    margin: 1rem;
+    width: 15rem;
+}
+
+.filterTitle {
+    font-size: larger;
+    font-weight: 500;
+}
+
+.jobExperienceSelect {
+    display: flex;
+    width: 15rem;
+    margin-right: 1rem;
+}
+
+.optionLabel {
+    font-size: small;
+}
+
+.searchBox {
+    display: flex;
+    flex-direction: row;
+    margin-left: 3rem !important;
+    justify-content: space-around;
+    align-items: center;
+    border-radius: 15px;
+    border: 2px solid #1072eb !important;
+    background: white;
+}

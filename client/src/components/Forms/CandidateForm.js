@@ -178,11 +178,11 @@ class CandidateForm extends Component {
                                 onChange={this.handleDepartmentChange.bind(this)}
                             >
                                 <MenuItem value={'department'}>Department</MenuItem>
-                                <MenuItem value={'Front End'}>Front End</MenuItem>
-                                <MenuItem value={'Back End'}>Back End</MenuItem>
-                                <MenuItem value={'Full Stack'}>Full Stack</MenuItem>
-                                <MenuItem value={'Data Engineering'}>Data Engineering</MenuItem>
-                                <MenuItem value={'Data Science'}>Data Science</MenuItem>
+                                <MenuItem value={'frontEnd'}>Front End</MenuItem>
+                                <MenuItem value={'backEnd'}>Back End</MenuItem>
+                                <MenuItem value={'fullStack'}>Full Stack</MenuItem>
+                                <MenuItem value={'dataEngineering'}>Data Engineering</MenuItem>
+                                <MenuItem value={'dataScience'}>Data Science</MenuItem>
                             </Select>
                     </div>
                     <div className="form_inputBox input-field">
