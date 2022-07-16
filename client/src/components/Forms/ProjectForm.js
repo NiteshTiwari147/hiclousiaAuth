@@ -1,27 +1,28 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import Datepicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
-import Select from 'react-select';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import * as actions from '../../actions';
 
 class ProjectForm extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { errors: [], tittle: '', desc: '', solution: '', start_year: '',skill: '',skills: [], end_year: '', Industryselectoptions: [], ID:"", Industryname:""}
+        this.state = { tittle: '', desc: '', solution: '', start_year: '',skill: '',skills: [], end_year: '',
+        industry: 'industry', department: 'department',}
     }
 
     submitProject() {
         this.props.sendProjectInfo({          
             value: {
-                company: this.state.tittle,
+                title: this.state.tittle,
                 desc: this.state.desc,
                 startDate: this.state.start_year,
                 endDate: this.state.end_year,
                 skills: this.state.skills,
-                industry: this.state.industry
+                industry: this.state.industry,
+                department: this.state.department
             }      
         });
     }
@@ -29,14 +30,24 @@ class ProjectForm extends Component {
     addProject() {
         this.props.sendProjectInfo({          
             value: {
-                company: this.state.tittle,
+                title: this.state.tittle,
                 desc: this.state.desc,
                 startDate: this.state.start_year,
                 endDate: this.state.end_year,
                 skills: this.state.skills,
+                industry: this.state.industry,
+                department: this.state.department
             }      
         })
         .then(res => window.location.reload())
+    }
+
+    handleDepartmentChange(event) {
+        this.setState({department: event.target.value})
+    }
+
+    handleIndustryChange(event) {
+        this.setState({industry: event.target.value})
     }
 
     addCoreSkill(event) {
@@ -48,42 +59,6 @@ class ProjectForm extends Component {
         this.setState({skills: coreSkills});
 
     }
-    
-    async getOptions(){
-        const IndustryData = [
-            {
-                ID: 0,
-                Industryname: 'IT'
-            },
-            {
-                ID: 1,
-                Industryname: "Mechanical"
-            },
-            {
-                ID: 2,
-                Industryname: "Chemical"
-            },
-            {
-                ID: 3,
-                Industryname: "Biology"
-            }
-        ];
-
-        const Industryoptions = IndustryData.map(d => ({
-          "value" : d.ID,
-          "label" : d.Industryname
-    
-        }))
-           this.setState({Industryselectoptions: Industryoptions})
-      }
-
-
-    IndustryhandleChange(e){
-        this.setState({ID:e.value, Industryname:e.label})
-       } 
-    componentDidMount(){
-           this.getOptions()
-       }
     
        render() {
         return (
@@ -156,14 +131,36 @@ class ProjectForm extends Component {
                         </div>                    
                     </div>
                     <div className="form_inputBox input-field">
-                        <div className='formLabel_title'>
-                            Industry
-                        </div>
-                        <div className='formInput'>
-                            <div>
-                                <Select options={this.state.Industryselectoptions} onChange={this.IndustryhandleChange.bind(this)} />    
-                            </div>   
-                        </div>                    
+                    <div className='formLabel_title'>
+                                Industry And Department
+                            </div>
+                            <div className='industryAndDepartmentSelect'>
+                                <Select
+                                    id="industrySelect"
+                                    value={this.state.industry}
+                                    fullWidth
+                                    variant="outlined"
+                                    onChange={this.handleIndustryChange.bind(this)}
+                                >
+                                    <MenuItem value={'industry'}>Industry</MenuItem>
+                                    <MenuItem value={'IT'}>IT</MenuItem>
+                                </Select>
+                                <div style={{'margin': '1rem'}}/>
+                                <Select
+                                    id="genderSelect"
+                                    value={this.state.department}
+                                    fullWidth
+                                    variant="outlined"
+                                    onChange={this.handleDepartmentChange.bind(this)}
+                                >
+                                    <MenuItem value={'department'}>Department</MenuItem>
+                                    <MenuItem value={'Front End'}>Front End</MenuItem>
+                                    <MenuItem value={'Back End'}>Back End</MenuItem>
+                                    <MenuItem value={'Full Stack'}>Full Stack</MenuItem>
+                                    <MenuItem value={'Data Engineering'}>Data Engineering</MenuItem>
+                                    <MenuItem value={'Data Science'}>Data Science</MenuItem>
+                                </Select>
+                            </div>             
                     </div>
                     <div className='btnOption'>
                         <button className="btn" onClick={this.submitProject.bind(this)}><a href='/surveys' className='linkBtn'> Submit And Go

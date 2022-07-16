@@ -1,0 +1,47 @@
+.jobCardContainer {
+    display: flex;
+    flex-wrap: wrap;
+    width: 21rem;
+    height: fit-content;
+    margin: 2rem;
+    border: 2px solid white !important;
+    border-radius: 7px;
+    padding: 0px !important;
+    border-radius: 15px;
+    background: white;
+}
+
+.jobResultContainer {
+    display: flex;
+    align-items: center;
+    margin-left: 4rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.companyImage {
+    margin-top: 1.8rem;
+    margin-left:1rem;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 10px;
+}
+
+.jobCardHeadingContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.introduction {
+    display: flex;
+    width: inherit;
+    flex-direction: column;
+    margin-top: 1rem;
+    margin-left: 3rem;
+    height: 150px;
+}
+
+.stateBoxContainer {
+    display: flex;
+    flex-wrap: wrap;
+}

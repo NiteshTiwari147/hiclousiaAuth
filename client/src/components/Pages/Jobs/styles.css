@@ -1,0 +1,13 @@
+.jobsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.filterPaneTitle {
+    font-size: 30px;
+    font-weight: 500;
+    margin-left: 1.5rem;
+    margin-top: 1rem;
+    align-items: flex-start !important;
+}

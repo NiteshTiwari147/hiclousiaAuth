@@ -1,0 +1,20 @@
+.statBox {
+    display: flex;
+    flex-direction: column;
+    margin: 0rem 1rem 1rem 1rem;
+    width: 7rem;
+    height: 4rem;
+    border-radius: 15px;
+    background-color: #e2efff;
+    justify-content: center;
+}
+
+.statBoxText {
+    font-size: small;
+    margin-left: 1rem;
+}
+
+.statBoxScore {
+    margin-left: 1rem;
+    color: #1072EB
+}

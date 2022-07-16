@@ -1,0 +1,16 @@
+.dashboardLayout {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.dashboardStack {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.shadow {
+    border: 0.2px solid white;
+    padding: 10px;
+    box-shadow: 2px 2px #1072EB;
+}

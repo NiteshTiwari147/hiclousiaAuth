@@ -9,7 +9,6 @@ const EducationInfoSchema = new Schema({
     field_of_course: String,
     start_date: String,
     end_date: String,
-    industry: String,
     grade: String
 });
 

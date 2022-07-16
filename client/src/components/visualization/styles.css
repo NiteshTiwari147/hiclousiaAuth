@@ -1,5 +1,8 @@
 .skillpiechartContainer {
-    margin: 20px;
+    border-radius: 15px;
+    margin-top: 2rem;
+    background: white;
+    border: white;
     height: 300px;
-    width: 300px;
+    width: 330px;
 }

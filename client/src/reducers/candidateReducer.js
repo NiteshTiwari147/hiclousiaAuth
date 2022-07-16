@@ -1,8 +1,17 @@
-import { FETCH_CANDIDATE,FETCH_EDUCATION,FETCH_EXPERIENCE,FETCH_PROJECT } from "../actions/types";
+import { FETCH_CANDIDATE,FETCH_EDUCATION,FETCH_EXPERIENCE,FETCH_PROJECT, FETCH_SKILLSET } from "../actions/types";
 
 export function candidateInfo(state = null, action) {
     switch(action.type) {
         case FETCH_CANDIDATE: 
+            return action.payload || false;
+        default: 
+            return state;
+    }
+}
+
+export function skillSetInfo(state=null, action) {
+    switch(action.type) {
+        case FETCH_SKILLSET:
             return action.payload || false;
         default: 
             return state;

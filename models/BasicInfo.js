@@ -5,15 +5,15 @@ const BISchema = new Schema({
     googleId: String,
     email: String,
     name: String,
-    dob: String,
-    phone: String,
-    applyingFor: String,
-    experience: String,
-    nationality: String,
-    address: String,
+    age: String,
     city: String,
-    state: String,
-    zip: String,
+    industry: String,
+    department: String,
+    experienceYears: Number,
+    experienceMonths: Number,
+    currentEmployment: String,
+    companyName: String,
+    designation: String,
 });
 
 mongoose.model('basicInfo', BISchema);

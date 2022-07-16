@@ -6,11 +6,13 @@ const ExperienceInfoSchema = new Schema({
     email: String,
     company: String,
     designation: String,
+    typeOfExperience: String,
     description: String,
     start_date: String,
     end_date: String,
     skills: [String],
     industry: String,
+    department: String
 });
 
 mongoose.model('experiences', ExperienceInfoSchema);

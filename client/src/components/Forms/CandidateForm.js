@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
-import Datepicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
-import 'react-phone-number-input/style.css'
-import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
-import Select from 'react-select';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 
 class CandidateForm extends Component {
@@ -13,68 +10,91 @@ class CandidateForm extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { errors: [], Name: '', dateofbirth: '', phone: '',isvalid: false, applyingfor: '', experience: '',
-        selectOptions : [],id: "",name: '',MartialSelectoptions : [], Id:'', sttatus:'', nationality: '', address: '', city: '', states: '', zip: ''}
+        this.state = {name: '', city: '', age: '', gender: '', industry: 'industry', department: 'department',
+        experienceYears: 0, experienceMonths: 0, currentEmployment: 'student', companyName: '', designation: ''
+        }
     }
 
     
     addCandidateInfo() {
         this.props.sendBasicInfo({          
             value: {
-                name: this.state.Name,
-                dateOfBirth: this.state.dateofbirth,
-                phone: this.state.phone,
-                applyingFor: this.state.applyingfor,
-                experience: this.state.experience,
-                nationality: this.state.nationality,
-                address: this.state.address,
+                name: this.state.name,
+                age: this.state.age,
                 city: this.state.city,
-                state: this.state.states,
-                zip: this.state.zip,
+                industry: this.state.industry,
+                department: this.state.department,
+                experienceYears: this.state.experienceYears,
+                experienceMonths: this.state.experienceMonths,
+                currentEmployment: this.state.currentEmployment,
+                companyName: this.state.companyName,
+                designation: this.state.designation
             }      
         });
     }
 
+    handleEmploymentChange(event) {
+        this.setState({currentEmployment: event.target.value})
+    }
 
-    async getOptions(){
-        const genderData = [
-            {
-                id: 0,
-                name: 'Male'
-            },
-            {
-                id: 1,
-                name: "Female"
-            }
-        ];
-        const martialData = [
-            {
-                Id: 0,
-                sttatus: 'Yes'
-            },
-            {
-                Id: 1,
-                sttatus: 'No'
-            }
-        ];
-        
-        const genderoptions = genderData.map(d => ({
-          "value" : d.id,
-          "label" : d.name
-    
-        }))
-        const  Martialoptions = martialData.map(e => ({
-            "value" : e.Id,
-            "label" : e.sttatus
-        }))
-    
-        this.setState({selectOptions: genderoptions})
-        this.setState({MartialSelectoptions: Martialoptions})
-      }
-    componentDidMount(){
-           this.getOptions()
-       }
-     
+    handleExperienceYearsChange(event) {
+        this.setState({experienceYears: event.target.value})
+    }
+
+    handleExperienceMonthsChange(event) {
+        this.setState({experienceMonths: event.target.value})
+    }
+
+    handleGenderChange(event) {
+        this.setState({gender: event.target.value})
+    }
+
+    handleIndustryChange(event) {
+        this.setState({industry: event.target.value})
+    }
+
+    handleDepartmentChange(event) {
+        this.setState({department: event.target.value})
+    }
+
+    renderExperienceYears() {
+        const years = new Array(50).fill(0);
+        return years.map( (year,index) => <MenuItem value={index}>{index}</MenuItem>)
+    }
+
+    renderExperienceMonths() {
+        const months = new Array(12).fill(0);
+        return months.map( (month,index) => <MenuItem value={index}>{index}</MenuItem>)
+    }
+
+    renderCurrentEmployedFields() {
+        if(this.state.currentEmployment === 'employed') {
+            return <div className='form_inputBox input-field'>
+                <div className='formLabel_title'>
+                        Company :
+                </div>
+                <div className='formInput'>
+                            <input 
+                                placeholder="Enter Your Company Name"
+                                value={this.state.companyName}
+                                onChange={ e => this.setState({ companyName: e.target.value })}
+                            />    
+                </div>
+                <div className='formLabel_title'>
+                        Designation :
+                </div>
+                <div className='formInput'>
+                            <input 
+                                placeholder="Enter Your Designation"
+                                value={this.state.designation}
+                                onChange={ e => this.setState({ designation: e.target.value })}
+                            />    
+                </div>  
+            </div>
+        }
+    }
+
+
     render() {
         return (
             <div className='form_container'>
@@ -90,79 +110,39 @@ class CandidateForm extends Component {
                         <div className='formInput'>
                             <input 
                                 placeholder="Enter Your Name"
-                                value={this.state.Name}
-                                onChange={ e => this.setState({ Name: e.target.value })}
+                                value={this.state.name}
+                                onChange={ e => this.setState({ name: e.target.value })}
                             />    
                         </div>                    
                     </div>
                     <div className="form_inputBox input-field">
                         <div className='formLabel_title'>
-                            Date of Birth :
-                        </div>
-                        <div className='formInput'>
-                            <Datepicker selected={this.state.dateofbirth} onChange={(date) => this.setState({ dateofbirth: date})} 
-                                dateFormat='dd/MM/yyyy' isClearable showYearDropdown scrollableYearDropdown placeholderText="DD/MM/YYYY"
-                            />   
-                        </div>                    
-                    </div>
-                    <div className="form_inputBox input-field">
-                        <div className='formLabel_title'>
-                            phone :
-                        </div>
-                        <div className='formInput'>
-                            <PhoneInput
-                                defaultCountry="IN"
-                                placeholder="Enter phone number"
-                                value={this.state.phone}
-                                onChange={(e) => {
-                                    this.setState({ phone: e });
-                                }}
-                            />
-                            { this.state.isvalid && <label>Invalid Number</label>}  
-                        </div>                    
-                    </div>
-                    <div className="form_inputBox input-field">
-                        <div className='formLabel_title'>
-                            Applying For :
+                            Age :
                         </div>
                         <div className='formInput'>
                             <input 
-                                value={this.state.applyingfor}
-                                onChange={ e => this.setState({ applyingfor: e.target.value })}
-                            />    
+                                placeholder="Enter your age"
+                                value={this.state.age}
+                                onChange={ e => this.setState({ age: e.target.value })}
+                            />  
                         </div>                    
                     </div>
                     <div className="form_inputBox input-field">
                         <div className='formLabel_title'>
-                            Experience :
+                            Gender :
                         </div>
-                        <div className='formInput'>
-                            <input 
-                                value={this.state.experience}
-                                onChange={ e => this.setState({ experience: e.target.value })}
-                            />    
-                        </div>                    
-                    </div>
-                    <div className="form_inputBox input-field">
-                        <div className='formLabel_title'>
-                            Nationality :
-                        </div>
-                        <div className='formInput'>
-                            <input 
-                                value={this.state.nationality}
-                                onChange={ e => this.setState({ nationality: e.target.value })}
-                            />    
-                        </div>                    
-                    </div>
-                    <div className="form_inputBox input-field">
-                        <div className='formLabel_title'>
-                            Address :
-                        </div>
-                        <div className='formInput'>
-                            <input 
-                                value={this.state.address}
-                                onChange={ e => this.setState({ address: e.target.value })}
-                            />    
+                        <div className='formInput' style={{'marginTop': '1rem'}}>
+                            <Select
+                                id="genderSelect"
+                                value={this.state.gender}
+                                fullWidth
+                                variant="outlined"
+                                onChange={this.handleGenderChange.bind(this)}
+                            >
+                                <MenuItem value={'male'}>Male</MenuItem>
+                                <MenuItem value={'female'}>Female</MenuItem>
+                                <MenuItem value={'other'}>Other</MenuItem>
+                            </Select>
                         </div>                    
                     </div>
                     <div className="form_inputBox input-field">
@@ -171,33 +151,84 @@ class CandidateForm extends Component {
                         </div>
                         <div className='formInput'>
                             <input 
+                                placeholder="Enter your city"
                                 value={this.state.city}
                                 onChange={ e => this.setState({ city: e.target.value })}
-                            />    
+                            />  
                         </div>                    
+                    </div>
+                    <h7>Select Industry and Department you're looking for </h7>
+                    <div className='industryAndDepartmentSelect'>
+                            <Select
+                                id="industrySelect"
+                                value={this.state.industry}
+                                fullWidth
+                                variant="outlined"
+                                onChange={this.handleIndustryChange.bind(this)}
+                            >
+                                <MenuItem value={'industry'}>Industry</MenuItem>
+                                <MenuItem value={'IT'}>IT</MenuItem>
+                            </Select>
+                            <div style={{'margin': '1rem'}}/>
+                            <Select
+                                id="genderSelect"
+                                value={this.state.department}
+                                fullWidth
+                                variant="outlined"
+                                onChange={this.handleDepartmentChange.bind(this)}
+                            >
+                                <MenuItem value={'department'}>Department</MenuItem>
+                                <MenuItem value={'frontEnd'}>Front End</MenuItem>
+                                <MenuItem value={'backEnd'}>Back End</MenuItem>
+                                <MenuItem value={'fullStack'}>Full Stack</MenuItem>
+                                <MenuItem value={'dataEngineering'}>Data Engineering</MenuItem>
+                                <MenuItem value={'dataScience'}>Data Science</MenuItem>
+                            </Select>
                     </div>
                     <div className="form_inputBox input-field">
                         <div className='formLabel_title'>
-                            State :
+                            Experience :
                         </div>
-                        <div className='formInput'>
-                            <input 
-                                value={this.state.states}
-                                onChange={ e => this.setState({ states: e.target.value })}
-                            />    
-                        </div>                    
+                        <div className='candidateExperienceSelect'>
+                            <Select
+                                id="experienceYearsSelect"
+                                value={this.state.experienceYears}
+                                fullWidth
+                                variant="outlined"
+                                onChange={this.handleExperienceYearsChange.bind(this)}
+                            >
+                                {this.renderExperienceYears()}
+                            </Select> 
+                            <div style={{'margin': '1rem'}}>Years</div>
+                            <Select
+                                id="experienceMonthsSelect"
+                                value={this.state.experienceMonths}
+                                fullWidth
+                                variant="outlined"
+                                onChange={this.handleExperienceMonthsChange.bind(this)}
+                            >
+                                {this.renderExperienceMonths()}
+                            </Select>
+                            <div style={{'margin': '1rem'}}>Months</div>
+                        </div>              
                     </div>
                     <div className="form_inputBox input-field">
                         <div className='formLabel_title'>
-                            Zip :
+                            Current Employment Status :
                         </div>
-                        <div className='formInput'>
-                            <input 
-                                value={this.state.zip}
-                                onChange={ e => this.setState({ zip: e.target.value })}
-                            />    
-                        </div>                    
+                        <Select
+                                id="experienceYearsSelect"
+                                value={this.state.currentEmployment}
+                                fullWidth
+                                variant="outlined"
+                                onChange={this.handleEmploymentChange.bind(this)}
+                            >
+                               <MenuItem value={'student'}>Student</MenuItem>
+                               <MenuItem value={'employed'}>Employed</MenuItem>
+                               <MenuItem value={'Not Employed'}>Not Employed</MenuItem>
+                        </Select>
                     </div>
+                    {this.renderCurrentEmployedFields()}
                     <div className='btnOption'>
                         <button className="btn" onClick={this.addCandidateInfo.bind(this)}><a href='/surveys' className='linkBtn'>
                             Submit

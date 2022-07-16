@@ -51,7 +51,7 @@
 }
 
 .shadow {
-    border: 0.2px solid;
+    border: 0.2px solid white;
     padding: 10px;
     box-shadow: 2px 2px #1072EB;
 }
@@ -64,4 +64,16 @@
 
 .linkBtn {
     color: white
+}
+
+.industryAndDepartmentSelect {
+    display: flex;
+    width: 20rem;
+    margin: 1rem;
+}
+
+.candidateExperienceSelect {
+    display: flex;
+    width: 15rem;
+    margin: 1rem;
 }

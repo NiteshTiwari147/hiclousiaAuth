@@ -9,7 +9,8 @@ const ProjectInfoSchema = new Schema({
     start_date: String,
     end_date: String,
     skills: [String],
-    industry: String
+    industry: String,
+    department: String
 });
 
 mongoose.model('projects', ProjectInfoSchema);

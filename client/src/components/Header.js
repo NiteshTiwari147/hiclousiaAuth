@@ -16,6 +16,9 @@ class Header extends Component {
                 </ul>
             default: 
                 return <ul id="nav-mobile" class="right hide-on-med-and-down">
+                    <li><a className='headerBtn' href="/jobs">Jobs</a></li>
+                    <li><a className='headerBtn' href="/candidates">Talent</a></li>
+                    <li><a className='headerBtn' href="/dashboard">Dashboard</a></li>
                     <li className='headerText' >{this.props.auth.email}</li>
                     <li><a className='headerBtn' href="/api/logout">Log Out</a></li>
                 </ul>    
@@ -26,7 +29,7 @@ class Header extends Component {
             <nav className='navigationBar'>
                  <div className="navigationBarContent">
                     <div >
-                        <Link to='/surveys' className="brand-logo companyLogo">
+                        <Link to='/dashboard' className="brand-logo companyLogo">
                             HICLOUSIA
                         </Link>
                     </div>

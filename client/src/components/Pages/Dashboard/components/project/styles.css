@@ -1,0 +1,88 @@
+.projectContainer {
+    display: flex;
+    flex-wrap: wrap;
+    width: 40rem;
+    height: 21rem;
+    margin-top: 2rem;
+    background: white !important;
+    border: 2px solid white;
+    border-radius: 15px;
+    background: inherit;
+}
+
+.projectImage {
+    width: 20rem;
+    height: 13rem;
+    border-radius: 15px 15px 0px 0px;
+}
+
+.projectStatContainer {
+    display: flex;
+    width: inherit;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.projectStat {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.projectStatTitle{
+    color: #1072EB;
+    font-weight: 1000;
+    font-family: system-ui;
+}
+
+.projectInfoContainer {
+    width: 15rem;
+    height: 4rem;
+    /* color: #1072EB;
+    font-size: larger;
+    font-weight: 1000;
+    font-family: system-ui; */
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+}
+
+.projectTitle {
+    color: #1072EB;
+    font-size: larger;
+    white-space: nowrap; 
+    text-overflow: ellipsis; 
+    overflow: hidden;
+    font-weight: 1000;
+    font-family: system-ui;
+    margin-left: 1rem;
+    margin-bottom: 1rem;
+}
+
+.skillsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.skillBox {
+    width: 6rem;
+    border-radius: 5px;
+    padding: 5px;
+    white-space: nowrap; 
+    text-overflow: ellipsis; 
+    overflow: hidden;
+    margin: 2px;
+    font-size: small;
+    border: 2px solid grey;
+}
+
+.projectDetailsBtn {
+    border-radius: 20px;
+    width: 7rem;
+    height: 2rem;
+    background: #e2efff;
+    border: 2px solid #1072EB;
+    color: #1072EB;
+}
