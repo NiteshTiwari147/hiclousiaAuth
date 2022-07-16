@@ -11,7 +11,7 @@ class StatBox extends Component {
                     {title}
                 </div>
                 <div className="statBoxScore">                            
-                <h5 style={{marginTop: '0.5rem'}}>{value}</h5>
+                <h7 style={{marginTop: '0.5rem'}}>{value}</h7>
                 </div>
             </div>
         )

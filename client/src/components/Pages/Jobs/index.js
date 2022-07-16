@@ -26,7 +26,7 @@ class Jobs extends Component {
                     Jobs Results : 
                 </label>
                 <div className='jobResultContainer'>
-                    {companyData.map(obj => <JobCard logo={obj.url} companyName={obj.name} slryRnge={obj.slryRnge} position={obj.position} skills={obj.skills} />)}    
+                    {companyData.map(obj => <JobCard logo={obj.url} companyName={obj.name} slryRnge={obj.slryRnge} position={obj.position} skills={obj.skills} origin='candidate' />)}    
                 </div>
             </div>
         )

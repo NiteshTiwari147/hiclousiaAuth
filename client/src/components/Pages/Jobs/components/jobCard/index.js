@@ -11,8 +11,21 @@ class JobCard extends Component {
         super(props)
     }
 
+    renderOptions(origin) {
+        if(origin === 'client') {
+            return  <div style={{ marginTop: '0.3rem'}}>
+                    <Button className='applyBtn' variant="contained" size='small'>
+                        <div style={{fontSize: 'smaller'}}>view candidates</div>
+                    </Button>
+            </div>
+        }
+        return  <Button className='applyBtn' variant="contained" size='small'>
+                Apply
+            </Button>
+    }
+
     render() {
-        const { logo, companyName, slryRnge, position, skills } = this.props;
+        const { logo, companyName, slryRnge, position, skills, origin } = this.props;
         return (
             <div className='jobCardContainer shadow'>
                 <div className="jobCardHeadingContainer">
@@ -21,10 +34,8 @@ class JobCard extends Component {
                     </div>
                     <div className="introduction">
                         <h5 style={{marginBottom: '0.2rem'}}>{companyName}</h5>
-                        <h7 style={{marginTop: '0.3rem', color: 'blue'}}>Read Job Description</h7>
-                        <Button className='applyBtn' variant="contained">
-                            Apply
-                        </Button>
+                        <a style={{fontSize: 'smaller', marginTop: '0.3rem'}}>Read Job Description</a>
+                        {this.renderOptions(origin)}
                     </div>
                 </div>
                 <div className="stateBoxContainer">

@@ -1,0 +1,54 @@
+.postedJobCardContainer {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    height: fit-content;
+    margin: 2rem;
+    border: 2px solid white !important;
+    border-radius: 7px;
+    padding: 0px !important;
+    border-radius: 15px;
+    background: white;
+}
+
+.postedJobCardHeadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.introductionPostedJob {
+    display: flex;
+    width: inherit;
+    flex-direction: column;
+    margin-left: 3rem;
+    height: 150px;
+    flex: 1 1 0;
+}
+
+.viewDetails {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-right: 1rem;
+}
+
+.postedJobCompanyImage {
+    margin-left:1rem;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 10px;
+}
+
+.postedJobCardHeadingContainer:second-child {
+    width: 25rem;
+} 
+
+.postedJobstateBoxContainer {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.viewDetails {
+    margin-right: 2rem;
+}
