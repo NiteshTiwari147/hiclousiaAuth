@@ -12,6 +12,7 @@ import EducationForm from './Forms/EducationForm';
 import ExperienceForm from './Forms/ExperienceForm';
 import gateway from './utils/gateway';
 import Candidates from './Pages/Candidates';
+import Welcome from './Pages/Welcome';
 import SignUp from './SignUp';
 
 const signUp = () => <SignUp />
@@ -34,6 +35,7 @@ class App extends Component {
                    <div>    
                         <Header />
                         <Route exact path="/" component={signUp} />
+                        <Route exact path="/welcome" component={Welcome} />
                         <Route exact path="/dashboard" component={Dashboard} />
                         <Route exact path="/jobs" component={Jobs} />
                         <Route exact path="/candidates" component={Candidates} />

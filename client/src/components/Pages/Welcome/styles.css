@@ -1,0 +1,33 @@
+.welcomePageTitle {
+    display: block;
+    text-align: center;
+    margin: 3rem;
+}
+
+.userOptionPane {
+    margin: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.userBox {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    height: fit-content;
+    align-items: center;
+    justify-content: center;
+    margin: 3rem;
+    border: 2px solid white;
+    border-radius: 15px;
+    background: white;
+}
+
+.userIcon {
+    width: 5rem;
+    height: 5rem;
+    object-fit: cover;
+    border: 2px solid white;
+    border-radius: 50%;
+}

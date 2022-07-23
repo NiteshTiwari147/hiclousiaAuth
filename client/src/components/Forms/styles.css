@@ -10,10 +10,17 @@
 }
 
 .form_inputBox{
-    width: 50rem;
+    width: 20rem;
+    margin: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+}
+
+.inputBoxColumn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .formContent {
@@ -53,7 +60,7 @@
 .shadow {
     border: 0.2px solid white;
     padding: 10px;
-    box-shadow: 2px 2px #1072EB;
+    box-shadow: 2px 2px #1072eb;
 }
 
 .updateForm {
@@ -69,6 +76,7 @@
 .industryAndDepartmentSelect {
     display: flex;
     width: 20rem;
+    height: fit-content;
     margin: 1rem;
 }
 
@@ -76,4 +84,44 @@
     display: flex;
     width: 15rem;
     margin: 1rem;
+}
+
+.skillFormContainer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.industryInfoBox {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 19rem;
+    height: fit-content;
+    margin: 2rem;
+    border: 2px solid white !important;
+    border-radius: 7px;
+    padding: 0px !important;
+    border-radius: 15px;
+    background: white;
+}
+
+.headerContent{
+    display: flex;
+    justify-content: space-between;
+}
+
+.skillAddPane {
+    display: flex;
+    justify-content: space-between;
+}
+
+.skillOption {
+    display: flex;
+    justify-content: space-between;
+}
+
+.skillWeight {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
