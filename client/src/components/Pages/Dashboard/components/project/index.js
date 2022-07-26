@@ -18,8 +18,19 @@ class Project extends Component {
             }
         }
         render(){
+            const isEmpty = this.props.isEmpty
+
+            if(isEmpty) {
+                return <div className='projectContainer shadow' style={{flexDirection: 'column' ,justifyContent: 'center',
+                    alignItems: 'center'}}>
+                    <h5>No projects found !!</h5>
+                    <p>Please add your projects</p>
+                </div>
+            }
+
             const { title,description, skills } = this.props.data;
             const idx = this.props.idx % 10;
+
             return(
                 <div className='projectContainer shadow'>
                     <img className='projectImage' src={projectImages[idx].url} />

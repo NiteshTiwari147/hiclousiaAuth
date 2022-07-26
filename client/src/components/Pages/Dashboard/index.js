@@ -9,6 +9,7 @@ import SkillPieChart from '../../visualization/skillPieChart';
 import Education from './components/education';
 import ExperienceTab from './components/experience';
 import Certificate from './components/certificates';
+import LoadingScreen from '../../utils/loadingScreen';
 
 import './styles.css';
 
@@ -31,33 +32,37 @@ class Dashboard extends Component {
     }
 
     render() {
-        if(this.props.project && this.props.skillSet && this.props.candidate && this.props.education && this.props.experience) {
+        if(this.props.skillSet && this.props.candidate) {
             const {project, skillSet, candidate, education, experience } = this.props
             return (
                 <div className='dashboardLayout'>
                     <div className='dashboardStack'>
                         {this.renderCandidateInfo(candidate)}
-                        <ExperienceTab data={experience} />
-                        <Education data={education}/>
+                        {experience ? <ExperienceTab data={experience} isEmpty={false} /> : 
+                        <ExperienceTab data={experience} isEmpty={true} />}
+                        {education ? <Education data={education} isEmpty={false} /> : 
+                        <Education data={education} isEmpty={true} />}
                     </div>
                     <div className='dashboardStack'>
                         {this.renderATS()}
                         <FormBar />
-                        {project ? project.map((value,index) => <Project key={index} idx={index} data={value} /> ): null}
+                        {project ? project.map((value,index) => <Project key={index} idx={index} data={value} isEmpty={false} /> ) : 
+                         <Project data={null} isEmpty={true} />    
+                        }
                     </div>
                     <div className='dashboardStack'>
                         <div>
                             <SkillPieChart data={skillSet.coreSkills} />
-                            <Certificate data={skillSet.coreSkills}/>
+                            {skillSet.coreSkills ? <Certificate data={skillSet.coreSkills} isEmpty={false} /> : 
+                            <Certificate data={skillSet.coreSkills} isEmpty={true} />
+                            }
                         </div>
                     </div>
                 </div>
             )
         }
         else {
-            return <div>
-                Please fill all the information
-            </div>
+            return <LoadingScreen />
         }
         
     }

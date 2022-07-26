@@ -53,7 +53,7 @@ class SkillPieChart extends Component {
             skillData.push(obj); 
         })
         return (
-            <div className='skillpiechartContainer shadow'>
+            <div className='skillpiechartContainer shadow' >
                 <h5 style={{'textAlign': 'center', 'color': '#1072EB'}}>Skill Pie Chart</h5>
                 <Divider color='skyblue'/>
                 <ResponsivePie

@@ -14,3 +14,11 @@
     padding: 10px;
     box-shadow: 2px 2px #1072EB;
 }
+
+.loadingContainer {
+    height: 30rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

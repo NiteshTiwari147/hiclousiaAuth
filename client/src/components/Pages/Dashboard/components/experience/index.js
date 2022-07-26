@@ -27,6 +27,16 @@ class ExperienceTab extends Component {
         </div>
     }
     render() {
+        const isEmpty = this.props.isEmpty;
+
+        if(isEmpty) {
+            return <div className='experienceContainer shadow' style={{flexDirection: 'column' ,justifyContent: 'center',
+            alignItems: 'center'}}>
+            <h5 style={{"color": "#1072EB"}}>Experience</h5>
+            <Divider color='skyblue'/>
+            <p>You have not added any experience</p>
+        </div>
+        }
         const experienceList = this.props.data;
         return (
             <div className='experienceContainer shadow'>

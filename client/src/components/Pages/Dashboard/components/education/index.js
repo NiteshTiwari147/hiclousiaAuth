@@ -39,6 +39,15 @@ class Education extends Component {
         </div>
 }
     render() {
+        const isEmpty = this.props.isEmpty;
+
+        if(isEmpty) {
+            return  <div className='educationContainer shadow' >
+                <h5 style={{"color": "#1072EB"}}>Education</h5>
+                <Divider color='skyblue'/>
+                <p>You have not added any education</p>
+            </div>
+        }
         const educationList = this.props.data
         return (
             <div className='educationContainer shadow' >

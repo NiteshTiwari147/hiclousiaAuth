@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import FilterPane from './components/filterPane';
 import JobCard from './components/jobCard';
+import LoadingScreen from '../../utils/loadingScreen';
 
 import { companyData } from '../../../data/companyData';
 import './styles.css'
@@ -30,6 +31,9 @@ class Jobs extends Component {
                 </div>
             </div>
         )
+        }
+        else {
+            <LoadingScreen />
         }
     }
 }
