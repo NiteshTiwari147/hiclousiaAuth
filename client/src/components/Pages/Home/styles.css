@@ -16,7 +16,7 @@
     justify-content: center;
     border: 8px solid #1072EB;
     border-radius: 50%;
-    background-image: linear-gradient( 95.2deg, rgba(173,252,234,1) 26.8%, rgba(192,229,246,1) 64% );
+    background-image: white;
     width: 25rem;
     height: 25rem;
 }
@@ -43,5 +43,5 @@
     border: 2px solid white !important;
     padding: 0px !important;
     border-radius: 15px;
-    background-image: linear-gradient( 109.6deg, rgba(156,252,248,1) 11.2%, rgba(110,123,251,1) 91.1% );
+    background-image: white;
 }

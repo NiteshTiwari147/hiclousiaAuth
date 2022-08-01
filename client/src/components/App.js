@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 
 import Header from './Header';
+import Footer from './Footer';
 import Dashboard from './Pages/Dashboard';
 import Jobs from './Pages/Jobs';
 import CandidateForm from './Forms/CandidateForm';
@@ -46,6 +47,7 @@ class App extends Component {
                         <Route exact path="/projectForm" component={ProjectForm} />
                         <Route exact path="/educationForm" component={EducationForm} />
                         <Route exact path="/experienceForm" component={ExperienceForm} />
+                        <Footer />
                    </div>
                 </BrowserRouter>
             </div>
