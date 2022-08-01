@@ -44,7 +44,10 @@ class ProjectModal extends Component {
                 department: this.state.department
             }      
         })
-        .then(res => window.location.reload());
+        .then(res => {
+            this.props.fetchProject();
+            this.props.close();
+        });
     }
 
     handleDepartmentChange(event) {

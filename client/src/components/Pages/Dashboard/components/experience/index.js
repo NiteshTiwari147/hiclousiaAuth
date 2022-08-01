@@ -1,10 +1,28 @@
 import React, { Component } from 'react';
 import BusinessIcon from '@mui/icons-material/Business';
 import Divider from '@mui/material/Divider';
+import Button from  '@mui/material/Button';
+import EditIcon from '@mui/icons-material/Edit';
+
+import ExperienceListingModal from './listingModal';
 
 import './styles.css';
 
 class ExperienceTab extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = { modalOpen: false}
+    };
+
+    handleModalOpen() {
+        this.setState({modalOpen: true})
+    }
+
+    handleModalClose() {
+        this.setState({modalOpen: false})
+    }
+
     renderExperience(company, designation) {
         return <div>
             <div className='experienceContent'>
@@ -40,12 +58,22 @@ class ExperienceTab extends Component {
         const experienceList = this.props.data;
         return (
             <div className='experienceContainer shadow'>
-                <h5 style={{"color": "#1072EB"}}>Experience</h5>
+               <div className='educationContainerTitle'>
+                    <h6 style={{"color": "#1072EB"}}>Experience</h6>
+                    <Button size='small' onClick={this.handleModalOpen.bind(this)}>
+                        <EditIcon size='small' />
+                    </Button>
+                </div>
                 <Divider color='skyblue'/>
                 {experienceList.map(experience => this.renderExperience(
                     experience.company,
                     experience.designation
                 ))}
+                <ExperienceListingModal 
+                open={this.state.modalOpen}
+                close={this.handleModalClose.bind(this)}
+                list={experienceList}
+                />
             </div>
         )
     }

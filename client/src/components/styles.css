@@ -34,13 +34,18 @@
 
 .signUp {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
+    margin: 3rem;
+}
+
+.signUpImage {
+    height: 25rem;
 }
 
 .signupbtn {
     justify-content: center;
+    margin-top: 2rem;
     font-size: larger;
     font-weight: 500;
 }
@@ -51,7 +56,57 @@
     margin: 3rem;
 }
 
+.signUpForm {
+    display: flex;
+    flex-direction: column;
+}
+
 .fillBox {
+    color: black;
     justify-content: center;
     font-weight: 500;
+}
+
+.loginBox {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 20rem;
+    height: fit-content;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    border-radius: 15px;
+    background: white;
+}
+
+.googleIcon {
+    height: 2rem;
+    width: 2rem;
+}
+
+.basicForm {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 5rem;
+}
+
+.basicFormPage2 {
+    display: flex;
+    justify-content: space-around;
+    margin: 2rem;
+}
+
+.basicFormImage {
+    height: 25rem;
+}
+
+.basicFormPage2Title {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: #1272EB;
 }

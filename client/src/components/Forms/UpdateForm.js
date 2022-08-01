@@ -20,6 +20,16 @@ class UpdateForm extends Component {
                         Add Experience
                     </Link>
                 </div>
+                <div className='updateCardContainer shadow'>
+                    <Link to="/" className='fillBox'>
+                        Upload Certificate
+                    </Link>
+                </div>
+                <div className='updateCardContainer shadow'>
+                    <Link to="/dashboard" className='fillBox'>
+                        View Dashboard
+                    </Link>
+                </div>
             </div>
         )
     }

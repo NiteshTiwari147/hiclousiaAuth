@@ -38,9 +38,9 @@ class Dashboard extends Component {
                 <div className='dashboardLayout'>
                     <div className='dashboardStack'>
                         {this.renderCandidateInfo(candidate)}
-                        {experience ? <ExperienceTab data={experience} isEmpty={false} /> : 
+                        {experience && experience.length > 0 ? <ExperienceTab data={experience} isEmpty={false} /> : 
                         <ExperienceTab data={experience} isEmpty={true} />}
-                        {education ? <Education data={education} isEmpty={false} /> : 
+                        {education && education.length > 0 ? <Education data={education} isEmpty={false} /> : 
                         <Education data={education} isEmpty={true} />}
                     </div>
                     <div className='dashboardStack'>

@@ -10,6 +10,12 @@
     border-radius: 15px;
 }
 
+.educationContainerTitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .educationContent {
     display: flex;
 }
@@ -53,4 +59,10 @@
 .grade {
     font-weight: bold;
     margin-right: 1rem;
+}
+
+.modalListItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }

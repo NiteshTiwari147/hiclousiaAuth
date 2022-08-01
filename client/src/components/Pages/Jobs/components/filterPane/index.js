@@ -49,7 +49,6 @@ class FilterPane extends Component {
 
     constructor(props) {
         super(props);
-        console.log(this.props);
         this.state ={ industry: this.props ? this.props.industry: 'select', department: this.props ? this.props.department: 'select', experienceYears: this.props ? this.props.experienceYears : 0, experienceMonths: this.props ? this.props.experienceMonths : 0,
             city: 'All'
     }

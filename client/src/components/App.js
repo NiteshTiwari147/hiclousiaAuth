@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route} from 'react-router-dom';
+import { BrowserRouter, Route, Redirect} from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 
@@ -34,13 +34,15 @@ class App extends Component {
                 <BrowserRouter>
                    <div>    
                         <Header />
-                        <Route exact path="/" component={signUp} />
-                        <Route exact path="/welcome" component={Welcome} />
+                        <Route exact path="/signin" component={signUp}></Route>
+                        <Route exact path="/" component={signUp}>
+                            <Redirect to="/signin" />
+                        </Route>
+                        <Route exact path="/welcome" component={Welcome} />                 
+                        <Route exact path="/home" component={gateway} />
                         <Route exact path="/dashboard" component={Dashboard} />
                         <Route exact path="/jobs" component={Jobs} />
                         <Route exact path="/candidates" component={Candidates} />
-                        <Route exact path="/surveys" component={gateway} />
-                        <Route exact path="/form" component={CandidateForm} />
                         <Route exact path="/projectForm" component={ProjectForm} />
                         <Route exact path="/educationForm" component={EducationForm} />
                         <Route exact path="/experienceForm" component={ExperienceForm} />

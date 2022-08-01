@@ -85,10 +85,42 @@ module.exports = app => {
 
     app.post('/create/candidate', async function (req,res) {
         const basicInfo = mongoose.model('basicInfo');
-        const { name, age, city, industry, department, experienceYears, experienceMonths, currentEmployment, companyName, designation } = req.body;
+        const { name,
+            age, 
+            city,
+            gender,
+            role,
+            expectedPosition,
+            expectedSalary,
+            expectedIndustry,
+            expectedDepartment,
+            experienceYears, 
+            experienceMonths, 
+            currentEmployment,
+            companyName,
+            designation,
+            currentIndustry,
+            currentDepartment } = req.body;
         const { googleId, email } = req.user;
-        const response = await new basicInfo({googleId, email, name, age, city, industry, department, experienceYears, experienceMonths, currentEmployment, companyName, designation}).save(); 
-        res.send(response);
+        const response = await new basicInfo({googleId, 
+            email, 
+            name,
+            age, 
+            city,
+            gender,
+            role,
+            expectedPosition,
+            expectedSalary,
+            expectedIndustry,
+            expectedDepartment,
+            experienceYears, 
+            experienceMonths, 
+            currentEmployment,
+            companyName,
+            designation,
+            currentIndustry,
+            currentDepartment}).save(); 
+        res.send({response: 204});
     })
 
     app.post('/create/project',async function (req,res) {
@@ -142,6 +174,21 @@ module.exports = app => {
         const response = await new project({googleId, email, title, description, start_date, end_date, skills, industry, department}).save();    
         res.send(response);
     })
+
+    app.post('/create/skills',async function (req,res) {
+        const skillList = mongoose.model('skillSet');
+        const { skillsObj } = req.body;
+        let coreSkills = [];
+        skillsObj.map( skill => {
+            coreSkills.push({
+                skillName: skill.name.toLowerCase().trim(),
+                skillPoint: skill.inverseWeight
+            })
+        })
+        const { googleId, email } = req.user;
+        const response = await new skillList({googleId, email, coreSkills}).save();
+        res.send({status: 204});
+    })
     app.post('/create/education',async function (req,res) {
         const education =  mongoose.model('education');
         const { institute, course, field_of_course, start_date, end_date, grade} = req.body;
@@ -155,5 +202,69 @@ module.exports = app => {
         const { googleId, email } = req.user;
         const response = await new experience({googleId, email, company, designation, description, start_date, end_date, skills, industry, department, typeOfExperience}).save();
         res.send(response);
+    })
+
+    app.put('/update/education', async function (req, res) {
+        const education =  mongoose.model('education');
+        try {
+            if(req && req.user && req.user.googleId) {
+                const { id } = req.body
+                const { institute, course, field_of_course, start_date, end_date, grade} = req.body;
+                var newvalues = { $set: { id, institute, course, field_of_course, start_date, end_date, grade} };
+                const response = await education.updateOne({_id: id}, newvalues)
+                res.send({response});          
+            }
+            
+        } catch(err) {
+            console.log("error occured while update ",err);
+            res.send({status: 204})
+        }
+    });
+
+    app.put('/delete/education', async function (req, res) {
+        const education =  mongoose.model('education');
+        try {
+            if(req && req.user && req.user.googleId) {
+                const { id } = req.body
+                const response = await education.deleteOne({_id: id});
+                res.send({response});          
+            }
+        }
+        catch (err) {
+            console.log("error occured while delete ",err);
+            res.send({status: 204})
+        }   
+    });
+
+    app.put('/update/experience', async function (req, res) {
+        const experience =  mongoose.model('experiences');
+        try {
+            if(req && req.user && req.user.googleId) {
+                const { id } = req.body
+                const { company, designation, description, start_date, end_date, skills, industry, department, typeOfExperience} = req.body;
+                var newvalues = { $set: { id, company, designation, description, start_date, end_date, skills, industry, department, typeOfExperience} };
+                const response = await experience.updateOne({_id: id}, newvalues)
+                res.send({response});          
+            }
+        } catch(err) {
+            console.log("error occured while update ",err);
+            res.send({status: 204})
+        }
+        
+    });
+
+    app.put('/delete/experience', async function (req, res) {
+        const experience =  mongoose.model('experiences');
+        try {
+            if(req && req.user && req.user.googleId) {
+                const { id } = req.body
+                const response = await experience.deleteOne({_id: id});
+                res.send({response});          
+            }
+        }
+        catch (err) {
+            console.log("error occured while delete ",err);
+            res.send({status: 204})
+        }   
     })
 }

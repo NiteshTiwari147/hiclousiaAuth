@@ -29,8 +29,19 @@ class ExperienceModal extends Component {
 
     constructor(props) {
       super(props);
-      this.state ={organization: '', position: '',desc: '', start_year: '',skill: '',skills: [], end_year: '', current: true, 
-      industry: 'industry', department: 'department', typeOfExperience: 'fullTime'}
+      this.state ={organization: this.props.data ? this.props.data.organization : '',
+       id: this.props.data ? this.props.data.id : '',
+       position: this.props.data ? this.props.data.position : '',
+       desc: this.props.data ? this.props.data.desc : '',
+       start_year: this.props.data ? new Date(this.props.data.start_data) : '',
+       skill: '',
+       skills:  this.props.data ? this.props.data.skills : [],
+       end_year: '',
+       current: true, 
+       industry: this.props.data ? this.props.data.industry :'industry',
+       department: this.props.data ? this.props.data.department :'department',
+       typeOfExperience: 'fullTime'}
+       console.log('Constructor')
     }
 
     addCoreSkill(event) {
@@ -44,20 +55,46 @@ class ExperienceModal extends Component {
     }
 
     submitExperience() {
-        this.props.sendExperienceInfo({          
-            value: {
-                company: this.state.organization,
-                designation: this.state.position,
-                typeOfExperience: this.state.typeOfExperience,
-                desc: this.state.desc,
-                startDate: this.state.start_year,
-                endDate: this.state.end_year,
-                skills: this.state.skills,
-                industry: this.state.industry,
-                department: this.state.department
-            }      
-        })
-        .then(res => window.location.reload());
+        if(this.props.edit) {
+            this.props.updateExperienceInfo({
+                value: {
+                    id: this.state.id,
+                    company: this.state.organization,
+                    designation: this.state.position,
+                    typeOfExperience: this.state.typeOfExperience,
+                    desc: this.state.desc,
+                    startDate: this.state.start_year,
+                    endDate: this.state.end_year,
+                    skills: this.state.skills,
+                    industry: this.state.industry,
+                    department: this.state.department
+                }     
+            })
+            .then(res => {
+                this.props.fetchExperience();
+                this.props.close();
+            });
+        }
+        else {
+            this.props.sendExperienceInfo({          
+                value: {
+                    company: this.state.organization,
+                    designation: this.state.position,
+                    typeOfExperience: this.state.typeOfExperience,
+                    desc: this.state.desc,
+                    startDate: this.state.start_year,
+                    endDate: this.state.end_year,
+                    skills: this.state.skills,
+                    industry: this.state.industry,
+                    department: this.state.department
+                }      
+            })
+            .then(res => {
+                this.props.fetchExperience();
+                this.props.close();
+            });
+        }
+        
     }
 
     handleExperienceTypeChange(event) {
@@ -72,7 +109,7 @@ class ExperienceModal extends Component {
         this.setState({department: event.target.value})
     }
 
-    render() {     
+    render() {  
       return (<div>
             <Modal
               open={this.props.open}

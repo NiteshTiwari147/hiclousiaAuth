@@ -1,38 +1,55 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as actions from '../../actions';
 import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
 
-const data = [
-    {label: 'Select ', id: 0, priority: -1},
-    {label: 'React ', id: 1, priority: -1},
-    {label: 'Angular ', id: 2, priority: -1},
-    {label: 'Java ', id: 3, priority: -1},
-    {label: 'Python ', id: 4, priority: -1},
-]
+import submit from '../../data/submit.png';
+
 class SkillForm extends Component {
 
     constructor(props) {
         super(props);
-        this.state= { 
-            selectedSkill: {label: 'Select ', id: 0, priority: -1}, 
+        this.state= {
+            submitted: false,
+            selectedSkill: '',
+            selectedPriority: 0,
             skillList: [],
             skillOptions: [],
         }
     }
 
-    renderSelectedOption(skillObj) {
-        const seriesIndex = [1,2,3,5,8,13]
-        const seriesWeight = [1,3,6,11,19,32];
-        this.setState({selectedSkill: skillObj});
+    handleSelectedOption(event) {
+        this.setState({selectedSkill: event.target.value.toUpperCase()});
     }
 
-    handleRemove(index) {
-        const obj = this.state.skillList;
-        obj.splice(index-1,1);
-        obj.map( (item,index) => {
-            item.priority = index+1;
+    handleSelectedPriority(event) {
+        this.setState({selectedPriority: event.target.value});
+    }
+
+    handleSubmit() {
+        this.props.sendSkillList({
+            value: {
+                skillList: this.state.skillList
+            }
         })
+        .then(res => {
+            this.props.fetchSkillSet();
+        })
+        this.setState({
+            submitted: true
+        })
+    }
+
+
+    handleRemove(name) {
+        let obj = this.state.skillList;
+        obj.map((skill,index) => {
+            if(skill.name === name) {
+                obj.splice(index,1);
+                return;
+            }
+        });
         this.setState({
             skillList: obj
         })
@@ -41,10 +58,10 @@ class SkillForm extends Component {
     renderHeaderContent() {
         return <tr className='headerContent'>
             <th>
-                Skill Name
+                Priority
             </th>
             <th>
-                Priority
+                Skill Name
             </th>
             <th>
                 Action
@@ -54,7 +71,6 @@ class SkillForm extends Component {
 
     renderSkillList() {
         const skillList = this.state.skillList || [];
-
         if(skillList.length === 0) {
             return <div style={{'textAlign': 'center', margin: '1rem'}}>
                 Please add skill 
@@ -62,13 +78,13 @@ class SkillForm extends Component {
         }
         return skillList.map(skill => <tr className='skillOption'>
         <td className='skillWeight'>
-            {skill.priority}
+            {skill.inverseWeight}
         </td>
         <td className='skillMenu'>
-            {skill.label}
+            {skill.name}
         </td>
         <td className='skillAction'>
-            <Button variant="contained" size='small' sx={{width: 2}} onClick={this.handleRemove.bind(this, skill.priority)}>
+            <Button variant="contained" size='small' sx={{width: 2}} onClick={this.handleRemove.bind(this, skill.name)}>
                 Remove
             </Button>
         </td>
@@ -76,37 +92,48 @@ class SkillForm extends Component {
     }
 
     addSkillHandle() {
-        const skillObj = this.state.selectedSkill;
+        const skillName = this.state.selectedSkill;
+        const skillPriority = parseInt(this.state.selectedPriority);
+        const temp = {
+            name: skillName,
+            inverseWeight: skillPriority
+        }
+
         const obj = this.state.skillList;
-        const len = obj.length;
-        skillObj.priority = len+1;
-        
-        obj.push(this.state.selectedSkill);
+        obj.push(temp);
         this.setState({
             skillList: obj
         })
+
         this.setState({
-            selectedSkill: {label: 'Select ', id: 0, priority: -1},
+            selectedSkill: '',
+            selectedPriority: 0,
         })
     }
 
     render() {
-        return(
-                <div>
+        return( <div>
+                {!this.state.submitted &&<div>
+                    <h5  style={{textAlign: 'center', color: '#1272EB', fontFamily: 'cursive', marginBottom: '1rem'}}>Please add your skills</h5>
+                    <p style={{color: 'green'}}>Note: add them in ascending order for better assesment</p>
                     <div className='skillAddPane'>
-                        <Autocomplete
-                        disablePortal
-                        id="combo-box-demo"
-                        value={this.state.selectedSkill}
-                        onChange={(event, newValue) => {
-                            this.renderSelectedOption(newValue);
-                        }}
-                        size='small'
-                        options={data}
-                        sx={{ width: 200, background: 'white'}}
-                        renderInput={(params) => { 
-                            return <TextField {...params} label="Skill" size='small' />}}
-                        />
+                        <TextField id="outlined-basic" label="Skill" size='small' variant="outlined"
+                            value={this.state.selectedSkill}
+                            onChange={(event) => {
+                            this.handleSelectedOption(event);
+                        }} />
+                        <div style={{marginLeft: '1rem'}}/>
+                        <TextField id="outlined-number"
+                            value={this.state.selectedPriority}
+                            label="Priority"
+                            type="number"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            onChange={(event) => {
+                            this.handleSelectedPriority(event);
+                        }} />
+                        <div style={{marginLeft: '1rem'}}/>
                         <Button  variant="contained" onClick={this.addSkillHandle.bind(this)} size='medium'>Add Skill</Button>
                     </div>
                     <table style={{'width': '30rem'}}>
@@ -114,13 +141,15 @@ class SkillForm extends Component {
                         {this.renderSkillList()}
                     </table>
                     <div style={{'display': 'flex', 'justifyContent': 'center', 'margin': '2rem'}}>
-                        <Button size='large' variant='contained'>
+                        <Button size='large' variant='contained' onClick={this.handleSubmit.bind(this)}>
                             Save
                         </Button>
                     </div>
+                </div>}
+                {this.state.submitted && <img src={submit} alt="Avatar"/>}
                 </div>
         )
     }
 };
 
-export default SkillForm;
+export default connect(null, actions)(SkillForm);

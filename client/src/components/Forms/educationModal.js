@@ -29,7 +29,16 @@ class EducationModal extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { errors: [], institute: '', course: '', field_of_course: '', start_year: '', end_year: '', grade: '', industry: ''}
+    this.state = { errors: [], 
+      institute: this.props.data ? this.props.data.institute : '' ,
+      id: this.props.data ? this.props.data.id : '',
+      course: this.props.data ? this.props.data.course : '', 
+      field_of_course: this.props.data ? this.props.data.field_of_course : '', 
+      start_year: this.props.data ? new Date(this.props.data.start_year) : '',  
+      end_year: this.props.data ? new Date(this.props.data.end_year) : '',  
+      grade: this.props.data ? this.props.data.grade : '',  
+      industry: this.props.data ? this.props.data.industry : ''
+    }
   }
 
   addEducation() {
@@ -46,17 +55,39 @@ class EducationModal extends Component {
     .then(res => window.location.reload());
   }
   submitEducation() {
-      this.props.sendEducationInfo({          
-          value: {
-              institute: this.state.institute,
-              course: this.state.course,
-              field_of_course: this.state.field_of_course,
-              startDate: this.state.start_year,
-              endDate: this.state.end_year,
-              grade: this.state.grade
-          }      
+    if(this.props.edit) {
+      this.props.updateEducationInfo({          
+        value: {
+            id: this.state.id,
+            institute: this.state.institute,
+            course: this.state.course,
+            field_of_course: this.state.field_of_course,
+            startDate: this.state.start_year,
+            endDate: this.state.end_year,
+            grade: this.state.grade
+        }      
       })
-      .then(res => window.location.reload());
+      .then(res => {
+        this.props.fetchEducation();
+        this.props.close();
+      });
+    }
+    else {
+      this.props.sendEducationInfo({          
+        value: {
+            institute: this.state.institute,
+            course: this.state.course,
+            field_of_course: this.state.field_of_course,
+            startDate: this.state.start_year,
+            endDate: this.state.end_year,
+            grade: this.state.grade
+        }      
+      })
+      .then(res => {
+        this.props.fetchEducation();
+        this.props.close();
+      });
+    }
   }
     render() {
       return (

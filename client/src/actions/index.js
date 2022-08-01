@@ -51,17 +51,24 @@ export const fetchExperience = () => async dispatch => {
 
 export const sendBasicInfo =  (props) => async dispatch => {
     const obj = {
-        name: props.value.name,
-        age: props.value.age,
-        city: props.value.city,
-        industry: props.value.industry,
-        department: props.value.department,
-        experienceYears: props.value.experienceYears,
-        experienceMonths: props.value.experienceMonths,
-        currentEmployment: props.value.currentEmployment,
-        companyName: props.value.companyName,
-        designation: props.value.designation, 
+            name: props.value.name,
+            age: props.value.age,
+            city: props.value.city,
+            gender: props.value.gender,
+            role: props.value.role,
+            expectedPosition: props.value.expectedPosition,
+            expectedSalary: props.value.expectedSalary,
+            expectedIndustry: props.value.expectedIndustry,
+            expectedDepartment: props.value.expectedDepartment,
+            experienceYears: props.value.experienceYears,
+            experienceMonths: props.value.experienceMonths,
+            currentEmployment: props.value.currentEmployment,
+            companyName: props.value.companyName,
+            designation: props.value.designation,
+            currentIndustry: props.value.currentIndustry,
+            currentDepartment: props.value.currentDepartment
     };
+    console.log("params", obj);
     const res = await axios.post('/create/candidate', obj);
 }
 
@@ -104,3 +111,53 @@ export const sendEducationInfo = (props) => async dispatch => {
     };
     const res = await axios.post('/create/education', obj);
 }
+
+export const sendSkillList = (props) => async dispatch => {
+    const obj = {
+        skillsObj: props.value.skillList
+    };
+    const res = await axios.post('/create/skills', obj);
+}
+
+export const updateEducationInfo = (props) => async dispatch => {
+    const obj = {
+        id: props.value.id,
+        institute: props.value.institute,
+        course: props.value.course,
+        field_of_course: props.value.field_of_course,
+        start_date: props.value.startDate,
+        end_date: props.value.endDate,
+        grade: props.value.grade,
+    };
+    const res = await axios.put('/update/education', obj);
+};
+
+export const updateExperienceInfo = (props) => async dispatch => {
+    const obj = {
+        id: props.value.id,
+        company: props.value.company,
+        designation: props.value.designation,
+        typeOfExperience: props.value.typeOfExperience,
+        description: props.value.desc,
+        start_date: props.value.startDate,
+        end_date: props.value.endDate,
+        skills: props.value.skills,
+        industry: props.value.industry,
+        department: props.value.department
+    }
+    const res = await axios.put('/update/experience',obj);
+};
+
+export const deleteEducation = (props) => async dispatch => {
+    const obj = {
+        id: props.value.id,
+    }
+    const res = await axios.put('/delete/education', obj);
+};
+
+export const deleteExperience = (props) => async dispatch => {
+    const obj = {
+        id: props.value.id
+    }
+    const res = await axios.put('/delete/experience', obj);
+};

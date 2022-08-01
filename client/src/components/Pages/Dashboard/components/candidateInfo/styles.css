@@ -30,10 +30,12 @@
 }
 
 .profileName {
+    color: black;
     margin: 0.5rem !important;
 }
 
 .profilePosition {
-    color: #1072EB;
+    text-align: center;
+    color: black;
     margin: 0.5rem;
 }
