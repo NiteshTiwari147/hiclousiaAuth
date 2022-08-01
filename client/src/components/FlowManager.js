@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import Landing from './Landing';
 import CandidateHome from './Pages/Home/Candidate';
+import LoadingScreen from './utils/loadingScreen';
 
 class FlowManager extends Component {
 
@@ -28,13 +29,15 @@ class FlowManager extends Component {
 
     }
     render() {
-        if(this.props.auth && (!this.props.candidate || !this.props.skillSet)) {
+        if(this.props.auth && (this.props.candidate == false || this.props.skillSet === false)) {
             return <Landing />
         }
 
         if(this.props.auth && this.props.candidate && this.props.skillSet && this.props.skillSet.coreSkills.length > 0) {
             return <CandidateHome />
         }
+
+        return <LoadingScreen />
         
     }
 }
