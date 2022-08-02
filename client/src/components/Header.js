@@ -29,7 +29,7 @@ class Header extends Component {
             <nav className='navigationBar'>
                  <div className="navigationBarContent">
                     <div >
-                        <Link to='/dashboard' className="brand-logo companyLogo">
+                        <Link to='/home' className="brand-logo companyLogo">
                             HICLOUSIA
                         </Link>
                     </div>
