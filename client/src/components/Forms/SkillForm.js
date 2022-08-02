@@ -114,7 +114,7 @@ class SkillForm extends Component {
     render() {
         return( <div>
                 {!this.state.submitted &&<div>
-                    <h5  style={{textAlign: 'center', color: '#1272EB', fontFamily: 'cursive', marginBottom: '1rem'}}>Please add your skills</h5>
+                    <h5  style={{textAlign: 'center', color: '#1272EB', fontFamily: 'sans-serif', marginBottom: '1rem'}}>Please add your skills</h5>
                     <p style={{color: 'green'}}>Note: add them in ascending order for better assesment</p>
                     <div className='skillAddPane'>
                         <TextField id="outlined-basic" label="Skill" size='small' variant="outlined"

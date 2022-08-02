@@ -87,7 +87,7 @@ class ExpectationForm extends Component {
         return (
             <div>
                 {!this.state.submitted && <div>   
-                    <h5  style={{textAlign: 'center', color: '#1272EB', fontFamily: 'cursive', marginBottom: '1rem'}}>Please mention your expectation</h5>
+                    <h5  style={{textAlign: 'center', color: '#1272EB', fontFamily: 'sans-serif', marginBottom: '1rem'}}>Please mention your expectation</h5>
                     <form className="col s16">
                     <div className='inputBoxColumn' style={{marginLeft: '1rem'}}>
                         <div className='formLabel_title' style={{'marginBottom': '1rem'}}>

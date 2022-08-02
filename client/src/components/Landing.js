@@ -52,7 +52,7 @@ class Landing extends Component {
     
     renderContent() {
         if(this.props.auth) {
-            return <div style={{textAlign: 'center', color: '#1272EB', fontFamily: 'cursive', width: '30rem'}} className='shadow'>
+            return <div style={{textAlign: 'center', color: '#1272EB', fontFamily: 'sans-serif', width: '30rem'}} className='shadow'>
                 <h4>
                     Tell us about yourself, {this.props.auth.name.toUpperCase()}
                 </h4>
@@ -132,7 +132,7 @@ class Landing extends Component {
             return (
                 <div>
                     <div className='basicFormPage2Title'>
-                        <h3 style={{textAlign: 'center', fontFamily: "cursive"}}>Help us in knowing you better</h3>
+                        <h3 style={{textAlign: 'center', fontFamily: "sans-serif"}}>Help us in knowing you better</h3>
                         {this.renderSubmitButton()}
                     </div>
                     <div className='basicFormPage2'>

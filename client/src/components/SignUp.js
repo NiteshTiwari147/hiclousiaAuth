@@ -17,13 +17,13 @@ class SignUp extends Component {
             <div className='signUp'>  
                 <div className='signUpLogo'>
                     <img className='signUpImage' src={logo} alt="Avatar"/>
-                    <div style={{textAlign: 'center', color: '#1272EB', fontFamily: 'cursive'}}>
+                    <div style={{textAlign: 'center', color: '#1272EB', fontFamily: 'sans-serif'}}>
                         <h4>Join us and take your career</h4>
                         <h3>to the sky</h3>
                     </div>                
                 </div>
                 <div className='signUpForm shadow'>
-                    <div style={{textAlign: 'center', color: '#1272EB', fontFamily: 'cursive'}}>
+                    <div style={{textAlign: 'center', color: '#1272EB', fontFamily: 'sans-serif'}}>
                         <h4 style={{color: '#1272EB !important'}}>Let's get started</h4>
                     </div>
                     <div className='loginBox'>
