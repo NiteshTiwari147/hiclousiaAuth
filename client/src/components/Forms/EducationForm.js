@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom'
 import * as actions from '../../actions';
 import Datepicker from 'react-datepicker'
@@ -51,11 +53,19 @@ class EducationForm extends Component {
                         Institute
                     </div>
                     <div className='formInput'>
-                        <input 
-                            placeholder="Enter Institute name"
-                            value={this.state.institute}
-                            onChange={ e => this.setState({ institute: e.target.value })}
-                        />    
+                        <Select
+                        id="universityTypeSelect"
+                        value={this.state.typeOfExperience}
+                        fullWidth
+                        variant="outlined"
+                        onChange={this.handleExperienceTypeChange.bind(this)}
+                        >
+                            <MenuItem value={'iit'}>IITs</MenuItem>
+                            <MenuItem value={'nit'}>NITs</MenuItem>
+                            <MenuItem value={'central'}>Central university</MenuItem>
+                            <MenuItem value={'govt'}>Govt. university</MenuItem>
+                            <MenuItem value={'private'}>Private</MenuItem>
+                        </Select>   
                     </div>                    
                 </div>
                 <div className="form_inputBox input-field">
@@ -63,11 +73,19 @@ class EducationForm extends Component {
                         Programme   
                     </div>
                     <div className='formInput'>
-                        <input 
-                            placeholder="Enter Programme name"
-                            value={this.state.course}
-                            onChange={ e => this.setState({ course: e.target.value })}
-                        />    
+                        <Select
+                        id="universityTypeSelect"
+                        value={this.state.typeOfExperience}
+                        fullWidth
+                        variant="outlined"
+                        onChange={this.handleExperienceTypeChange.bind(this)}
+                        >
+                            <MenuItem value={'iit'}>Doctrate</MenuItem>
+                            <MenuItem value={'nit'}>Masters</MenuItem>
+                            <MenuItem value={'central'}>Bachelor</MenuItem>
+                            <MenuItem value={'govt'}>PG diploma</MenuItem>
+                            <MenuItem value={'private'}>Diploma</MenuItem>
+                        </Select>  
                     </div>                    
                 </div>
                 <div className="form_inputBox input-field">

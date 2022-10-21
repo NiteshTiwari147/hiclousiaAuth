@@ -8,6 +8,7 @@ import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 
 import ExpectationForm from './Forms/expectationForm';
+import CompositeForm from './Forms/CompositeForm';
 import SkillForm from './Forms/SkillForm';
 import LoadingScreen from './utils/loadingScreen';
 
@@ -119,7 +120,6 @@ class Landing extends Component {
         }
     }
     render() {
-        console.log('cdsml', this.props);
         if(!this.state.buttonClicked) {
             return <div className='basicForm'>
             <div className='signUpLogo'>
@@ -138,7 +138,7 @@ class Landing extends Component {
                     <div className='basicFormPage2'>
                         <ExpectationForm name={this.props.auth ? this.props.auth.name : 'user'} age={this.state.age} gender={this.state.gender} role={this.state.role} />
                         <Divider orientation="vertical" flexItem />
-                        <SkillForm />
+                        <CompositeForm />
                     </div>
                 </div>
             )}

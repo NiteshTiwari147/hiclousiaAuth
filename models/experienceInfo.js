@@ -8,8 +8,11 @@ const ExperienceInfoSchema = new Schema({
     designation: String,
     typeOfExperience: String,
     description: String,
-    start_date: String,
-    end_date: String,
+    isCurrent: Boolean,
+    industryExperience: {
+        yr: Number,
+        mo: Number
+    },
     skills: [String],
     industry: String,
     department: String

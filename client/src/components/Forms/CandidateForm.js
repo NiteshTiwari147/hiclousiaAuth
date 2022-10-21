@@ -13,7 +13,7 @@ class CandidateForm extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {submitted: false,
+        this.state = {submitted: true,
         name: this.props.name ? this.props.name: 'User',
         city: '',
         age: this.props.age ? this.props.age: '25',
@@ -26,6 +26,10 @@ class CandidateForm extends Component {
         experienceYears: 0, experienceMonths: 0, currentEmployment: 'student', companyName: '', designation: 'L1',
         currentIndustry: 'industry', currentDepartment: 'department'
         }
+    }
+
+    componentDidMount() {
+        this.addCandidateInfo();
     }
 
     
@@ -41,13 +45,6 @@ class CandidateForm extends Component {
                 expectedSalary: this.state.budget,
                 expectedIndustry: this.state.expectedIndustry,
                 expectedDepartment: this.state.expectedDepartment,
-                experienceYears: this.state.experienceYears,
-                experienceMonths: this.state.experienceMonths,
-                currentEmployment: this.state.currentEmployment,
-                companyName: this.state.companyName,
-                designation: this.state.designation,
-                currentIndustry: this.state.currentIndustry,
-                currentDepartment: this.state.currentDepartment
             }      
         })
         .then(res => {
@@ -202,35 +199,34 @@ class CandidateForm extends Component {
                                 />  
                             </div>                    
                         </div>
-                    <div className='inputBoxColumn'>
-                        
+                    <div className='inputBoxColumn'>                      
                         <div className="form_inputBox input-field">
-                        <div className='formLabel_title'>
-                            Experience :
+                            <div className='formLabel_title'>
+                                Experience :
+                            </div>
+                            <div className='candidateExperienceSelect'>
+                                <Select
+                                    id="experienceYearsSelect"
+                                    value={this.state.experienceYears}
+                                    fullWidth
+                                    variant="outlined"
+                                    onChange={this.handleExperienceYearsChange.bind(this)}
+                                >
+                                    {this.renderExperienceYears()}
+                                </Select> 
+                                <div style={{'margin': '1rem'}}>Years</div>
+                                <Select
+                                    id="experienceMonthsSelect"
+                                    value={this.state.experienceMonths}
+                                    fullWidth
+                                    variant="outlined"
+                                    onChange={this.handleExperienceMonthsChange.bind(this)}
+                                >
+                                    {this.renderExperienceMonths()}
+                                </Select>
+                                <div style={{'margin': '1rem'}}>Months</div>
+                            </div>              
                         </div>
-                        <div className='candidateExperienceSelect'>
-                            <Select
-                                id="experienceYearsSelect"
-                                value={this.state.experienceYears}
-                                fullWidth
-                                variant="outlined"
-                                onChange={this.handleExperienceYearsChange.bind(this)}
-                            >
-                                {this.renderExperienceYears()}
-                            </Select> 
-                            <div style={{'margin': '1rem'}}>Years</div>
-                            <Select
-                                id="experienceMonthsSelect"
-                                value={this.state.experienceMonths}
-                                fullWidth
-                                variant="outlined"
-                                onChange={this.handleExperienceMonthsChange.bind(this)}
-                            >
-                                {this.renderExperienceMonths()}
-                            </Select>
-                            <div style={{'margin': '1rem'}}>Months</div>
-                        </div>              
-                    </div>
                     </div>
                     {this.renderCurrentEmployedFields()}
                     <div className='btnOption'>

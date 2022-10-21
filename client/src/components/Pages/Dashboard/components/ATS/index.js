@@ -17,10 +17,10 @@ class ATS extends Component {
                 </div>
                 <div className="miniBox">
                     <div>
-                        <h6 className="headingATS">Skills</h6> 
+                        <h6 className="headingATS">Education Compentency</h6> 
                     </div>
                     <h6 className="ATS_score" style={{marginRight: '1rem'}}>
-                        {skills}
+                        723/1000
                     </h6>
                 </div>
                 <div className="miniBox">
@@ -33,10 +33,10 @@ class ATS extends Component {
                 </div>
                 <div className="miniBox">
                     <div>
-                        <h6 className="headingATS">Certificates</h6> 
+                        <h6 className="headingATS">Skill Compentency</h6> 
                     </div>
                     <h6 className="ATS_score" style={{marginRight: '1rem'}}>
-                        0
+                        783/1000
                     </h6>
                 </div>
             </div>

@@ -93,14 +93,7 @@ module.exports = app => {
             expectedPosition,
             expectedSalary,
             expectedIndustry,
-            expectedDepartment,
-            experienceYears, 
-            experienceMonths, 
-            currentEmployment,
-            companyName,
-            designation,
-            currentIndustry,
-            currentDepartment } = req.body;
+            expectedDepartment } = req.body;
         const { googleId, email } = req.user;
         const response = await new basicInfo({googleId, 
             email, 
@@ -112,14 +105,7 @@ module.exports = app => {
             expectedPosition,
             expectedSalary,
             expectedIndustry,
-            expectedDepartment,
-            experienceYears, 
-            experienceMonths, 
-            currentEmployment,
-            companyName,
-            designation,
-            currentIndustry,
-            currentDepartment}).save(); 
+            expectedDepartment}).save(); 
         res.send({response: 204});
     })
 
@@ -156,7 +142,7 @@ module.exports = app => {
                 if(err){
                     console.log(err);
                 }else{
-                    console.log("Skils Saved To database");
+                    console.log("Skills Saved To database");
                 }
             });
         } 
@@ -182,7 +168,8 @@ module.exports = app => {
         skillsObj.map( skill => {
             coreSkills.push({
                 skillName: skill.name.toLowerCase().trim(),
-                skillPoint: skill.inverseWeight
+                industryExperience: skill.industryExperience,
+                otherExperience: skill.otherExperience
             })
         })
         const { googleId, email } = req.user;
@@ -198,9 +185,10 @@ module.exports = app => {
     })
     app.post('/create/experience',async function (req,res) {
         const experience =  mongoose.model('experiences');
-        const { company, designation, description, start_date, end_date, skills, industry, department, typeOfExperience} = req.body;
+        const { company, designation, description, isCurrent, industryExperience, skills, industry, department, typeOfExperience} = req.body;
         const { googleId, email } = req.user;
-        const response = await new experience({googleId, email, company, designation, description, start_date, end_date, skills, industry, department, typeOfExperience}).save();
+        console.log("about to send ", req.body);
+        const response = await new experience({googleId, email, company, designation, description, isCurrent, industryExperience, skills, industry, department, typeOfExperience}).save();
         res.send(response);
     })
 
@@ -241,8 +229,8 @@ module.exports = app => {
         try {
             if(req && req.user && req.user.googleId) {
                 const { id } = req.body
-                const { company, designation, description, start_date, end_date, skills, industry, department, typeOfExperience} = req.body;
-                var newvalues = { $set: { id, company, designation, description, start_date, end_date, skills, industry, department, typeOfExperience} };
+                const { company, designation, description, isCurrent, industryExperience, skills, industry, department, typeOfExperience} = req.body;
+                var newvalues = { $set: { id, company, designation, description, isCurrent, industryExperience, skills, industry, department, typeOfExperience} };
                 const response = await experience.updateOne({_id: id}, newvalues)
                 res.send({response});          
             }

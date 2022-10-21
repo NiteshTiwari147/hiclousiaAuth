@@ -29,7 +29,7 @@ class Certificate extends Component {
         const skillList = this.props.data;
         return (
             <div className='certicatesContainer shadow'>
-                <h5 style={{"color": "#1072EB"}}>Certificates</h5>
+                <h5 style={{"color": "#1072EB"}}>Skills & Certificates</h5>
                 <Divider color='skyblue'/>
                 <div className='certicateContent'>
                     {skillList.map(skill => this.renderSkillCertificate(skill.skillName))}

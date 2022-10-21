@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
+import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import MenuItem from '@mui/material/MenuItem';
 
 import submit from '../../data/submit.png';
 
@@ -15,8 +17,29 @@ class SkillForm extends Component {
             selectedSkill: '',
             selectedPriority: 0,
             skillList: [],
+            industryExperienceYears: 0,
+            industryExperienceMonths: 0,
+            otherExperienceYears: 0,
+            otherExperienceMonths: 0,
+            experienceType: 'industry',
             skillOptions: [],
         }
+    }
+
+    handleIndustryExperienceYearsChange(event) {
+        this.setState({industryExperienceYears: event.target.value})
+    }
+
+    handleIndustryExperienceMonthsChange(event) {
+        this.setState({industryExperienceMonths: event.target.value})
+    }
+
+    handleOtherExperienceYearsChange(event) {
+        this.setState({otherExperienceYears: event.target.value})
+    }
+
+    handleOtherExperienceMonthsChange(event) {
+        this.setState({otherExperienceMonths: event.target.value})
     }
 
     handleSelectedOption(event) {
@@ -58,13 +81,13 @@ class SkillForm extends Component {
     renderHeaderContent() {
         return <tr className='headerContent'>
             <th>
-                Priority
-            </th>
-            <th>
                 Skill Name
             </th>
             <th>
-                Action
+                Industry Experience
+            </th>
+            <th>
+                Personal Experience
             </th>
         </tr>
     }
@@ -78,25 +101,41 @@ class SkillForm extends Component {
         }
         return skillList.map(skill => <tr className='skillOption'>
         <td className='skillWeight'>
-            {skill.inverseWeight}
-        </td>
-        <td className='skillMenu'>
             {skill.name}
         </td>
+        <td className='skillMenu'>
+            {skill.industryExperience.yr}yr {skill.industryExperience.mn}mn
+        </td>
         <td className='skillAction'>
-            <Button variant="contained" size='small' sx={{width: 2}} onClick={this.handleRemove.bind(this, skill.name)}>
-                Remove
-            </Button>
+        {skill.otherExperience.yr}yr {skill.otherExperience.mn}mn
         </td>
     </tr>);
     }
 
+    renderExperienceYears() {
+        const years = new Array(50).fill(0);
+        return years.map( (year,index) => <MenuItem value={index}>{index}</MenuItem>)
+    }
+
+    renderExperienceMonths() {
+        const months = new Array(12).fill(0);
+        return months.map( (month,index) => <MenuItem value={index}>{index}</MenuItem>)
+    }
+
     addSkillHandle() {
         const skillName = this.state.selectedSkill;
-        const skillPriority = parseInt(this.state.selectedPriority);
+        const industryExpObj = {
+            yr: this.state.industryExperienceYears,
+            mn: this.state.industryExperienceMonths
+        }
+        const otherExpObj = {
+            yr: this.state.otherExperienceYears,
+            mn: this.state.otherExperienceMonths
+        }
         const temp = {
             name: skillName,
-            inverseWeight: skillPriority
+            industryExperience: industryExpObj,
+            otherExperience: otherExpObj
         }
 
         const obj = this.state.skillList;
@@ -107,7 +146,10 @@ class SkillForm extends Component {
 
         this.setState({
             selectedSkill: '',
-            selectedPriority: 0,
+            industryExperienceYears: 0,
+            industryExperienceMonths: 0,
+            otherExperienceYears: 0,
+            otherExperienceMonths: 0,
         })
     }
 
@@ -115,7 +157,6 @@ class SkillForm extends Component {
         return( <div>
                 {!this.state.submitted &&<div>
                     <h5  style={{textAlign: 'center', color: '#1272EB', fontFamily: 'sans-serif', marginBottom: '1rem'}}>Please add your skills</h5>
-                    <p style={{color: 'green'}}>Note: add them in ascending order for better assesment</p>
                     <div className='skillAddPane'>
                         <TextField id="outlined-basic" label="Skill" size='small' variant="outlined"
                             value={this.state.selectedSkill}
@@ -123,18 +164,67 @@ class SkillForm extends Component {
                             this.handleSelectedOption(event);
                         }} />
                         <div style={{marginLeft: '1rem'}}/>
-                        <TextField id="outlined-number"
-                            value={this.state.selectedPriority}
-                            label="Priority"
-                            type="number"
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                            onChange={(event) => {
-                            this.handleSelectedPriority(event);
-                        }} />
+                        <div className='inputBoxColumn'>                      
+                            <div className="form_inputBox input-field">
+                                <div className='formLabel_title'>
+                                    Industy Experience :
+                                </div>
+                                <div className='candidateExperienceSelect'>
+                                    <Select
+                                        id="experienceYearsSelect"
+                                        value={this.state.industryExperienceYears}
+                                        fullWidth
+                                        variant="outlined"
+                                        onChange={this.handleIndustryExperienceYearsChange.bind(this)}
+                                    >
+                                        {this.renderExperienceYears()}
+                                    </Select> 
+                                    <div style={{'margin': '1rem'}}>Years</div>
+                                    <Select
+                                        id="experienceMonthsSelect"
+                                        value={this.state.industryExperienceMonths}
+                                        fullWidth
+                                        variant="outlined"
+                                        onChange={this.handleIndustryExperienceMonthsChange.bind(this)}
+                                    >
+                                        {this.renderExperienceMonths()}
+                                    </Select>
+                                    <div style={{'margin': '1rem'}}>Months</div>
+                                </div>              
+                            </div>
+                        </div>
                         <div style={{marginLeft: '1rem'}}/>
-                        <Button  variant="contained" onClick={this.addSkillHandle.bind(this)} size='medium'>Add Skill</Button>
+                        <div className='inputBoxColumn'>                      
+                            <div className="form_inputBox input-field">
+                                <div className='formLabel_title'>
+                                    Intern/Personal Experience :
+                                </div>
+                                <div className='candidateExperienceSelect'>
+                                    <Select
+                                        id="experienceYearsSelect"
+                                        value={this.state.otherExperienceYears}
+                                        fullWidth
+                                        variant="outlined"
+                                        onChange={this.handleOtherExperienceYearsChange.bind(this)}
+                                    >
+                                        {this.renderExperienceYears()}
+                                    </Select> 
+                                    <div style={{'margin': '1rem'}}>Years</div>
+                                    <Select
+                                        id="experienceMonthsSelect"
+                                        value={this.state.otherExperienceMonths}
+                                        fullWidth
+                                        variant="outlined"
+                                        onChange={this.handleOtherExperienceMonthsChange.bind(this)}
+                                    >
+                                        {this.renderExperienceMonths()}
+                                    </Select>
+                                    <div style={{'margin': '1rem'}}>Months</div>
+                                </div>              
+                            </div>
+                        </div>
+                        <div style={{marginLeft: '1rem'}}/>
+                        <Button  variant="contained" onClick={this.addSkillHandle.bind(this)} size='small'>Add Skill</Button>
                     </div>
                     <table style={{'width': '30rem'}}>
                         {this.renderHeaderContent()}

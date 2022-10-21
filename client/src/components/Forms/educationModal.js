@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Box from '@mui/material/Box';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import Datepicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css'
 import Modal from '@mui/material/Modal';
@@ -15,7 +17,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 'fit-content',
+  width: '40%',
   height: 'fit-content',
   bgcolor: 'background.paper',
   border: '2px solid white',
@@ -30,9 +32,10 @@ class EducationModal extends Component {
     super(props);
 
     this.state = { errors: [], 
-      institute: this.props.data ? this.props.data.institute : '' ,
+      institute: this.props.data ? this.props.data.institute : 'select' ,
       id: this.props.data ? this.props.data.id : '',
-      course: this.props.data ? this.props.data.course : '', 
+      instituteName: '',
+      course: this.props.data ? this.props.data.course : 'select', 
       field_of_course: this.props.data ? this.props.data.field_of_course : '', 
       start_year: this.props.data ? new Date(this.props.data.start_year) : '',  
       end_year: this.props.data ? new Date(this.props.data.end_year) : '',  
@@ -89,9 +92,17 @@ class EducationModal extends Component {
       });
     }
   }
+
+  handleUniversityTypeChange(event) {
+    this.setState({institute: event.target.value})
+  }
+
+  handleDegreeTypeChange(event) {
+    this.setState({course: event.target.value})
+  }
     render() {
       return (
-        <div>
+        <div id="nitesh">
           <Modal
             open={this.props.open}
             onClose={this.props.close}
@@ -103,38 +114,55 @@ class EducationModal extends Component {
                 <div className='form_title'>
                     <h5>Fill Education Information</h5>
                 </div>
-                <div className="row">
-                  <form className="col s16 formContent">
+                <form className="col s16 formContent">
                       <div className='inputBoxColumn'>
                         <div className="form_inputBox input-field">
                             <div className='formLabel_title'>
-                                Institute
+                                Awarding Authority
                             </div>
                             <div className='formInput'>
-                                <input 
-                                    placeholder="Enter Institute name"
-                                    value={this.state.institute}
-                                    onChange={ e => this.setState({ institute: e.target.value })}
-                                />    
+                              <Select
+                                id="universityTypeSelect"
+                                value={this.state.institute}
+                                fullWidth
+                                variant="outlined"
+                                onChange={this.handleUniversityTypeChange.bind(this)}
+                                >
+                                <MenuItem value={'select'}>Select university</MenuItem>
+                                <MenuItem value={'iit'}>IITs</MenuItem>
+                                <MenuItem value={'nit'}>NITs</MenuItem>
+                                <MenuItem value={'central'}>Central university</MenuItem>
+                                <MenuItem value={'govt'}>Govt. university</MenuItem>
+                                <MenuItem value={'private'}>Private</MenuItem>
+                              </Select>  
                             </div>                    
                         </div>
                         <div className="form_inputBox input-field">
                             <div className='formLabel_title'>
-                                Programme   
+                                Degree Type   
                             </div>
                             <div className='formInput'>
-                                <input 
-                                    placeholder="Enter Programme name"
-                                    value={this.state.course}
-                                    onChange={ e => this.setState({ course: e.target.value })}
-                                />    
+                              <Select
+                              id="universityTypeSelect"
+                              value={this.state.course}
+                              fullWidth
+                              variant="outlined"
+                              onChange={this.handleDegreeTypeChange.bind(this)}
+                              >
+                                <MenuItem value={'select'}>Select Degree type</MenuItem>
+                                <MenuItem value={'doctorate'}>Doctrate</MenuItem>
+                                <MenuItem value={'masters'}>Masters</MenuItem>
+                                <MenuItem value={'bachelor'}>Bachelor</MenuItem>
+                                <MenuItem value={'pg diploma'}>PG diploma</MenuItem>
+                                <MenuItem value={'diploma'}>Diploma</MenuItem>
+                              </Select> 
                             </div>                    
                         </div>
                       </div>
                       <div className='inputBoxColumn'>
                         <div className="form_inputBox input-field">
                             <div className='formLabel_title'>
-                                Field of course
+                                Field of Degree
                             </div>
                             <div className='formInput'>
                                 <input 
@@ -179,13 +207,24 @@ class EducationModal extends Component {
                             </div>                    
                         </div>
                       </div>
+                      <div className='inputBoxColumn' style={{flexDirection: 'column', width: '90%'}}>
+                        <div className='formLabel_title'>
+                                  Institute Name
+                        </div>
+                        <div className='formInput'>
+                            <input 
+                                placeholder="Enter institure name"
+                                value={this.state.instituteName}
+                                onChange={ e => this.setState({ instituteName: e.target.instituteName })}
+                            />    
+                        </div> 
+                        </div>
                       <div className='btnOption'>
                         <Button variant='contained' size='medium' onClick={this.submitEducation.bind(this)}>
                           Save
                         </Button>
                       </div>
                   </form>
-                </div>
               </div>
             </Box>
           </Modal>

@@ -1,5 +1,6 @@
 .form_container {
     display: flex;
+    width: 100%;
     flex-direction: column;
 }
 
@@ -8,7 +9,7 @@
 }
 
 .form_inputBox{
-    width: 10rem;
+    width: 15rem;
     margin: 1rem;
     display: flex;
     flex-direction: column;
@@ -57,6 +58,34 @@
     padding: 0px !important;
     border-radius: 15px;
     background-image: white;
+}
+
+.onBoardingFormCardContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 10rem;
+    height: 5rem;
+    margin: 1rem;
+    border: 2px solid white !important;
+    padding: 0px !important;
+    border-radius: 15px;
+    background-image: white;
+}
+
+.experienceTable {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 1rem;
+}
+
+.educationTable {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 1rem;
 }
 
 .shadow {
@@ -113,8 +142,7 @@
 }
 
 .skillAddPane {
-    display: flex;
-    justify-content: space-between;
+    
 }
 
 .skillOption {

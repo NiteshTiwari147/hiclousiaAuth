@@ -7,7 +7,14 @@ const skillSetSchema = new Schema({
     coreSkills: [
         {
             skillName: String,
-            skillPoint: Number
+            industryExperience: {
+                yr: Number,
+                mon: Number
+            },
+            otherExperience: {
+                yr: Number,
+                mon: Number
+            }
         }
     ]
 })

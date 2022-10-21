@@ -81,9 +81,10 @@ class FilterPane extends Component {
     }
 
     renderFilterOptions(options, changeHandle, valueSelected) {
+        
         return <Select
             id="industryTypeSelect"
-            value={valueSelected}
+            value={valueSelected ? valueSelected: 'select' }
             fullWidth
             variant="outlined"
             onChange={changeHandle}

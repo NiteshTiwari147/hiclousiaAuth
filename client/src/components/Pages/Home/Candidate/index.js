@@ -30,16 +30,16 @@ class CandidateHome extends Component {
                     <div className='candidateContent'>
                         <div  style={{margin: '2rem'}}>
                             <div className='candidateStatContainer shadow'>
-                                <Link to="/projectForm" className='fillBox'>
-                                    Certificates
+                                <Link className='fillBox'>
+                                    Education Compentency
                                 </Link>
-                                <h5>6</h5>
+                                <h5>723/1000</h5>
                             </div>
                             <div className='candidateStatContainer shadow'>
                                 <Link to="/educationForm" className='fillBox'>
-                                    Skills
+                                    Skill Compentency
                                 </Link>
-                                {skillSet && skillSet.coreSkills && skillSet.coreSkills.length > 0 ? <h5>{skillSet.coreSkills.length}</h5> : <h5>0</h5>}
+                                {skillSet && skillSet.coreSkills && skillSet.coreSkills.length > 0 ? <h5>783/1000</h5> : <h5>0</h5>}
                             </div>  
                         </div>
                         {candidate && <div className='candidateInfoContainer'>
@@ -54,7 +54,7 @@ class CandidateHome extends Component {
                                 {project && project.length > 0 ? <h5>{project.length}</h5> : <h5>0</h5>}
                             </div>
                             <div className='candidateStatContainer shadow'>
-                                <Link to="/educationForm" className='fillBox'>
+                                <Link to="/jobs" className='fillBox'>
                                     Shortlisted Jobs
                                 </Link>
                                 <h5>34</h5>

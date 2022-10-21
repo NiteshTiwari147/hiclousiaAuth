@@ -60,15 +60,7 @@ export const sendBasicInfo =  (props) => async dispatch => {
             expectedSalary: props.value.expectedSalary,
             expectedIndustry: props.value.expectedIndustry,
             expectedDepartment: props.value.expectedDepartment,
-            experienceYears: props.value.experienceYears,
-            experienceMonths: props.value.experienceMonths,
-            currentEmployment: props.value.currentEmployment,
-            companyName: props.value.companyName,
-            designation: props.value.designation,
-            currentIndustry: props.value.currentIndustry,
-            currentDepartment: props.value.currentDepartment
     };
-    console.log("params", obj);
     const res = await axios.post('/create/candidate', obj);
 }
 
@@ -91,8 +83,8 @@ export const sendExperienceInfo = (props) => async dispatch => {
         designation: props.value.designation,
         typeOfExperience: props.value.typeOfExperience,
         description: props.value.desc,
-        start_date: props.value.startDate,
-        end_date: props.value.endDate,
+        isCurrent: props.value.isCurrent,
+        industryExperience: props.value.industryExperience,
         skills: props.value.skills,
         industry: props.value.industry,
         department: props.value.department
@@ -139,8 +131,7 @@ export const updateExperienceInfo = (props) => async dispatch => {
         designation: props.value.designation,
         typeOfExperience: props.value.typeOfExperience,
         description: props.value.desc,
-        start_date: props.value.startDate,
-        end_date: props.value.endDate,
+        industryExperience: props.value.industryExperience,
         skills: props.value.skills,
         industry: props.value.industry,
         department: props.value.department
