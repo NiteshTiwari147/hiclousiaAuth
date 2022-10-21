@@ -10,6 +10,7 @@ import Education from './components/education';
 import ExperienceTab from './components/experience';
 import Certificate from './components/certificates';
 import LoadingScreen from '../../utils/loadingScreen';
+import CompentencyPieChart from '../../visualization/compentencyChart';
 
 import './styles.css';
 
@@ -67,6 +68,7 @@ class Dashboard extends Component {
                     <div className='dashboardStack'>
                         <div>
                             <SkillPieChart data={skillSet.coreSkills} />
+                            <CompentencyPieChart />
                             {skillSet.coreSkills ? <Certificate data={skillSet.coreSkills} isEmpty={false} /> : 
                             <Certificate data={skillSet.coreSkills} isEmpty={true} />
                             }
