@@ -126,11 +126,11 @@ class SkillForm extends Component {
         const skillName = this.state.selectedSkill;
         const industryExpObj = {
             yr: this.state.industryExperienceYears,
-            mn: this.state.industryExperienceMonths
+            mon: this.state.industryExperienceMonths
         }
         const otherExpObj = {
             yr: this.state.otherExperienceYears,
-            mn: this.state.otherExperienceMonths
+            mon: this.state.otherExperienceMonths
         }
         const temp = {
             name: skillName,

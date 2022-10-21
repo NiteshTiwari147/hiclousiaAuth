@@ -25,9 +25,23 @@ class Dashboard extends Component {
         }
     }
 
+    calculateExperience(experience) {
+        console.log("data ", experience);
+        let yr=0;
+        let mo=0;
+        experience.map(exp => {
+            yr+=exp.industryExperience.yr;
+            mo+=exp.industryExperience.mo;
+        })
+        yr = yr + parseInt(mo/12);
+        mo = mo%12;
+        return {yr, mo};
+    }
+
     renderATS() {
-        if(this.props.project && this.props.skillSet && this.props.candidate) {
-            return <ATS projectLen={this.props.project.length} skills={this.props.skillSet.coreSkills.length} experienceYears={this.props.candidate.experienceYears} experienceMonths={this.props.candidate.experienceMonths} />
+        if(this.props.project && this.props.skillSet && this.props.experience) {
+           const {yr, mo} = this.calculateExperience(this.props.experience)
+            return <ATS projectLen={this.props.project.length} skills={this.props.skillSet.coreSkills.length} experienceYears={yr} experienceMonths={mo} />
         }
     }
 

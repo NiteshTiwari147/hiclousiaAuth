@@ -187,7 +187,6 @@ module.exports = app => {
         const experience =  mongoose.model('experiences');
         const { company, designation, description, isCurrent, industryExperience, skills, industry, department, typeOfExperience} = req.body;
         const { googleId, email } = req.user;
-        console.log("about to send ", req.body);
         const response = await new experience({googleId, email, company, designation, description, isCurrent, industryExperience, skills, industry, department, typeOfExperience}).save();
         res.send(response);
     })

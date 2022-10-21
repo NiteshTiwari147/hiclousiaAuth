@@ -32,13 +32,13 @@ class Education extends Component {
             </div>
             <div className='educationInfo'>
                 <div className='educationInstitute'>
-                    {institute}
+                    {institute.toUpperCase()}
                 </div>
                 <div className='educationCourse'>
-                    {course}
+                    {course.toUpperCase()}
                 </div>
                 <div className='educationStudy'>
-                    {study}
+                    {study.toUpperCase()}
                 </div>
             </div>
             </div>
