@@ -29,6 +29,10 @@ class FlowManager extends Component {
             return <Landing />
         }
 
+        if(this.props.auth && !this.props.candidate) {
+            <LoadingScreen />
+        }
+
         if(this.props.auth && this.props.candidate) {
             return <Dashboard />
         }
