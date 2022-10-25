@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import Landing from './Landing';
 import CandidateHome from './Pages/Home/Candidate';
 import LoadingScreen from './utils/loadingScreen';
+import SignUp from './SignUp';
+import Dashboard from './Pages/Dashboard';
 
 class FlowManager extends Component {
 
@@ -12,7 +14,6 @@ class FlowManager extends Component {
         this.state = {
             auth: this.props.auth,
             candidate: this.props.candidate,
-            skillSet: this.props.skillSet
         }
     }
 
@@ -20,30 +21,25 @@ class FlowManager extends Component {
         this.setState({
             auth: this.props.auth,
             candidate: this.props.candidate,
-            skillSet: this.props.skillSet
         })
     }
 
-    renderComponent() {
-
-
-    }
     render() {
-        if(this.props.auth && (this.props.candidate == false || this.props.skillSet === false)) {
+        if(this.props.auth && this.props.candidate === false) {
             return <Landing />
         }
 
-        if(this.props.auth && this.props.candidate && this.props.skillSet && this.props.skillSet.coreSkills.length > 0) {
-            return <CandidateHome />
+        if(this.props.auth && this.props.candidate) {
+            return <Dashboard />
         }
 
-        return <LoadingScreen />
+        return <SignUp />
         
     }
 }
 
-function mapStateToProps({auth, candidate, skillSet}) {
-    return { auth, candidate, skillSet }
+function mapStateToProps({auth, candidate}) {
+    return { auth, candidate }
 }
 
 export default connect(mapStateToProps)(FlowManager);

@@ -9,17 +9,11 @@ const BISchema = new Schema({
     city: String,
     gender: String,
     role: String,
+    purpose: String,
     expectedPosition: String,
     expectedSalary: String,
     expectedIndustry: String,
     expectedDepartment: String,
-    experienceYears: Number, 
-    experienceMonths: Number, 
-    currentEmployment: String,
-    companyName: String,
-    designation: String,
-    currentIndustry: String,
-    currentDepartment: String
 });
 
 mongoose.model('basicInfo', BISchema);

@@ -7,7 +7,7 @@ import Header from './Header';
 import Footer from './Footer';
 import Dashboard from './Pages/Dashboard';
 import Jobs from './Pages/Jobs';
-import CandidateForm from './Forms/CandidateForm';
+import CandidateHome from './Pages/Home/Candidate';
 import ProjectForm from './Forms/ProjectForm';
 import EducationForm from './Forms/EducationForm';
 import ExperienceForm from './Forms/ExperienceForm';
@@ -37,10 +37,11 @@ class App extends Component {
                         <Header />
                         <Route exact path="/signin" component={signUp}></Route>
                         <Route exact path="/" component={signUp}>
-                            <Redirect to="/signin" />
+                            <Redirect to="/welcome" />
                         </Route>
                         <Route exact path="/welcome" component={Welcome} />                 
                         <Route exact path="/home" component={gateway} />
+                        <Route exact path="/careerprofile" component={CandidateHome} />
                         <Route exact path="/dashboard" component={Dashboard} />
                         <Route exact path="/jobs" component={Jobs} />
                         <Route exact path="/candidates" component={Candidates} />

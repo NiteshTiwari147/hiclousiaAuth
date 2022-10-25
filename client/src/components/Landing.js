@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
-import TextField from '@mui/material/TextField';
+import { sendBasicInfo } from '../actions/index';
+
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Divider from '@mui/material/Divider';
@@ -13,8 +13,6 @@ import SkillForm from './Forms/SkillForm';
 import LoadingScreen from './utils/loadingScreen';
 
 import formIcon from '../data/formImage.jpg';
-import candidate from '../data/avatarMan.jpg';
-import recruiter from '../data/recruiterIcon.jpg';
 import './styles.css';
 
 class Landing extends Component {
@@ -24,7 +22,9 @@ class Landing extends Component {
         this.state = {
             buttonClicked: false,
             gender: 'male',
-            age: '25',
+            age: '',
+            city: '',
+            name: '',
             role: 'candidate'
         }
     }
@@ -35,12 +35,17 @@ class Landing extends Component {
         })
     }
 
+    handleNameChange(event) {
+        this.setState({
+            name: event.target.value
+        })
+    }
+
     handleGenderChange(event) {
         this.setState({
             gender: event.target.value
         })
     }
-
 
     handleCandidateButton() {
         this.setState({
@@ -53,44 +58,55 @@ class Landing extends Component {
     
     renderContent() {
         if(this.props.auth) {
-            return <div style={{textAlign: 'center', color: '#1272EB', fontFamily: 'sans-serif', width: '30rem'}} className='shadow'>
-                <h4>
-                    Tell us about yourself, {this.props.auth.name.toUpperCase()}
-                </h4>
-                <div style={{display: 'flex', justifyContent: 'center',alignItems: 'center', marginTop: '2rem'}}>      
-                    <TextField id="outlined-basic" label="Your age" size='small' variant="standard" 
-                    value={this.state.age}
-                    onChange={this.handleAgeChange.bind(this)}
-                    />
-                </div>
-                <div style={{display: 'flex', justifyContent: 'center',alignItems: 'center', marginTop: '2rem'}}>
-                    <label style={{marginRight: '1rem'}}>
-                        <h5>Gender :</h5> 
-                    </label>
-                    <Select
-                        id="genderSelect"
-                        value={this.state.gender}
-                        variant="outlined"
-                        onChange={this.handleGenderChange.bind(this)}
-                    >
-                        <MenuItem value={'male'}>Male</MenuItem>
-                        <MenuItem value={'female'}>Female</MenuItem>
-                        <MenuItem value={'other'}>Other</MenuItem>
-                    </Select>
-                </div>
-                <div>
-                    <label><h5>What is your role ?</h5></label>
-                    <div className='userOptionPane'>
-                        <button className='userBox shadow' onClick={this.handleCandidateButton.bind(this)}>
-                            <img className="userIcon" src={candidate} alt="Avatar"/>
-                            <h5 className='userTitle'>Candidate</h5>
-                        </button>
-                        <button className='userBox shadow'>
-                            <img className="userIcon" src={recruiter} alt="Avatar"/>
-                            <h5 className='userTitle'>Recruiter</h5>
-                        </button>
+            return <div style={{textAlign: 'center', fontFamily: 'sans-serif', width: '30rem'}} className='shadow'>
+                <h5>
+                    Please fill out your basic information 
+                </h5>
+                <form className="col s16 formContent">
+                    <div className="form_inputBox input-field">
+                        <div className='formLabel_title'>
+                            Please enter your name
+                        </div>
+                        <div className='formInput'>
+                            <input 
+                                placeholder="Enter your age"
+                                value={this.state.name}
+                                onChange={this.handleNameChange.bind(this)}
+                            />  
+                        </div>                    
                     </div>
-                </div>
+                    <div className="form_inputBox input-field">
+                        <div className='formLabel_title'>
+                            Please enter your age
+                        </div>
+                        <div className='formInput'>
+                            <input 
+                                placeholder="Enter your age"
+                                value={this.state.age}
+                                onChange={this.handleAgeChange.bind(this)}
+                            />  
+                        </div>                    
+                    </div>
+                    <div style={{display: 'flex', justifyContent: 'center',alignItems: 'center', marginTop: '2rem'}}>
+                        <div className='formLabel_title' style={{marginRight: '1rem'}}>
+                            Gender
+                        </div>
+                        <Select
+                            id="genderSelect"
+                            value={this.state.gender}
+                            variant="outlined"
+                            onChange={this.handleGenderChange.bind(this)}
+                        >
+                            <MenuItem value={'male'}>Male</MenuItem>
+                            <MenuItem value={'female'}>Female</MenuItem>
+                            <MenuItem value={'other'}>Other</MenuItem>
+                        </Select>
+                    </div>
+
+                    <Button size='large' variant='contained' color='primary' style={{width: '50%', marginTop: '2rem'}} onClick={this.handleCandidateButton.bind(this)}>
+                        Save
+                    </Button>
+                </form> 
             </div>
         }
         else if (this.props.candidate === null) {
@@ -132,13 +148,12 @@ class Landing extends Component {
             return (
                 <div>
                     <div className='basicFormPage2Title'>
-                        <h3 style={{textAlign: 'center', fontFamily: "sans-serif"}}>Help us in knowing you better</h3>
-                        {this.renderSubmitButton()}
+                        <h4 style={{textAlign: 'center', fontFamily: "sans-serif"}}>Hello, {this.state.name} !!</h4>
                     </div>
                     <div className='basicFormPage2'>
-                        <ExpectationForm name={this.props.auth ? this.props.auth.name : 'user'} age={this.state.age} gender={this.state.gender} role={this.state.role} />
-                        <Divider orientation="vertical" flexItem />
-                        <CompositeForm />
+                        <ExpectationForm name={this.state.name} age={this.state.age} gender={this.state.gender} />
+                        {/* <Divider orientation="vertical" flexItem />
+                        <CompositeForm /> */}
                     </div>
                 </div>
             )}

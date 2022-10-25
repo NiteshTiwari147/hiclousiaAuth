@@ -106,6 +106,7 @@
 
 .basicFormPage2Title {
     display: flex;
+    flex-direction: column;
     justify-content: space-around;
     align-items: center;
     color: #1272EB;

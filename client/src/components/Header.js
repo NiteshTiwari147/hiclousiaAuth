@@ -22,8 +22,9 @@ class Header extends Component {
                     <li><a className='headerBtn'>Products</a></li>
                     <li><a className='headerBtn'>About us</a></li>
                     {this.props.candidate && this.props.candidate.role === 'candidate' && <li><a className='headerBtn' href="/jobs">Jobs</a></li>}
+                    {this.props.candidate && this.props.candidate.role === 'candidate' && <li><a className='headerBtn' href="/careerprofile">Career Profile</a></li>}
                     {this.props.candidate && this.props.candidate.role === 'recruiter' && <li><a className='headerBtn' href="/candidates">Talent</a></li>}
-                    <li><a className='headerBtn' href="/dashboard">Dashboard</a></li>
+                    <li><a className='headerBtn' href="/home">Dashboard</a></li>
                     <li className='headerText' >{this.props.auth.email}</li>
                     <li><a className='headerBtn' href="/api/logout">Log Out</a></li>
                 </ul>    

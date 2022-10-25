@@ -11,7 +11,7 @@ import submit from '../../data/submit.png';
 import './styles.css';
 
 const style = {
-    width: '15rem',
+    width: '13rem',
     marginBottom: '2rem'
 }
 
@@ -21,7 +21,13 @@ class ExpectationForm extends Component {
         super(props);
 
         this.state = {
+            name: this.props.name,
+            age: this.props.age,
+            gender: this.props.gender,
+            role: 'candidate',
+            city: '',
             submitted: false,
+            purpose: 'job',
             budget: 'B1',
             position: 'L1',
             department: 'department',
@@ -30,6 +36,23 @@ class ExpectationForm extends Component {
     }
 
     handleSubmit() {
+        this.props.sendBasicInfo({          
+            value: {
+                name: this.state.name,
+                age: this.state.age,
+                city: this.state.city,
+                gender: this.state.gender,
+                role: this.state.role,
+                purpose: this.state.purpose,
+                expectedPosition: this.state.position,
+                expectedSalary: this.state.budget,
+                expectedIndustry: this.state.expectedIndustry,
+                expectedDepartment: this.state.expectedDepartment,
+            }      
+        })
+        .then(res => {
+            this.props.fetchCandidate();
+        })
         this.setState({
             submitted: true
         })
@@ -49,6 +72,16 @@ class ExpectationForm extends Component {
 
     handlePositionChange(event) {
         this.setState({position: event.target.value})
+    }
+
+    handlePurposeChange(event) {
+        this.setState({purpose: event.target.value})
+    }
+
+    handleCityChange(event) {
+        this.setState({
+            city: event.target.value
+        })
     }
 
     renderSalary() {
@@ -83,62 +116,93 @@ class ExpectationForm extends Component {
             </Select>
     }
 
+    renderRoles() {
+        return <Select
+                id="experienceYearsSelect"
+                value={this.state.purpose}
+                sx={style}
+                variant="outlined"
+                onChange={this.handlePurposeChange.bind(this)}
+            >
+                <MenuItem value={'job'}>Finding Job</MenuItem>
+                <MenuItem value={'upgrade'}>Upskilling</MenuItem>
+                <MenuItem value={'both'}>Both</MenuItem>
+            </Select>
+    }
+
     render () {
         return (
             <div>
                 {!this.state.submitted && <div>   
-                    <h5  style={{textAlign: 'center', color: '#1272EB', fontFamily: 'sans-serif', marginBottom: '1rem'}}>Please mention your expectation</h5>
                     <form className="col s16">
-                    <div className='inputBoxColumn' style={{marginLeft: '1rem'}}>
-                        <div className='formLabel_title' style={{'marginBottom': '1rem'}}>
-                            Designation :
+                        <div className='inputBoxColumn' style={{'flex-direction': 'column', 'align-items': 'flex-start'}}>
+                            <div className='formLabel_title' style={{'marginBottom': '1rem'}}>
+                                <h6>What are you looking for ?</h6>
+                            </div>
+                            {this.renderRoles()}
                         </div>
-                        {this.renderPosition()}
+                        <div className="form_inputBox input-field" style={{margin: '0rem'}}>
+                            <div className='formLabel_title'>
+                                Please prefred location
+                            </div>
+                            <div className='formInput'>
+                                <input 
+                                    placeholder="Enter your preffered city"
+                                    value={this.state.city}
+                                    onChange={this.handleCityChange.bind(this)}
+                                />  
+                            </div>                    
                     </div>
-                    <div className='inputBoxColumn' style={{marginLeft: '1rem'}}>
-                        <div className='formLabel_title' style={{'marginBottom': '1rem'}}>
-                            Budget :
+                        <div className='inputBoxColumn' style={{'flex-direction': 'column', 'align-items': 'flex-start'}}>
+                            <h6>Select desired industry and role</h6>
+                            <div className='industryAndDepartmentSelect' style={{marginLeft: '0rem'}}>
+                                    <Select
+                                        id="industrySelect"
+                                        value={this.state.industry}
+                                        fullWidth
+                                        variant="outlined"
+                                        onChange={this.handleIndustryChange.bind(this)}
+                                    >
+                                        <MenuItem value={'industry'}>Industry</MenuItem>
+                                        <MenuItem value={'IT'}>IT</MenuItem>
+                                    </Select>
+                                    <div style={{'margin': '1rem'}}/>
+                                    <Select
+                                        id="genderSelect"
+                                        value={this.state.department}
+                                        fullWidth
+                                        variant="outlined"
+                                        onChange={this.handleDepartmentChange.bind(this)}
+                                    >
+                                        <MenuItem value={'department'}>Department</MenuItem>
+                                        <MenuItem value={'frontEnd'}>Front End</MenuItem>
+                                        <MenuItem value={'backEnd'}>Back End</MenuItem>
+                                        <MenuItem value={'fullStack'}>Full Stack</MenuItem>
+                                        <MenuItem value={'dataEngineering'}>Data Engineering</MenuItem>
+                                        <MenuItem value={'dataScience'}>Data Science</MenuItem>
+                                    </Select>
+                            </div>
                         </div>
-                        {this.renderSalary()}
-                    </div>
-                    <div className='inputBoxColumn' style={{'flex-direction': 'column', 'marginLeft': '1rem'}}>
-                        <h7>Select Industry and Department you're looking for </h7>
-                        <div className='industryAndDepartmentSelect'>
-                                <Select
-                                    id="industrySelect"
-                                    value={this.state.industry}
-                                    fullWidth
-                                    variant="outlined"
-                                    onChange={this.handleIndustryChange.bind(this)}
-                                >
-                                    <MenuItem value={'industry'}>Industry</MenuItem>
-                                    <MenuItem value={'IT'}>IT</MenuItem>
-                                </Select>
-                                <div style={{'margin': '1rem'}}/>
-                                <Select
-                                    id="genderSelect"
-                                    value={this.state.department}
-                                    fullWidth
-                                    variant="outlined"
-                                    onChange={this.handleDepartmentChange.bind(this)}
-                                >
-                                    <MenuItem value={'department'}>Department</MenuItem>
-                                    <MenuItem value={'frontEnd'}>Front End</MenuItem>
-                                    <MenuItem value={'backEnd'}>Back End</MenuItem>
-                                    <MenuItem value={'fullStack'}>Full Stack</MenuItem>
-                                    <MenuItem value={'dataEngineering'}>Data Engineering</MenuItem>
-                                    <MenuItem value={'dataScience'}>Data Science</MenuItem>
-                                </Select>
+                        {this.state.purpose !='upgrade' && <div className='inputBoxColumn' style={{marginTop: '1rem'}}>
+                            <div className='formLabel_title' style={{'marginBottom': '1rem'}}>
+                                Designation :
+                            </div>
+                            {this.renderPosition()}
+                        </div>}
+                        {this.state.purpose !='upgrade' && <div className='inputBoxColumn' style={{marginTop: '1rem'}}>
+                            <div className='formLabel_title' style={{'marginBottom': '1rem'}}>
+                                Budget :
+                            </div>
+                            {this.renderSalary()}
+                        </div>}
+                        <div style={{'display': 'flex', 'justifyContent': 'center', 'margin': '2rem'}}>
+                            <Button size='large' variant='contained' onClick={this.handleSubmit.bind(this)}>
+                                Save
+                            </Button>
                         </div>
-                    </div>
-                    <div style={{'display': 'flex', 'justifyContent': 'center', 'margin': '2rem'}}>
-                        <Button size='large' variant='contained' onClick={this.handleSubmit.bind(this)}>
-                            Save
-                        </Button>
-                    </div>
                     </form>
                 </div>}
-                {this.state.submitted && <CandidateForm 
+                {/* {this.state.submitted && <CandidateForm 
                                     name={this.props.name}
                                     age={this.props.age}
                                     gender={this.props.gender} 
@@ -147,7 +211,7 @@ class ExpectationForm extends Component {
                                     position={this.state.position}
                                     department={this.state.department}
                                     industry={this.state.industry}
-                                    />}        
+                                    />}         */}
             </div>
         )
     }

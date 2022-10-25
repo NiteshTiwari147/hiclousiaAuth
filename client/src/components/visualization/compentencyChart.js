@@ -40,19 +40,19 @@ const data = [
 class CompentencyPieChart extends Component {
     render() {
         var skillData = [];
-        let colorVal = Math.floor(Math.random() * 300) + 50;
+        let colorVal = Math.floor(Math.random() * 800) + 50;
         var educationComptency = {
             "id": 'Education Compentency',
             "label": 'Education Compentency',
             "value": 73,
             "color":  "hsl("+colorVal+" 70%, 50%)"
         }
-        colorVal = Math.floor(Math.random() * 300) + 50;
+        colorVal = Math.floor(Math.random() * 600) + 23;
         var skillComptency = {
             "id": 'Skill Compentency',
             "label": 'Skill Compentency',
             "value": 87,
-            "color":  "hsl("+colorVal+" 70%, 50%)"
+            "color":  "hsl("+colorVal+" 30%, 50%)"
         }
         skillData.push(educationComptency);
         skillData.push(skillComptency);      
