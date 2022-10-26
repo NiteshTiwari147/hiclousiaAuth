@@ -128,7 +128,7 @@ class SkillModal extends Component {
         }
         return skillList.map(skill => <tr className='skillOption'>
         <td className='skillWeight'>
-            {skill.skillName}
+            {skill.skillName.toUpperCase()}
         </td>
         <td className='skillMenu'>
             {skill.industryExperience.yr}yr {skill.industryExperience.mn}mn
