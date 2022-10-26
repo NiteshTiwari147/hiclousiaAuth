@@ -163,21 +163,32 @@ module.exports = app => {
         res.send(response);
     })
 
-    app.post('/create/skills',async function (req,res) {
+    app.post('/update/skills',async function (req,res) {
         const skillList = mongoose.model('skillSet');
         const { skillsObj } = req.body;
         let coreSkills = [];
         skillsObj.map( skill => {
             coreSkills.push({
-                skillName: skill.name.toLowerCase().trim(),
+                skillName: skill.skillName.toLowerCase().trim(),
                 industryExperience: skill.industryExperience,
                 otherExperience: skill.otherExperience
             })
         })
         const { googleId, email } = req.user;
+        var newvalues = { $set: { googleId, email, coreSkills} };
+        const resposne = await skillList.updateOne({googleId: googleId}, newvalues)
+        res.send({resposne});
+    });
+
+    app.post('/create/skills',async function (req,res) {
+        const skillList = mongoose.model('skillSet');
+        let coreSkills = [];
+        const { googleId, email } = req.user;
+        var newvalues = { $set: { googleId, email, coreSkills} };
         const response = await new skillList({googleId, email, coreSkills}).save();
-        res.send({status: 204});
-    })
+        res.send({resposne});
+    });
+
     app.post('/create/education',async function (req,res) {
         const education =  mongoose.model('education');
         const { institute, course, field_of_course, start_date, end_date, grade} = req.body;

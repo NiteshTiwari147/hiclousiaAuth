@@ -106,10 +106,18 @@ export const sendEducationInfo = (props) => async dispatch => {
 }
 
 export const sendSkillList = (props) => async dispatch => {
-    const obj = {
-        skillsObj: props.value.skillList
-    };
-    const res = await axios.post('/create/skills', obj);
+    if(props.value.skillList.length > 0) {
+        const obj = {
+            skillsObj: props.value.skillList
+        };
+        const res = await axios.post('/update/skills', obj);
+    } else {
+        const obj = {
+            skillsObj: []
+        };
+        const res = await axios.post('/create/skills', obj);
+    }
+    
 }
 
 export const updateEducationInfo = (props) => async dispatch => {

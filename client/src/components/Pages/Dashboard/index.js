@@ -27,7 +27,9 @@ class Dashboard extends Component {
     }
 
     calculateExperience(experience) {
-        console.log("data ", experience);
+        if(experience.length === 0) {
+            return { yr: 0, mo: 0}
+        }
         let yr=0;
         let mo=0;
         experience.map(exp => {
@@ -40,14 +42,13 @@ class Dashboard extends Component {
     }
 
     renderATS() {
-        if(this.props.project && this.props.skillSet && this.props.experience) {
-           const {yr, mo} = this.calculateExperience(this.props.experience)
-            return <ATS projectLen={this.props.project.length} skills={this.props.skillSet.coreSkills.length} experienceYears={yr} experienceMonths={mo} />
-        }
+        const {project, skillSet, candidate, education, experience } = this.props
+        const {yr, mo} = this.calculateExperience(this.props.experience ? this.props.experience : [])
+        return <ATS projectLen={project ? project.length : 0} skills={skillSet && skillSet.coreSkills? this.props.skillSet.coreSkills.length : 0} experienceYears={yr} experienceMonths={mo} />
     }
 
     render() {
-        if(this.props.skillSet && this.props.candidate) {
+        if(this.props.auth && this.props.candidate) {
             const {project, skillSet, candidate, education, experience } = this.props
             return (
                 <div className='dashboardLayout'>
@@ -60,17 +61,17 @@ class Dashboard extends Component {
                     </div>
                     <div className='dashboardStack'>
                         {this.renderATS()}
-                        <FormBar />
+                        <FormBar skillList={skillSet && skillSet.coreSkills ? skillSet.coreSkills : []} />
                         {project ? project.map((value,index) => <Project key={index} idx={index} data={value} isEmpty={false} /> ) : 
                          <Project data={null} isEmpty={true} />    
                         }
                     </div>
                     <div className='dashboardStack'>
                         <div>
-                            <SkillPieChart data={skillSet.coreSkills} />
+                            <SkillPieChart data={skillSet && skillSet.coreSkills ? skillSet.coreSkills : []} />
                             <CompentencyPieChart />
-                            {skillSet.coreSkills ? <Certificate data={skillSet.coreSkills} isEmpty={false} /> : 
-                            <Certificate data={skillSet.coreSkills} isEmpty={true} />
+                            {skillSet && skillSet.coreSkills ? <Certificate data={skillSet.coreSkills} isEmpty={false} /> : 
+                            <Certificate data={skillSet && skillSet.coreSkills ? skillSet.coreSkills : []} isEmpty={true} />
                             }
                         </div>
                     </div>
@@ -84,8 +85,8 @@ class Dashboard extends Component {
     }
 }
 
-function mapStateToProps({candidate, education, experience, project, skillSet}) {
-    return { candidate, education, experience, project, skillSet }
+function mapStateToProps({auth, candidate, education, experience, project, skillSet}) {
+    return { auth, candidate, education, experience, project, skillSet }
 }
 
 export default connect(mapStateToProps)(Dashboard);
