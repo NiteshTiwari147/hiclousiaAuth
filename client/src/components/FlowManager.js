@@ -25,12 +25,12 @@ class FlowManager extends Component {
     }
 
     render() {
+        if(this.props.auth === null) {
+            return <SignUp />
+        }
+        
         if(this.props.auth && this.props.candidate === false) {
             return <Landing />
-        }
-
-        if(!this.props.auth) {
-            return <SignUp />
         }
 
         if(this.props.auth && this.props.candidate) {

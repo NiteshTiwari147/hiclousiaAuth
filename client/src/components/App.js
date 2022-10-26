@@ -36,7 +36,7 @@ class App extends Component {
                    <div>    
                         <Header />
                         <Route exact path="/signin" component={signUp}></Route>
-                        <Route exact path="/" component={signUp}>
+                        <Route exact path="/">
                             <Redirect to="/welcome" />
                         </Route>
                         <Route exact path="/welcome" component={Welcome} />                 
