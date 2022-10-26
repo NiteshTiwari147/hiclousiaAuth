@@ -48,7 +48,7 @@ class Dashboard extends Component {
     }
 
     render() {
-        if(this.props.auth && this.props.candidate) {
+        if(this.props.auth && this.props.candidate && this.props.skillSet) {
             const {project, skillSet, candidate, education, experience } = this.props
             return (
                 <div className='dashboardLayout'>

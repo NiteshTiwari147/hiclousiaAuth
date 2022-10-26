@@ -186,7 +186,7 @@ module.exports = app => {
         const { googleId, email } = req.user;
         var newvalues = { $set: { googleId, email, coreSkills} };
         const response = await new skillList({googleId, email, coreSkills}).save();
-        res.send({resposne});
+        res.send({response});
     });
 
     app.post('/create/education',async function (req,res) {

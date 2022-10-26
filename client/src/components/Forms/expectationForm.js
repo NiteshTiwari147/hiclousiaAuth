@@ -9,6 +9,7 @@ import CandidateForm from './CandidateForm';
 
 import submit from '../../data/submit.png';
 import './styles.css';
+import LoadingScreen from '../utils/loadingScreen';
 
 const style = {
     width: '13rem',
@@ -207,6 +208,7 @@ class ExpectationForm extends Component {
                         </div>
                     </form>
                 </div>}
+                {this.state.submitted && <LoadingScreen />}
             </div>
         )
     }

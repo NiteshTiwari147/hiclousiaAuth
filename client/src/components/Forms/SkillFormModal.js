@@ -28,10 +28,11 @@ const style = {
 class SkillModal extends Component {
     constructor(props) {
         super(props);
+        console.log("from constructor ", this.props.skillList)
         this.state= {
             selectedSkill: '',
             selectedPriority: 0,
-            skillList: this.props.skillList ? this.props.skillList: [],
+            skillList: this.props.skillList,
             industryExperienceYears: 0,
             industryExperienceMonths: 0,
             otherExperienceYears: 0,
@@ -119,8 +120,8 @@ class SkillModal extends Component {
     }
 
     renderSkillList() {
-        console.log(" here is the ;isdt", this.props)
         const skillList = this.state.skillList || [];
+        console.log(" here is the ;isdt",skillList, this.props.skillList)
         if(skillList.length === 0) {
             return <div style={{'textAlign': 'center', margin: '1rem'}}>
                 Please add skill 

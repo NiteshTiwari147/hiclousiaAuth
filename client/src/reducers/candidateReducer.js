@@ -12,7 +12,7 @@ export function candidateInfo(state = null, action) {
 export function skillSetInfo(state=null, action) {
     switch(action.type) {
         case FETCH_SKILLSET:
-            return action.payload || false;
+            return action.payload || [];
         default: 
             return state;
     }

@@ -152,8 +152,6 @@ class Landing extends Component {
                     </div>
                     <div className='basicFormPage2'>
                         <ExpectationForm name={this.state.name} age={this.state.age} gender={this.state.gender} />
-                        {/* <Divider orientation="vertical" flexItem />
-                        <CompositeForm /> */}
                     </div>
                 </div>
             )}
