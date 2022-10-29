@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../../actions';
+
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
 
-import CandidateForm from './CandidateForm';
 
-import submit from '../../data/submit.png';
 import './styles.css';
+import * as actions from '../../actions';
+import { jobCategory } from '../../constants/jobCategoryAndPositions'
 import LoadingScreen from '../utils/loadingScreen';
 
 const style = {
@@ -27,6 +29,7 @@ class ExpectationForm extends Component {
             gender: this.props.gender,
             role: 'candidate',
             city: '',
+            jobRoles: [],
             submitted: false,
             purpose: 'job',
             budget: 'B1',
@@ -65,11 +68,12 @@ class ExpectationForm extends Component {
     }
 
     handleIndustryChange(event) {
-        this.setState({industry: event.target.value})
+        this.setState({industry: jobCategory[event].title,
+            jobRoles: jobCategory[event].roles})
     }
 
     handleDepartmentChange(event) {
-        this.setState({department: event.target.value})
+        this.setState({department: this.state.jobRoles[event]})
     }
 
     handleSalaryChange(event) {
@@ -162,31 +166,26 @@ class ExpectationForm extends Component {
                         <div className='inputBoxColumn' style={{'flex-direction': 'column', 'align-items': 'flex-start'}}>
                             <h6>Select desired industry and role</h6>
                             <div className='industryAndDepartmentSelect' style={{marginLeft: '0rem'}}>
-                                    <Select
-                                        id="industrySelect"
-                                        value={this.state.industry}
-                                        fullWidth
-                                        variant="outlined"
-                                        onChange={this.handleIndustryChange.bind(this)}
-                                    >
-                                        <MenuItem value={'industry'}>Industry</MenuItem>
-                                        <MenuItem value={'IT'}>IT</MenuItem>
-                                    </Select>
-                                    <div style={{'margin': '1rem'}}/>
-                                    <Select
-                                        id="genderSelect"
-                                        value={this.state.department}
-                                        fullWidth
-                                        variant="outlined"
-                                        onChange={this.handleDepartmentChange.bind(this)}
-                                    >
-                                        <MenuItem value={'department'}>Department</MenuItem>
-                                        <MenuItem value={'frontEnd'}>Front End</MenuItem>
-                                        <MenuItem value={'backEnd'}>Back End</MenuItem>
-                                        <MenuItem value={'fullStack'}>Full Stack</MenuItem>
-                                        <MenuItem value={'dataEngineering'}>Data Engineering</MenuItem>
-                                        <MenuItem value={'dataScience'}>Data Science</MenuItem>
-                                    </Select>
+                                <Autocomplete
+                                    id="free-solo-demo"
+                                    fullWidth
+                                    onChange={(event) => {
+                                        this.handleIndustryChange(event.target.dataset.optionIndex);
+                                    }}
+                                    options={jobCategory.map((option) => option.title)}
+                                    renderInput={(params) => <TextField {...params} label="Industry" />}
+                                />
+                                <div style={{'margin': '1rem'}}/>
+                                <Autocomplete
+                                    id="free-solo-demo"
+                                    fullWidth
+                                    onChange={(event) => {
+                                        console.log("autocomplete ", event.target.dataset.optionIndex)
+                                        this.handleDepartmentChange(event.target.dataset.optionIndex);
+                                    }}
+                                    options={this.state.jobRoles.map((option) => option)}
+                                    renderInput={(params) => <TextField {...params} label="Department" />}
+                                />
                             </div>
                         </div>
                         {this.state.purpose !='upgrade' && <div className='inputBoxColumn' style={{marginTop: '1rem'}}>

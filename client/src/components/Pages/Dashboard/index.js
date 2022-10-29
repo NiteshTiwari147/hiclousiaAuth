@@ -50,6 +50,7 @@ class Dashboard extends Component {
     render() {
         if(this.props.auth && this.props.candidate && this.props.skillSet) {
             const {project, skillSet, candidate, education, experience } = this.props
+            console.log(project);
             return (
                 <div className='dashboardLayout'>
                     <div className='dashboardStack'>
@@ -62,7 +63,7 @@ class Dashboard extends Component {
                     <div className='dashboardStack'>
                         {this.renderATS()}
                         <FormBar skillList={skillSet && skillSet.coreSkills ? skillSet.coreSkills : []} />
-                        {project ? project.map((value,index) => <Project key={index} idx={index} data={value} isEmpty={false} /> ) : 
+                        {project && project.length ? project.map((value,index) => <Project key={index} idx={index} data={value} isEmpty={false} /> ) : 
                          <Project data={null} isEmpty={true} />    
                         }
                     </div>

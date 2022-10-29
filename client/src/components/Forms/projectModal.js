@@ -2,34 +2,38 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Modal from '@mui/material/Modal';
 import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import MenuItem from '@mui/material/MenuItem';
 import Datepicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
 import * as actions from '../../actions';
+import { jobCategory } from '../../constants/jobCategoryAndPositions'
 import './styles.css'
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%) scale(0.9)',
-  width: 'fit-content',
-  height: 'fit-content',
-  bgcolor: 'background.paper',
-  border: '2px solid white',
-  borderRadius: '15px',
-  boxShadow: '2px 2px #1072EB',
-  p: 4,
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%) scale(0.8)',
+    width: '60%',
+    height: '120%',
+    overflow: 'auto',
+    bgcolor: 'background.paper',
+    border: '2px solid white',
+    borderRadius: '15px',
+    boxShadow: '2px 2px #1072EB',
+    p: 4
 };
 
 class ProjectModal extends Component {
     constructor(props) {
       super(props);
-      this.state = { tittle: '', desc: '', solution: '', start_year: '',skill: '',skills: [], end_year: '',
-      industry: 'industry', department: 'department',}
+      this.state = { tittle: '', desc: '', start_year: '',skill: '',skills: [], end_year: '',
+      industry: 'industry', department: 'department', jobRoles: [],  typeOfProject: 'industry'}
     }
 
     submitProject() {
@@ -37,6 +41,7 @@ class ProjectModal extends Component {
             value: {
                 title: this.state.tittle,
                 desc: this.state.desc,
+                typeOfProject: this.state.typeOfProject,
                 startDate: this.state.start_year,
                 endDate: this.state.end_year,
                 skills: this.state.skills,
@@ -45,17 +50,24 @@ class ProjectModal extends Component {
             }      
         })
         .then(res => {
+            this.setState({tittle: '', desc: '', start_year: '',skill: '',skills: [], end_year: '',
+            industry: 'industry', department: 'department', jobRoles: [],  typeOfProject: 'industry'})
             this.props.fetchProject();
             this.props.close();
         });
     }
 
-    handleDepartmentChange(event) {
-      this.setState({department: event.target.value})
+    handleProjectTypeChange(event) {
+        this.setState({typeOfProject: event.target.value})
     }
 
     handleIndustryChange(event) {
-        this.setState({industry: event.target.value})
+        this.setState({industry: jobCategory[event].title,
+            jobRoles: jobCategory[event].roles})
+    }
+
+    handleDepartmentChange(event) {
+        this.setState({department: this.state.jobRoles[event]})
     }
 
     addCoreSkill(event) {
@@ -80,12 +92,12 @@ class ProjectModal extends Component {
             <Box sx={style}>
               <div className='form_container'>
                 <div className='form_title'>
-                    <h5>Add Project data</h5>
+                    <h4 style={{fontWeight: 1000}}>Add Project data</h4>
                 </div>
                 <div className="row">
                     <form className="col s16 formContent">
-                      <div className='inputBoxColumn'>
-                        <div className="form_inputBox input-field">
+                      <div className='inputBoxColumn' style={{width: '77%'}}>
+                        <div className="form_inputBox input-field" >
                             <div className='formLabel_title'>
                                 Title
                             </div>
@@ -99,13 +111,36 @@ class ProjectModal extends Component {
                         </div>
                         <div className="form_inputBox input-field">
                             <div className='formLabel_title'>
+                                Type of project
+                            </div>
+                            <div className='formInput'>
+                                <Select
+                                id="experienceTypeSelect"
+                                value={this.state.typeOfProject}
+                                fullWidth
+                                variant="outlined"
+                                onChange={this.handleProjectTypeChange.bind(this)}
+                                >
+                                    <MenuItem value={'industry'}>Industry</MenuItem>
+                                    <MenuItem value={'intern'}>Intern</MenuItem>
+                                    <MenuItem value={'self'}>Self</MenuItem>
+                                </Select>  
+                            </div>                    
+                        </div>
+                      </div>
+                      <div className='inputBoxColumn' style={{width: '77%'}}>
+                        <div className="form_inputBox input-field" style={{width: '100%'}}>
+                            <div className='formLabel_title' >
                                 Description
                             </div>
                             <div className='formInput'>
-                                <input
-                                    placeholder="Enter problem statement of the project"
-                                    value={this.state.desc}
+                                <TextField
+                                    id="outlined-multiline-static"
+                                    fullWidth  
+                                    multiline
+                                    rows={4}
                                     onChange={ e => this.setState({ desc: e.target.value })}
+                                    defaultValue={this.state.desc}
                                 />
                             </div>                         
                         </div>
@@ -113,7 +148,7 @@ class ProjectModal extends Component {
                       <div className='inputBoxColumn'>
                         <div className="form_inputBox input-field">
                                 <div className='formLabel_title'>
-                                    Start date
+                                    Start Date
                                 </div>
                                 <div className='formInput'>
                                     <Datepicker selected={this.state.start_year} onChange={(date) => this.setState({ start_year: date})} 
@@ -123,7 +158,7 @@ class ProjectModal extends Component {
                         </div>
                         <div className="form_inputBox input-field">
                             <div className='formLabel_title'>
-                                End date
+                                End Date
                             </div>
                             <div className='formInput'>
                                 <Datepicker selected={this.state.end_year} onChange={(date) => this.setState({ end_year: date})} 
@@ -132,7 +167,7 @@ class ProjectModal extends Component {
                             </div>                    
                         </div>
                       </div>
-                      <div className="form_inputBox input-field" style={{width: '22rem'}}>
+                      <div className="form_inputBox input-field" style={{width: '77%'}}>
                             <div>
                                 Skills
                             </div>
@@ -150,42 +185,37 @@ class ProjectModal extends Component {
                                 </div>                               
                             </div>
                         </div>
-                      <div className="form_inputBox input-field" style={{width: '22rem'}}>
-                      <div className='formLabel_title'>
-                                  Industry And Department
-                              </div>
-                              <div className='industryAndDepartmentSelect'>
-                                  <Select
-                                      id="industrySelect"
-                                      value={this.state.industry}
-                                      fullWidth
-                                      variant="outlined"
-                                      onChange={this.handleIndustryChange.bind(this)}
-                                  >
-                                      <MenuItem value={'industry'}>Industry</MenuItem>
-                                      <MenuItem value={'IT'}>IT</MenuItem>
-                                  </Select>
-                                  <div style={{'margin': '1rem'}}/>
-                                  <Select
-                                      id="genderSelect"
-                                      value={this.state.department}
-                                      fullWidth
-                                      variant="outlined"
-                                      onChange={this.handleDepartmentChange.bind(this)}
-                                  >
-                                      <MenuItem value={'department'}>Department</MenuItem>
-                                      <MenuItem value={'Front End'}>Front End</MenuItem>
-                                      <MenuItem value={'Back End'}>Back End</MenuItem>
-                                      <MenuItem value={'Full Stack'}>Full Stack</MenuItem>
-                                      <MenuItem value={'Data Engineering'}>Data Engineering</MenuItem>
-                                      <MenuItem value={'Data Science'}>Data Science</MenuItem>
-                                  </Select>
-                              </div>             
-                      </div>
+                        <div className="form_inputBox input-field" style={{width: '77%'}}>
+                            <div className='formLabel_title'>
+                                Industry And Department
+                            </div>
+                            <div className='industryAndDepartmentSelect'>
+                            <Autocomplete
+                                id="free-solo-demo"
+                                fullWidth
+                                onChange={(event) => {
+                                    this.handleIndustryChange(event.target.dataset.optionIndex);
+                                }}
+                                options={jobCategory.map((option) => option.title)}
+                                renderInput={(params) => <TextField {...params} label="Industry" />}
+                            />
+                            <div style={{'margin': '1rem'}}/>
+                            <Autocomplete
+                                id="free-solo-demo"
+                                fullWidth
+                                onChange={(event) => {
+                                    console.log("autocomplete ", event.target.dataset.optionIndex)
+                                    this.handleDepartmentChange(event.target.dataset.optionIndex);
+                                }}
+                                options={this.state.jobRoles.map((option) => option)}
+                                renderInput={(params) => <TextField {...params} label="Department" />}
+                            />
+                            </div>             
+                        </div>
                         <div className='btnOption'>
-                          <Button variant='contained' size='medium' onClick={this.submitProject.bind(this)}>
-                              Save
-                          </Button>
+                            <Button variant='contained' size='medium' onClick={this.submitProject.bind(this)}>
+                                Save
+                            </Button>
                         </div>
                     </form>
                 </div>

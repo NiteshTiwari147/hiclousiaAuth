@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Modal from '@mui/material/Modal';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 
 import * as actions from '../../actions';
+import { skills } from '../../constants/skills'
 import './styles.css';
 
 const style = {
@@ -43,7 +45,8 @@ class SkillModal extends Component {
     }
 
     handleSelectedOption(event) {
-        this.setState({selectedSkill: event.target.value.toUpperCase()});
+        console.log(event);
+        this.setState({selectedSkill: skills[event]});
     }
 
     handleIndustryExperienceYearsChange(event) {
@@ -163,12 +166,15 @@ class SkillModal extends Component {
                     <div className='form_title'>
                         <h5>Add Skill data</h5>
                         <div className='skillAddPane'>
-                            <TextField id="outlined-basic" label="Please enter skill name here" size='small' variant="outlined"
-                                value={this.state.selectedSkill}
-                                fullWidth
-                                onChange={(event) => {
-                                this.handleSelectedOption(event);
-                            }} />
+                                <Autocomplete
+                                    id="free-solo-demo"
+                                    fullWidth
+                                    onChange={(event) => {
+                                        this.handleSelectedOption(event.target.dataset.optionIndex);
+                                    }}
+                                    options={skills.map((option) => option)}
+                                    renderInput={(params) => <TextField {...params} label="Skill" />}
+                                />
                             <div style={{marginLeft: '1rem'}}/>
                             <div className='inputBoxColumn'>                      
                                 <div className="form_inputBox input-field">

@@ -113,53 +113,9 @@ module.exports = app => {
 
     app.post('/create/project',async function (req,res) {
         const project =  mongoose.model('projects');
-        const skillSet = mongoose.model('skillSet');
-        const { title, description, start_date, end_date, skills, industry, department} = req.body;
+        const { title, description,typeOfProject,  start_date, end_date, skills, industry, department} = req.body;
         const { googleId, email } = req.user;
-        const candidateSkillSet = await skillSet.findOne({googleId: req.user.googleId});
-        var coreSkills = [];
-        if(candidateSkillSet != null) {
-            coreSkills = candidateSkillSet.coreSkills;
-            skills.map(skill => {
-                let found_flag = false;
-                for(var i=0;i<coreSkills.length; i++) {
-                    if(skill.toLowerCase().trim() === coreSkills[i].skillName) {
-                        found_flag = true;
-                        coreSkills[i].skillPoint++;
-                        break;
-                    }
-                }
-                if(found_flag === false) {
-                    coreSkills.push({
-                        skillName: skill.toLowerCase().trim(),
-                        skillPoint: 1
-                    })
-                }
-            });
-            skillSet.updateOne({
-                googleId,
-                email,
-                coreSkills
-            },function(err,result){
-                if(err){
-                    console.log(err);
-                }else{
-                    console.log("Skills Saved To database");
-                }
-            });
-        } 
-        else {
-            skills.map( skill => {
-                coreSkills.push({
-                    skillName: skill.toLowerCase().trim(),
-                    skillPoint: 1
-                })
-            })
-            const resposne = await new skillSet({googleId, email, coreSkills }).save();
-            console.log("New Skils Saved To database");
-        }
-
-        const response = await new project({googleId, email, title, description, start_date, end_date, skills, industry, department}).save();    
+        const response = await new project({googleId, email, typeOfProject, title, description, start_date, end_date, skills, industry, department}).save();    
         res.send(response);
     })
 

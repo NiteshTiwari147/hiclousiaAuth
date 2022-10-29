@@ -6,6 +6,7 @@ const ProjectInfoSchema = new Schema({
     email: String,
     title: String,
     description: String,
+    typeOfProject: String,
     start_date: String,
     end_date: String,
     skills: [String],

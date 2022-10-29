@@ -1,10 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
+import Autocomplete from '@mui/material/Autocomplete';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import * as actions from '../../actions';
 import Datepicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+
+const top100Films = [
+    { title: 'The Shawshank Redemption', year: 1994 },
+    { title: 'The Godfather', year: 1972 },
+    { title: 'The Godfather: Part II', year: 1974 },
+    { title: 'The Dark Knight', year: 2008 },
+    { title: '12 Angry Men', year: 1957 },
+    { title: "Schindler's List", year: 1993 },
+    { title: 'Pulp Fiction', year: 1994 },
+]
 
 class ExperienceForm extends Component {
     constructor(props) {
@@ -186,16 +199,12 @@ class ExperienceForm extends Component {
                                 Industry And Department
                             </div>
                             <div className='industryAndDepartmentSelect'>
-                                <Select
-                                    id="industrySelect"
-                                    value={this.state.industry}
-                                    fullWidth
-                                    variant="outlined"
-                                    onChange={this.handleIndustryChange.bind(this)}
-                                >
-                                    <MenuItem value={'industry'}>Industry</MenuItem>
-                                    <MenuItem value={'IT'}>IT</MenuItem>
-                                </Select>
+                            <Autocomplete
+                                id="free-solo-demo"
+                                freeSolo
+                                options={top100Films.map((option) => option.title)}
+                                renderInput={(params) => <TextField {...params} label="freeSolo" />}
+                            />
                                 <div style={{'margin': '1rem'}}/>
                                 <Select
                                     id="genderSelect"

@@ -10,6 +10,38 @@
     background: inherit;
 }
 
+.projectDetailsContainer {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: fit-content;
+    background: white !important;
+    border: 2px solid white;
+    border-radius: 15px;
+    background: inherit;
+}
+
+.projectDetailHeader {
+    display: flex;
+}
+
+.projectDetailSummary {
+    display: flex;
+    flex-direction: column;
+}
+
+.projectDetailImage {
+    width: 30rem;
+    height: 20rem;
+    border-radius: 15px 15px 0px 0px;
+}
+
+.projectDetailDescription {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+}
+
 .projectImage {
     width: 20rem;
     height: 13rem;

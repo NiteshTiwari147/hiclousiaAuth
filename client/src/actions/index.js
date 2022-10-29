@@ -69,6 +69,7 @@ export const sendProjectInfo = (props) => async dispatch => {
     const obj = {
         title: props.value.title,
         description: props.value.desc,
+        typeOfProject: props.value.typeOfProject,
         start_date: props.value.startDate,
         end_date: props.value.endDate,
         skills: props.value.skills,

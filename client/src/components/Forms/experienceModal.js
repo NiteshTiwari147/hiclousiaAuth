@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Modal from '@mui/material/Modal';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -9,7 +11,8 @@ import Datepicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
 import * as actions from '../../actions';
-import './styles.css'
+import { jobCategory } from '../../constants/jobCategoryAndPositions'
+import './styles.css';
 
 const style = {
   position: 'absolute',
@@ -17,7 +20,8 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%) scale(0.8)',
   width: '60%',
-  height: 'fit-content',
+  height: '120%',
+  overflow: 'auto',
   bgcolor: 'background.paper',
   border: '2px solid white',
   borderRadius: '15px',
@@ -37,6 +41,7 @@ class ExperienceModal extends Component {
        skill: '',
        skills:  this.props.data ? this.props.data.skills : [],
        end_year: '',
+       jobRoles: [],
        current: false, 
        industryExperienceYears: 0,
        industryExperienceMonths: 0,
@@ -93,6 +98,22 @@ class ExperienceModal extends Component {
                 }     
             })
             .then(res => {
+                this.setState({
+                organization: '',
+                id: '',
+                position: '',
+                desc: '',
+                start_year: '',
+                skill: '',
+                skills:  [],
+                end_year: '',
+                jobRoles: [],
+                current: false, 
+                industryExperienceYears: 0,
+                industryExperienceMonths: 0,
+                industry: 'industry',
+                department: 'department',
+                typeOfExperience: 'fullTime'})
                 this.props.fetchExperience();
                 this.props.close();
             });
@@ -127,13 +148,14 @@ class ExperienceModal extends Component {
     }
 
     handleIndustryChange(event) {
-        this.setState({industry: event.target.value})
+        this.setState({industry: jobCategory[event].title,
+            jobRoles: jobCategory[event].roles})
     }
 
     handleDepartmentChange(event) {
-        this.setState({department: event.target.value})
+        this.setState({department: this.state.jobRoles[event]})
     }
-
+    
     render() {  
       return (<div>
             <Modal
@@ -181,30 +203,35 @@ class ExperienceModal extends Component {
                         </div>
                         </div>
                         <div className='inputBoxColumn' style={{width: '80%'}}>
-                        <div className="form_inputBox input-field">
-                            <div className='formLabel_title'>
-                                Designation
+                            <div className="form_inputBox input-field">
+                                <div className='formLabel_title'>
+                                    Designation
+                                </div>
+                                <div className='formInput'>
+                                    <input 
+                                        placeholder="Enter your designation"
+                                        value={this.state.position}
+                                        onChange={ e => this.setState({ position: e.target.value })}
+                                    />    
+                                </div>                    
                             </div>
-                            <div className='formInput'>
-                                <input 
-                                    placeholder="Enter your designation"
-                                    value={this.state.position}
-                                    onChange={ e => this.setState({ position: e.target.value })}
-                                />    
-                            </div>                    
                         </div>
-                        <div className="form_inputBox input-field">
-                            <div className='formLabel_title'>
-                                About the job
+                        <div className='inputBoxColumn' style={{width: '80%'}}>
+                            <div className="form_inputBox input-field" style={{width: '100%'}}>
+                                <div className='formLabel_title'>
+                                    About the job
+                                </div>
+                                <div className='formInput'>
+                                    <TextField
+                                        id="outlined-multiline-static"
+                                        fullWidth  
+                                        multiline
+                                        rows={4}
+                                        onChange={ e => this.setState({ desc: e.target.value })}
+                                        defaultValue={this.state.desc}
+                                    />
+                                </div>                    
                             </div>
-                            <div className='formInput'>
-                                <input 
-                                    placeholder="Give a brief about your job"
-                                    value={this.state.desc}
-                                    onChange={ e => this.setState({ desc: e.target.value })}
-                                />    
-                            </div>                    
-                        </div>
                         </div>
                         <div className='inputBoxColumn' style={{width: '80%'}}>
                             <div className="form_inputBox input-field">
@@ -262,36 +289,31 @@ class ExperienceModal extends Component {
                                 </div>                               
                             </div>
                         </div>
-                        <div className="form_inputBox input-field" style={{width: '22rem'}}>
+                        <div className="form_inputBox input-field" style={{width: '77%'}}>
                             <div className='formLabel_title'>
                                 Industry And Department
                             </div>
                             <div className='industryAndDepartmentSelect'>
-                                <Select
-                                    id="industrySelect"
-                                    value={this.state.industry}
+                                <Autocomplete
+                                    id="free-solo-demo"
                                     fullWidth
-                                    variant="outlined"
-                                    onChange={this.handleIndustryChange.bind(this)}
-                                >
-                                    <MenuItem value={'industry'}>Industry</MenuItem>
-                                    <MenuItem value={'IT'}>IT</MenuItem>
-                                </Select>
+                                    onChange={(event) => {
+                                        this.handleIndustryChange(event.target.dataset.optionIndex);
+                                    }}
+                                    options={jobCategory.map((option) => option.title)}
+                                    renderInput={(params) => <TextField {...params} label="Industry" />}
+                                />
                                 <div style={{'margin': '1rem'}}/>
-                                <Select
-                                    id="genderSelect"
-                                    value={this.state.department}
+                                <Autocomplete
+                                    id="free-solo-demo"
                                     fullWidth
-                                    variant="outlined"
-                                    onChange={this.handleDepartmentChange.bind(this)}
-                                >
-                                    <MenuItem value={'department'}>Department</MenuItem>
-                                    <MenuItem value={'Front End'}>Front End</MenuItem>
-                                    <MenuItem value={'Back End'}>Back End</MenuItem>
-                                    <MenuItem value={'Full Stack'}>Full Stack</MenuItem>
-                                    <MenuItem value={'Data Engineering'}>Data Engineering</MenuItem>
-                                    <MenuItem value={'Data Science'}>Data Science</MenuItem>
-                                </Select>
+                                    onChange={(event) => {
+                                        console.log("autocomplete ", event.target.dataset.optionIndex)
+                                        this.handleDepartmentChange(event.target.dataset.optionIndex);
+                                    }}
+                                    options={this.state.jobRoles.map((option) => option)}
+                                    renderInput={(params) => <TextField {...params} label="Department" />}
+                                />
                             </div>                    
                         </div>
                         <div className='btnOption'>

@@ -87,6 +87,17 @@ class EducationModal extends Component {
         }      
       })
       .then(res => {
+        this.setState({
+          institute: 'select' ,
+          id: '',
+          instituteName: '',
+          course: 'select', 
+          field_of_course: '', 
+          start_year: '',  
+          end_year: '',  
+          grade: '',  
+          industry: ''
+        })
         this.props.fetchEducation();
         this.props.close();
       });
