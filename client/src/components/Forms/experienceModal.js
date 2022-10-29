@@ -20,7 +20,7 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%) scale(0.8)',
   width: '60%',
-  height: '120%',
+  height: '100%',
   overflow: 'auto',
   bgcolor: 'background.paper',
   border: '2px solid white',
