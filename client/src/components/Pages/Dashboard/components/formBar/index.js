@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
 
 import EducationModal from "../../../../Forms/educationModal";
 import ProjectModal from "../../../../Forms/projectModal";
@@ -16,6 +17,11 @@ class FormBar extends Component {
             projectModalOpen: false,
             skillModalOpen: false
         }
+    }
+
+    handleAddMoreProject() {
+        this.setState({projectModalOpen: false});
+        this.setState({projectModalOpen: true});
     }
 
     handleProjectModalOpen() {
@@ -51,22 +57,11 @@ class FormBar extends Component {
     render() {
         return(
             <div className="pageBarContainer shadow">
-                <Button size='medium' onClick={this.handleEducationModalOpen.bind(this)}>
-                    <div style={{fontSize: 'small', fontWeight: 'bold'}}>Add Education</div>
-                </Button>
-                <EducationModal open={this.state.educationModalOpen} close={this.handleEducationModalClose.bind(this)} />
-                <Button size='medium' onClick={this.handleExperienceModalOpen.bind(this)}>
-                    <div style={{fontSize: 'small', fontWeight: 'bold'}}>Add Experience</div>
-                </Button>
-                <ExperienceModal open={this.state.experienceModalOpen} close={this.handleExperienceModalClose.bind(this)} />
-                <Button size='medium' onClick={this.handleProjectModalOpen.bind(this)}>
-                    <div style={{fontSize: 'small', fontWeight: 'bold'}}>Add Project</div>
-                </Button>
-                <ProjectModal open={this.state.projectModalOpen} close={this.handleProjectModalClose.bind(this)} />
-                <Button size='medium' onClick={this.handleSkillModalOpen.bind(this)}>
-                    <div style={{fontSize: 'small', fontWeight: 'bold'}}>Add Skill</div>
-                </Button>
-                <SkillFormModal skillList={this.props.skillList ? this.props.skillList : []} open={this.state.skillModalOpen} close={this.handleSkillModalClose.bind(this)} />
+                <div style={{fontSize: '20px',color: '#1072EB', fontWeight: 'bold'}}>Projects :</div>
+                <ProjectModal addMore={this.handleAddMoreProject.bind(this)} open={this.state.projectModalOpen} close={this.handleProjectModalClose.bind(this)} />
+                <Button  style={{marginBottom: '0.5rem'}} variant="contained" color='success' size='small' onClick={this.handleProjectModalOpen.bind(this)}>
+                    <AddIcon  />
+                </Button>   
             </div>
         )
     }

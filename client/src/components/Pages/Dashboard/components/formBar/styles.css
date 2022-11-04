@@ -3,7 +3,7 @@
     flex-wrap: wrap;
     width: 40rem;
     height: 3rem;
-    justify-content: space-evenly;
+    justify-content: space-between;
     margin-top: 1rem;
     border: 2px solid white !important;
     border-radius: 6px;

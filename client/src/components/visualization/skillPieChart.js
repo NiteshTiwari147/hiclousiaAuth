@@ -41,11 +41,10 @@ class SkillPieChart extends Component {
     render() {
         var skillData = [];
         const skillSet = this.props.data;
-        console.log('skillSet ', skillSet);
+        console.log(skillSet);
         skillSet.map((skill,index) => {
             const colorVal = Math.floor(Math.random() * 300) + 50;
-            let val = 0.7*(skill.industryExperience.yr*12 + skill.industryExperience.mon);
-            val = val + 0.3*(skill.otherExperience.yr*12 + skill.otherExperience.mon)
+            let val = skill.score || 45;
             var obj = {
                 "id": skill.skillName,
                 "label": skill.skillName,

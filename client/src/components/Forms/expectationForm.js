@@ -40,11 +40,6 @@ class ExpectationForm extends Component {
     }
 
     handleSubmit() {
-        this.props.sendSkillList({
-            value: {
-                skillList: []
-            }
-        })
         this.props.sendBasicInfo({          
             value: {
                 name: this.state.name,

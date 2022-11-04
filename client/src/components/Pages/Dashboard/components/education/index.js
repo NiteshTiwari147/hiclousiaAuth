@@ -5,6 +5,7 @@ import Button from  '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 
 import EducationListingModal from './listingModal';
+import EducationModal from '../../../../Forms/educationModal';
 
 import './styles.css';
 
@@ -13,8 +14,16 @@ class Education extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { modalOpen: false}
+        this.state = { educationModalOpen: false,
+        modalOpen: false}
     };
+
+    handleEducationModalOpen() {
+        this.setState({educationModalOpen: true})
+    }
+    handleEducationModalClose() {
+        this.setState({educationModalOpen: false})
+    }
 
     handleModalOpen() {
         this.setState({modalOpen: true})
@@ -61,7 +70,12 @@ class Education extends Component {
             return  <div className='educationContainer shadow' >
                 <h5 style={{"color": "#1072EB"}}>Education</h5>
                 <Divider color='skyblue'/>
-                <p>You have not added any education</p>
+                <div style={{marginTop: '1rem'}}>
+                    <Button variant='contained' color='success' size='small' onClick={this.handleEducationModalOpen.bind(this)}>
+                        Please add education
+                    </Button>
+                </div>
+                <EducationModal open={this.state.educationModalOpen} close={this.handleEducationModalClose.bind(this)} />
             </div>
         }
         const educationList = this.props.data
@@ -83,9 +97,14 @@ class Education extends Component {
                 close={this.handleModalClose.bind(this)}
                 list={educationList}
                 />
-            </div>
-        )
-    }
+                <div style={{marginTop: '1rem'}}>
+                    <Button variant="contained" color='success' size='medium' onClick={this.handleEducationModalOpen.bind(this)}>
+                        Add Education
+                    </Button>
+                </div>
+                <EducationModal open={this.state.educationModalOpen} close={this.handleEducationModalClose.bind(this)} />
+            </div>)
+        } 
 }
 
 export default Education;

@@ -5,6 +5,12 @@ import avatar from '../../../../../data/avatarMan.jpg';
 
 class CandidateInfo extends Component {
 
+    renderCurrentRole(currentEmploymnt) {
+        if(currentEmploymnt.isCurrent) {
+            return <text className="profilePosition">{currentEmploymnt.designation} at {currentEmploymnt.company}</text>
+        }
+    }
+
     render() {
         const url = [
             {
@@ -23,7 +29,7 @@ class CandidateInfo extends Component {
                 <img className="profilePic" src={avatar} alt="Avatar"/>
                 <h5 className="profileName">{name}</h5>
                 <h7 className="profilePosition">{email}</h7>
-                <text className="profilePosition">{currentEmploymnt.designation} at {currentEmploymnt.company}</text>
+                {currentEmploymnt.map( obj => this.renderCurrentRole(obj))}
             </div>
         )
     }

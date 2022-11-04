@@ -8,7 +8,7 @@ import './styles.css';
 class Certificate extends Component {
     renderSkillCertificate(data) {
         return <div>
-                <div className='certificate'>
+                {/* <div className='certificate'>
                 <div className='skillName'>
                     {data.toUpperCase()}
                 </div>
@@ -20,7 +20,7 @@ class Certificate extends Component {
                         Nothing to show
                     </div>
                 </ReactTooltip>
-            </div>
+            </div> */}
             <Divider/>
         </div>
 

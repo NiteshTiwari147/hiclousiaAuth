@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import dayjs from 'dayjs';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -10,6 +11,11 @@ import MenuItem from '@mui/material/MenuItem';
 import Datepicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
+
+import AlertModal from './alertModal';
+import ProjectModal from './projectModal';
+import MaterialUIPickers from '../utils/calender';
+import durationCalculator from '../utils/durationCalculator';
 import * as actions from '../../actions';
 import { jobCategory } from '../../constants/jobCategoryAndPositions'
 import './styles.css';
@@ -33,21 +39,101 @@ class ExperienceModal extends Component {
 
     constructor(props) {
       super(props);
-      this.state ={organization: this.props.data ? this.props.data.organization : '',
-       id: this.props.data ? this.props.data.id : '',
-       position: this.props.data ? this.props.data.position : '',
-       desc: this.props.data ? this.props.data.desc : '',
-       start_year: this.props.data ? new Date(this.props.data.start_data) : '',
-       skill: '',
-       skills:  this.props.data ? this.props.data.skills : [],
-       end_year: '',
-       jobRoles: [],
-       current: false, 
-       industryExperienceYears: 0,
-       industryExperienceMonths: 0,
-       industry: this.props.data ? this.props.data.industry :'industry',
-       department: this.props.data ? this.props.data.department :'department',
-       typeOfExperience: 'fullTime'}
+      this.state = {
+            organization: this.props.data ? this.props.data.organization : '',
+            id: this.props.data ? this.props.data.id : '',
+            position: this.props.data ? this.props.data.position : '',
+            desc: this.props.data ? this.props.data.desc : '',
+            start_year: this.props.data ? new Date(this.props.data.start_data) : '',
+            skill: '',
+            startDate: '',
+            endDate: '',
+            duration: {},
+            childProp: {},
+            skills:  this.props.data ? this.props.data.skills : [],
+            end_year: '',
+            jobRoles: [],
+            current: true, 
+            industryExperienceYears: 0,
+            industryExperienceMonths: 0,
+            industry: this.props.data ? this.props.data.industry :'industry',
+            department: this.props.data ? this.props.data.department :'department',
+            typeOfExperience: 'fullTime',
+            alertModalOpen:false,
+            projectModalOpen: false
+        }
+    }
+
+    handleProjectModalOpen() {
+        this.setState({alertModalOpen: false})
+        this.setState({projectModalOpen: true})
+    }
+
+    handleAddMoreProject() {
+        this.setState({projectModalOpen: false});
+        this.setState({
+            organization: '',
+            id: '',
+            position: '',
+            desc: '',
+            start_year: '',
+            skill: '',
+            skills:  [],
+            end_year: '',
+            jobRoles: [],
+            current: false, 
+        })
+        this.setState({projectModalOpen: true});
+    }
+
+    handleProjectModalClose() {
+        this.setState({projectModalOpen: false})
+        this.setState({
+            organization: '',
+            id: '',
+            position: '',
+            desc: '',
+            start_year: '',
+            skill: '',
+            skills:  [],
+            end_year: '',
+            jobRoles: [],
+            current: false, 
+            industryExperienceYears: 0,
+            industryExperienceMonths: 0,
+            industry: 'industry',
+            department: 'department',
+            typeOfExperience: 'fullTime'
+        })
+    }
+
+    handleSkillModalOpen() {
+        this.setState({skillModalOpen: true})
+    }
+
+    handleAlertModalOpen() {
+        this.setState({alertModalOpen: true})
+    }
+    handleAlertModalClose() {
+        this.setState({alertModalOpen: false})
+        this.setState({
+            organization: '',
+            id: '',
+            position: '',
+            desc: '',
+            start_year: '',
+            skill: '',
+            skills:  [],
+            end_year: '',
+            jobRoles: [],
+            current: false, 
+            industryExperienceYears: 0,
+            industryExperienceMonths: 0,
+            industry: 'industry',
+            department: 'department',
+            typeOfExperience: 'fullTime'
+        })
+        this.props.close();
     }
 
     handleIndustryExperienceYearsChange(event) {
@@ -119,28 +205,41 @@ class ExperienceModal extends Component {
             });
         }
         else {
-            this.props.sendExperienceInfo({          
+            this.handleAlertModalOpen();
+            const valueObj = {
                 value: {
                     company: this.state.organization,
                     designation: this.state.position,
                     typeOfExperience: this.state.typeOfExperience,
-                    desc: this.state.desc,
                     isCurrent: this.state.current,
-                    industryExperience: {
-                        yr: this.state.industryExperienceYears,
-                        mo: this.state.industryExperienceMonths
-                    },
-                    skills: this.state.skills,
+                    duration: this.state.duration,
+                    startDate: this.state.startDate,
+                    endDate: this.state.endDate,
                     industry: this.state.industry,
                     department: this.state.department
-                }      
-            })
-            .then(res => {
-                this.props.fetchExperience();
-                this.props.close();
-            });
+                }
+            }
+            this.setState({childProp: valueObj});
         }
         
+    }
+
+    calculateExpDuration() {
+        this.state.endDate = dayjs(this.state.endDate).format('YYYY-MM-DD');
+        this.state.startDate = dayjs(this.state.startDate).format('YYYY-MM-DD');
+        const date1 = dayjs(this.state.endDate);
+        const date2 = dayjs(this.state.startDate);
+        this.setState({duration: durationCalculator(date1.diff(date2))});
+        console.log(this.state.endDate, this.state.startDate, durationCalculator(date1.diff(date2)));
+    }
+
+    handleStartDateChange(value) {
+        this.setState({startDate: value});
+    }
+
+    handleEndDateChange(value) {
+        this.setState({endDate: value});
+        setTimeout(() =>this.calculateExpDuration(), 2000);
     }
 
     handleExperienceTypeChange(event) {
@@ -196,8 +295,7 @@ class ExperienceModal extends Component {
                                 onChange={this.handleExperienceTypeChange.bind(this)}
                                 >
                                     <MenuItem value={'fullTime'}>Full Time</MenuItem>
-                                    <MenuItem value={'partTime'}>Part Time</MenuItem>
-                                    <MenuItem value={'Intern'}>Inter</MenuItem>
+                                    <MenuItem value={'intern'}>Intern</MenuItem>
                                 </Select>  
                             </div>                    
                         </div>
@@ -217,77 +315,31 @@ class ExperienceModal extends Component {
                             </div>
                         </div>
                         <div className='inputBoxColumn' style={{width: '80%'}}>
-                            <div className="form_inputBox input-field" style={{width: '100%'}}>
-                                <div className='formLabel_title'>
-                                    About the job
-                                </div>
-                                <div className='formInput'>
-                                    <TextField
-                                        id="outlined-multiline-static"
-                                        fullWidth  
-                                        multiline
-                                        rows={4}
-                                        onChange={ e => this.setState({ desc: e.target.value })}
-                                        defaultValue={this.state.desc}
-                                    />
-                                </div>                    
-                            </div>
-                        </div>
-                        <div className='inputBoxColumn' style={{width: '80%'}}>
                             <div className="form_inputBox input-field">
                                 <div className='formLabel_title'>
-                                    Experience Duration
+                                    Start Date
                                 </div>
                                 <div className='candidateExperienceSelect'>
-                                    <Select
-                                        id="experienceYearsSelect"
-                                        value={this.state.industryExperienceYears}
-                                        fullWidth
-                                        variant="outlined"
-                                        onChange={this.handleIndustryExperienceYearsChange.bind(this)}
-                                    >
-                                        {this.renderExperienceYears()}
-                                    </Select> 
-                                    <div style={{'margin': '1rem'}}>Years</div>
-                                    <Select
-                                        id="experienceMonthsSelect"
-                                        value={this.state.industryExperienceMonths}
-                                        fullWidth
-                                        variant="outlined"
-                                        onChange={this.handleIndustryExperienceMonthsChange.bind(this)}
-                                    >
-                                        {this.renderExperienceMonths()}
-                                    </Select>
-                                    <div style={{'margin': '1rem'}}>Months</div>
+                                    <MaterialUIPickers setTime={this.handleStartDateChange.bind(this)}/>
                                 </div>                  
-                        </div>
-                        <div className="form_inputBox input-field">
-                            <div className='formLabel_title'>
-                                Currently Working
                             </div>
-                            <div className='formInput' style={{marginTop: '1rem'}}>
-                                <button className="small btn" style={{'margin-right': '2rem'}} onClick={(event) => { event.preventDefault(); this.setState({current: true})}}>Yes</button>
-                                <button className="small btn" onClick={(event) => { event.preventDefault(); this.setState({current: false})}}>No</button>
-                            </div>                    
-                        </div>
-                        </div>
-                        <div className="form_inputBox input-field" style={{width: '77%'}}>
-                            <div>
-                                Skills
-                            </div>
-                            <div>
-                                <input
-                                    placeholder="Add Skills used one by one "
-                                    value={this.state.skill}
-                                    onChange={ e => this.setState({ skill: e.target.value })}
-                                />
-                                <div className='skill_options'>
-                                    <button className="small btn" onClick={this.addCoreSkill.bind(this)}>Add</button>
-                                    <div className='addedSkill'>
-                                        {this.state.skills && this.state.skills.map( skill => <p style={{'margin-left': '1rem'}}>{skill}</p>)}
-                                    </div>        
-                                </div>                               
-                            </div>
+                            {this.state.current && <div className="form_inputBox input-field">
+                                <div className='formLabel_title'>
+                                    Currently Working
+                                </div>
+                                <div className='formInput' style={{marginTop: '1rem'}}>
+                                    <button className="small btn" style={{'margin-right': '2rem'}} onClick={(event) => { event.preventDefault(); this.setState({current: true})}}>Yes</button>
+                                    <button className="small btn" onClick={(event) => { event.preventDefault(); this.setState({current: false})}}>No</button>
+                                </div>                    
+                            </div>}
+                            {!this.state.current && <div className="form_inputBox input-field">
+                                <div className='formLabel_title'>
+                                    End Date
+                                </div>
+                                <div className='candidateExperienceSelect'>
+                                    <MaterialUIPickers setTime={this.handleEndDateChange.bind(this)}/>
+                                </div>
+                            </div>}
                         </div>
                         <div className="form_inputBox input-field" style={{width: '77%'}}>
                             <div className='formLabel_title'>
@@ -323,6 +375,20 @@ class ExperienceModal extends Component {
                         </div>
                     </form>
                 </div>
+                {this.state.alertModalOpen && <AlertModal 
+                    data={this.state.childProp}
+                    open={this.state.alertModalOpen} 
+                    close={this.handleAlertModalClose.bind(this)}
+                    openProject={this.handleProjectModalOpen.bind(this)} 
+                    closeParent={this.props.close.bind(this)}
+                />}
+                {this.state.projectModalOpen && <ProjectModal
+                    data={this.state.childProp}
+                    open={this.state.projectModalOpen} 
+                    closeParent={this.props.close.bind(this)}
+                    close={this.handleProjectModalClose.bind(this)}
+                    addMore={this.handleAddMoreProject.bind(this)} 
+                />}
               </Box>
             </Modal>
         </div>

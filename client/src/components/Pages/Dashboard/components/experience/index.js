@@ -5,6 +5,7 @@ import Button from  '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 
 import ExperienceListingModal from './listingModal';
+import ExperienceModal from '../../../../Forms/experienceModal';
 
 import './styles.css';
 
@@ -12,8 +13,16 @@ class ExperienceTab extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { modalOpen: false}
+        this.state = { experienceModalOpen: false,
+        modalOpen: false}
     };
+
+    handleExperienceModalOpen() {
+        this.setState({experienceModalOpen: true})
+    }
+    handleExperienceModalClose() {
+        this.setState({experienceModalOpen: false})
+    }
 
     handleModalOpen() {
         this.setState({modalOpen: true})
@@ -52,7 +61,12 @@ class ExperienceTab extends Component {
             alignItems: 'center'}}>
             <h5 style={{"color": "#1072EB"}}>Experience</h5>
             <Divider color='skyblue'/>
-            <p>You have not added any experience</p>
+            <div style={{marginTop: '1rem'}}>
+                <Button variant='contained' color='success' size='small' onClick={this.handleExperienceModalOpen.bind(this)}>
+                     Please add experience
+                </Button>
+            </div>
+            <ExperienceModal open={this.state.experienceModalOpen} close={this.handleExperienceModalClose.bind(this)} />
         </div>
         }
         const experienceList = this.props.data;
@@ -74,6 +88,12 @@ class ExperienceTab extends Component {
                 close={this.handleModalClose.bind(this)}
                 list={experienceList}
                 />
+                <div style={{marginTop: '1rem'}}>
+                    <Button variant='contained' color='success' size='medium' onClick={this.handleExperienceModalOpen.bind(this)}>
+                        Add Experience
+                    </Button>
+                </div>
+                <ExperienceModal open={this.state.experienceModalOpen} close={this.handleExperienceModalClose.bind(this)} />
             </div>
         )
     }

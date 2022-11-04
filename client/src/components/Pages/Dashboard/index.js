@@ -16,29 +16,30 @@ import './styles.css';
 
 class Dashboard extends Component {
 
-    renderCandidateInfo(candidate) {
+    renderCandidateInfo(candidate, experience) {
         const currentEmploymnt = {
             designation: 'SDE-2',
             company: 'PayPal'
         }
         if(candidate) {
-            return <CandidateInfo name={candidate.name} email={candidate.email} currentEmploymnt={currentEmploymnt} />
+            return <CandidateInfo name={candidate.name} email={candidate.email} currentEmploymnt={experience} />
         }
     }
 
     calculateExperience(experience) {
-        if(experience.length === 0) {
-            return { yr: 0, mo: 0}
-        }
-        let yr=0;
-        let mo=0;
-        experience.map(exp => {
-            yr+=exp.industryExperience.yr;
-            mo+=exp.industryExperience.mo;
-        })
-        yr = yr + parseInt(mo/12);
-        mo = mo%12;
-        return {yr, mo};
+        console.log("experience calculator ", experience)
+        // if(experience.length === 0) {
+        //     return { yr: 0, mo: 0}
+        // }
+        // let yr=0;
+        // let mo=0;
+        // experience.map(exp => {
+        //     yr+=exp.industryExperience.yr;
+        //     mo+=exp.industryExperience.mo;
+        // })
+        // yr = yr + parseInt(mo/12);
+        // mo = mo%12;
+        return {yr: 3, mo: 1};
     }
 
     renderATS() {
@@ -50,11 +51,11 @@ class Dashboard extends Component {
     render() {
         if(this.props.auth && this.props.candidate && this.props.skillSet) {
             const {project, skillSet, candidate, education, experience } = this.props
-            console.log(project);
+            console.log(this.props);
             return (
                 <div className='dashboardLayout'>
                     <div className='dashboardStack'>
-                        {this.renderCandidateInfo(candidate)}
+                        {this.renderCandidateInfo(candidate, experience)}
                         {experience && experience.length > 0 ? <ExperienceTab data={experience} isEmpty={false} /> : 
                         <ExperienceTab data={experience} isEmpty={true} />}
                         {education && education.length > 0 ? <Education data={education} isEmpty={false} /> : 
@@ -69,10 +70,10 @@ class Dashboard extends Component {
                     </div>
                     <div className='dashboardStack'>
                         <div>
-                            <SkillPieChart data={skillSet && skillSet.coreSkills ? skillSet.coreSkills : []} />
+                            <SkillPieChart data={skillSet && skillSet.processedSKillList ? skillSet.processedSKillList : []} />
                             <CompentencyPieChart />
-                            {skillSet && skillSet.coreSkills ? <Certificate data={skillSet.coreSkills} isEmpty={false} /> : 
-                            <Certificate data={skillSet && skillSet.coreSkills ? skillSet.coreSkills : []} isEmpty={true} />
+                            {skillSet && skillSet.processedSKillList ? <Certificate data={skillSet.processedSKillList} isEmpty={false} /> : 
+                            <Certificate data={skillSet && skillSet.processedSKillList ? skillSet.processedSKillList : []} isEmpty={true} />
                             }
                         </div>
                     </div>

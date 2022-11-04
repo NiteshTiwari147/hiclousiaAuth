@@ -1,22 +1,21 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
+const listSchema = new Schema({
+    skillName: String,
+    types: [
+        {
+            typeName: String,
+            duration: Object
+        }
+    ],
+    score: Number
+})
+
 const skillSetSchema = new Schema({
     googleId: String,
     email: String,
-    coreSkills: [
-        {
-            skillName: String,
-            industryExperience: {
-                yr: Number,
-                mon: Number
-            },
-            otherExperience: {
-                yr: Number,
-                mon: Number
-            }
-        }
-    ]
+    processedSKillList: Object
 })
 
 mongoose.model('skillSet', skillSetSchema);

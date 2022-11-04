@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import dayjs from 'dayjs';
 import Modal from '@mui/material/Modal';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -11,6 +12,9 @@ import Datepicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
 import * as actions from '../../actions';
+import MaterialUIPickers from '../utils/calender';
+import durationCalculator from '../utils/durationCalculator';
+import { skills } from '../../constants/skills'
 import { jobCategory } from '../../constants/jobCategoryAndPositions'
 import './styles.css'
 
@@ -29,11 +33,91 @@ const style = {
     p: 4
 };
 
+const res = new Set();
+
 class ProjectModal extends Component {
     constructor(props) {
       super(props);
-      this.state = { tittle: '', desc: '', start_year: '',skill: '',skills: [], end_year: '',
-      industry: 'industry', department: 'department', jobRoles: [],  typeOfProject: 'industry'}
+      this.state = { fromExp: false,tittle: '', desc: '', startDate: '',duration: {}, endDate: '',
+      industry: 'industry', department: 'department', jobRoles: [],  typeOfProject: 'industry', selectedSkill: []}
+    }
+
+    calculateExpDuration() {
+        this.state.endDate = dayjs(this.state.endDate).format('YYYY-MM-DD');
+        this.state.startDate = dayjs(this.state.startDate).format('YYYY-MM-DD');
+        const date1 = dayjs(this.state.endDate);
+        const date2 = dayjs(this.state.startDate);
+        this.setState({duration: durationCalculator(date1.diff(date2))});
+        console.log(this.state.endDate, this.state.startDate, durationCalculator(date1.diff(date2)));
+    }
+
+    handleStartDateChange(value) {
+        this.setState({startDate: value});
+    }
+
+    handleEndDateChange(value) {
+        this.setState({endDate: value});
+        setTimeout(() =>this.calculateExpDuration(), 2000);
+    }
+
+    componentDidMount() {
+        if(this.props.data?.value?.typeOfExperience) {
+            this.setState({fromExp: true});
+            this.setState({industry: this.props.data.value.industry});
+            this.setState({department: this.props.data.value.department});
+           
+            if(this.props.data.value.typeOfExperience === 'intern') {
+                this.setState({typeOfProject: 'intern'});
+            }
+        }
+    }
+
+    handleSelectedOption(event) {
+        let newSkillList = this.state.selectedSkill;
+        newSkillList.push(skills[event]);
+        this.setState({selectedSkill: newSkillList});
+    }
+
+    showSelect(params) {
+        res.clear();
+        const final = params?.InputProps?.startAdornment || [];
+        final.map(o => {
+           if(this.state.selectedSkill.includes(o.props.label)) {
+                res.add(o.props.label);
+            }
+        });
+    }
+
+    addMoreProject() {
+        this.props.sendProjectInfo({          
+            value: {
+                title: this.state.tittle,
+                desc: this.state.desc,
+                typeOfProject: this.state.typeOfProject,
+                duration: this.state.duration,
+                startDate: this.state.startDate,
+                endDate: this.state.endDate,
+                industry: this.state.industry,
+                selectedSkill: Array.from(res),
+                department: this.state.department
+            }      
+        })
+        .then( _ => {
+            this.props.sendSkillList({
+                value: {
+                    skillList: Array.from(res),
+                    typeOfProject: this.state.typeOfProject,
+                    duration: this.state.duration,
+                }
+            })
+        })
+        .then(res => {
+            this.props.fetchSkillSet();
+            this.setState({ tittle: '', desc: '', startDate: '',duration: {}, endDate: '',
+            jobRoles: [], selectedSkill: []})
+            this.props.fetchProject();
+            this.props.addMore();
+        })
     }
 
     submitProject() {
@@ -42,19 +126,33 @@ class ProjectModal extends Component {
                 title: this.state.tittle,
                 desc: this.state.desc,
                 typeOfProject: this.state.typeOfProject,
-                startDate: this.state.start_year,
-                endDate: this.state.end_year,
-                skills: this.state.skills,
+                duration: this.state.duration,
+                startDate: this.state.startDate,
+                endDate: this.state.endDate,
                 industry: this.state.industry,
+                selectedSkill: Array.from(res),
                 department: this.state.department
             }      
         })
+        .then( () => {
+            this.props.sendSkillList({
+                value: {
+                    skillList: Array.from(res),
+                    typeOfProject: this.state.typeOfProject,
+                    duration: this.state.duration,
+                }
+            });
+        })
         .then(res => {
-            this.setState({tittle: '', desc: '', start_year: '',skill: '',skills: [], end_year: '',
-            industry: 'industry', department: 'department', jobRoles: [],  typeOfProject: 'industry'})
-            this.props.fetchProject();
+            this.props.fetchSkillSet();
+            this.setState({ tittle: '', desc: '', startDate: '',duration: {}, endDate: '',
+            industry: 'industry', department: 'department', jobRoles: [],  typeOfProject: 'industry', selectedSkill: []})
+            if(this.state.fromExp) {
+                this.props.closeParent();
+            }
             this.props.close();
-        });
+            this.props.fetchProject();
+        })
     }
 
     handleProjectTypeChange(event) {
@@ -96,7 +194,7 @@ class ProjectModal extends Component {
                 </div>
                 <div className="row">
                     <form className="col s16 formContent">
-                      <div className='inputBoxColumn' style={{width: '77%'}}>
+                      <div className='inputBoxColumn' style={{width: '100%'}}>
                         <div className="form_inputBox input-field" >
                             <div className='formLabel_title'>
                                 Title
@@ -128,7 +226,7 @@ class ProjectModal extends Component {
                             </div>                    
                         </div>
                       </div>
-                      <div className='inputBoxColumn' style={{width: '77%'}}>
+                      <div className='inputBoxColumn' style={{width: '100%'}}>
                         <div className="form_inputBox input-field" style={{width: '100%'}}>
                             <div className='formLabel_title' >
                                 Description
@@ -145,15 +243,13 @@ class ProjectModal extends Component {
                             </div>                         
                         </div>
                       </div>
-                      <div className='inputBoxColumn'>
+                      <div className='inputBoxColumn' style={{width: '100%'}}>
                         <div className="form_inputBox input-field">
                                 <div className='formLabel_title'>
                                     Start Date
                                 </div>
                                 <div className='formInput'>
-                                    <Datepicker selected={this.state.start_year} onChange={(date) => this.setState({ start_year: date})} 
-                                    dateFormat='dd/MM/yyyy' isClearable showYearDropdown scrollableYearDropdown placeholderText="DD/MM/YYYY"
-                                    />
+                                    <MaterialUIPickers setTime={this.handleStartDateChange.bind(this)}/>
                                 </div>                    
                         </div>
                         <div className="form_inputBox input-field">
@@ -161,31 +257,27 @@ class ProjectModal extends Component {
                                 End Date
                             </div>
                             <div className='formInput'>
-                                <Datepicker selected={this.state.end_year} onChange={(date) => this.setState({ end_year: date})} 
-                                    dateFormat='dd/MM/yyyy' isClearable showYearDropdown scrollableYearDropdown placeholderText="DD/MM/YYYY"
-                                />    
+                                <MaterialUIPickers setTime={this.handleEndDateChange.bind(this)}/>   
                             </div>                    
                         </div>
                       </div>
-                      <div className="form_inputBox input-field" style={{width: '77%'}}>
-                            <div>
-                                Skills
-                            </div>
-                            <div>
-                                <input
-                                    placeholder="Add core Skill "
-                                    value={this.state.skill}
-                                    onChange={ e => this.setState({ skill: e.target.value })}
-                                />
-                                <div className='skill_options'>
-                                    <button className="small btn" onClick={this.addCoreSkill.bind(this)}>Add</button>
-                                    <div className='addedSkill'>
-                                        {this.state.skills && this.state.skills.map( skill => <p style={{'margin-left': '1rem'}}>{skill}</p>)}
-                                    </div>        
-                                </div>                               
-                            </div>
+                        <div className="form_inputBox input-field" style={{width: '100%'}}>
+                            <Autocomplete
+                                multiple
+                                id="skill adder"                                 
+                                onChange={(event) => {
+                                    console.log(event);
+                                    this.handleSelectedOption(event.target.dataset.optionIndex);
+                                }}
+                                options={skills.map((option) => option)}
+                                getOptionLabel={(option) => option}
+                                renderInput={(params) => {
+                                    this.showSelect({...params})
+                                    return <TextField {...params} label="Skill" />
+                                }}
+                            />
                         </div>
-                        <div className="form_inputBox input-field" style={{width: '77%'}}>
+                        {!this.props.data && <div className="form_inputBox input-field" style={{width: '100%'}}>
                             <div className='formLabel_title'>
                                 Industry And Department
                             </div>
@@ -211,10 +303,14 @@ class ProjectModal extends Component {
                                 renderInput={(params) => <TextField {...params} label="Department" />}
                             />
                             </div>             
-                        </div>
+                        </div>}
                         <div className='btnOption'>
+                            <Button variant='contained' size='medium' onClick={this.addMoreProject.bind(this)}>
+                                Add More
+                            </Button>
+                            <div style={{marginRight: '1rem'}} />
                             <Button variant='contained' size='medium' onClick={this.submitProject.bind(this)}>
-                                Save
+                                Thats all
                             </Button>
                         </div>
                     </form>

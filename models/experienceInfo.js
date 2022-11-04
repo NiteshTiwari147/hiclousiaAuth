@@ -5,17 +5,15 @@ const ExperienceInfoSchema = new Schema({
     googleId: String,
     email: String,
     company: String,
+    department: String,
     designation: String,
-    typeOfExperience: String,
-    description: String,
-    isCurrent: Boolean,
-    industryExperience: {
-        yr: Number,
-        mo: Number
-    },
-    skills: [String],
+    duration: Object,
+    endDate: String,
     industry: String,
-    department: String
+    isCurrent: Boolean,
+    startDate: String,
+    skills: [String],
+    typeOfExperience: String
 });
 
 mongoose.model('experiences', ExperienceInfoSchema);

@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
+
 require('../models/BasicInfo');
 require('../models/projectInfo');
 require('../models/educationInfo');
 require('../models/experienceInfo');
 require('../models/skillSet');
+
+const { processSkillData }  =  require('../services/stats');
 
 module.exports = app => {
 
@@ -113,27 +116,50 @@ module.exports = app => {
 
     app.post('/create/project',async function (req,res) {
         const project =  mongoose.model('projects');
-        const { title, description,typeOfProject,  start_date, end_date, skills, industry, department} = req.body;
+        const { title, description, typeOfProject,  startDate, endDate, skills, duration, industry, department} = req.body;
         const { googleId, email } = req.user;
-        const response = await new project({googleId, email, typeOfProject, title, description, start_date, end_date, skills, industry, department}).save();    
+        const response = await new project({googleId, email, title, description, typeOfProject,  startDate, endDate, skills, duration, industry, department}).save();    
         res.send(response);
     })
 
     app.post('/update/skills',async function (req,res) {
         const skillList = mongoose.model('skillSet');
-        const { skillsObj } = req.body;
-        let coreSkills = [];
-        skillsObj.map( skill => {
-            coreSkills.push({
-                skillName: skill.skillName.toLowerCase().trim(),
-                industryExperience: skill.industryExperience,
-                otherExperience: skill.otherExperience
-            })
-        })
-        const { googleId, email } = req.user;
-        var newvalues = { $set: { googleId, email, coreSkills} };
-        const resposne = await skillList.updateOne({googleId: googleId}, newvalues)
-        res.send({resposne});
+        try {
+            if(req, req.user && req.user.googleId) {
+                const candidateSkillSet = await skillList.findOne({googleId: req.user.googleId});
+                if(candidateSkillSet === null) {
+                    const processedSKillList = processSkillData([], req.body)
+                    const { googleId, email } = req.user;
+                    const response = await new skillList({googleId, email, processedSKillList}).save();
+                    res.send({response});
+                } else {
+                    const processedSKillList = processSkillData(candidateSkillSet.processedSKillList, req.body)
+                    const { googleId, email } = req.user;
+                    var newvalues = { $set: { googleId, email, processedSKillList} };
+                    const resposne = await skillList.updateOne({googleId: googleId}, newvalues)
+                    res.send({resposne});
+                }
+            }
+            res.status({status: 200});   
+        }
+        catch (err) {
+            console.log("candidate skillset not found ",err);
+            res.send({status: 204})
+        } 
+        // let coreSkills = [];
+        // // skillsObj.map( skill => {
+        // //     coreSkills.push({
+        // //         skillName: skill.skillName.toLowerCase().trim(),
+        // //         industryExperience: skill.industryExperience,
+        // //         otherExperience: skill.otherExperience
+        // //     })
+        // // })
+        // const { googleId, email } = req.user;
+        // var newvalues = { $set: { googleId, email, coreSkills} };
+        // console.log("body: ",skillsObj," processed: ",coreSkills);
+        // res.send({});
+        // const resposne = await skillList.updateOne({googleId: googleId}, newvalues)
+        // res.send({resposne});
     });
 
     app.post('/create/skills',async function (req,res) {
@@ -154,9 +180,9 @@ module.exports = app => {
     })
     app.post('/create/experience',async function (req,res) {
         const experience =  mongoose.model('experiences');
-        const { company, designation, description, isCurrent, industryExperience, skills, industry, department, typeOfExperience} = req.body;
+        const { company, designation, duration, isCurrent, endDate, skills, industry, department, typeOfExperience, startDate} = req.body;
         const { googleId, email } = req.user;
-        const response = await new experience({googleId, email, company, designation, description, isCurrent, industryExperience, skills, industry, department, typeOfExperience}).save();
+        const response = await new experience({googleId, email, company, designation, duration, isCurrent, endDate, skills, industry, department, typeOfExperience, startDate}).save();
         res.send(response);
     })
 

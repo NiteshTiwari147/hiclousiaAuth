@@ -67,29 +67,32 @@ export const sendBasicInfo =  (props) => async dispatch => {
 
 export const sendProjectInfo = (props) => async dispatch => {
     const obj = {
-        title: props.value.title,
+        department: props.value.department,
         description: props.value.desc,
-        typeOfProject: props.value.typeOfProject,
-        start_date: props.value.startDate,
-        end_date: props.value.endDate,
-        skills: props.value.skills,
+        duration: props.value.duration,      
+        endDate: props.value.endDate,
         industry: props.value.industry,
-        department: props.value.department
+        startDate: props.value.startDate,
+        skills: props.value.selectedSkill,
+        title: props.value.title,
+        typeOfProject: props.value.typeOfProject,
+        
     };
     const res = await axios.post('/create/project', obj);
 }
 
 export const sendExperienceInfo = (props) => async dispatch => {
     const obj = {
-        company: props.value.company,
-        designation: props.value.designation,
-        typeOfExperience: props.value.typeOfExperience,
-        description: props.value.desc,
-        isCurrent: props.value.isCurrent,
-        industryExperience: props.value.industryExperience,
-        skills: props.value.skills,
-        industry: props.value.industry,
-        department: props.value.department
+        company: props.value.expFormData.company,
+        department: props.value.expFormData.department,
+        designation: props.value.expFormData.designation,
+        duration: props.value.expFormData.duration,
+        endDate:  props.value.expFormData.endDate,
+        industry: props.value.expFormData.industry,   
+        isCurrent: props.value.expFormData.isCurrent,
+        startDate: props.value.expFormData.startDate,
+        skills:  Array.from(props.value.res),
+        typeOfExperience: props.value.expFormData.typeOfExperience,   
     };
     const res = await axios.post('/create/experience', obj);
 }
@@ -107,18 +110,23 @@ export const sendEducationInfo = (props) => async dispatch => {
 }
 
 export const sendSkillList = (props) => async dispatch => {
-    if(props.value.skillList.length > 0) {
-        const obj = {
-            skillsObj: props.value.skillList
-        };
-        const res = await axios.post('/update/skills', obj);
-    } else {
-        const obj = {
-            skillsObj: []
-        };
-        const res = await axios.post('/create/skills', obj);
+    const obj = {
+        skillList: props.value.skillList,
+        duration: props.value.duration,
+        typeOfProject: props.value.typeOfProject, 
     }
-    
+    const res = await axios.post('/update/skills', obj);
+    // if(props.value.skillList.length > 0) {
+    //     const obj = {
+    //         skillsObj: props.value.skillList
+    //     };
+    //     const res = await axios.post('/update/skills', obj);
+    // } else {
+    //     const obj = {
+    //         skillsObj: []
+    //     };
+    //     const res = await axios.post('/create/skills', obj);
+    // }
 }
 
 export const updateEducationInfo = (props) => async dispatch => {

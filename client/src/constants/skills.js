@@ -118,7 +118,6 @@ export const skills = [
 "Graphing",
 "Computing",
 "Calculating",
-"Modeling",
 "Extrapolating",
 "Predicting",
 "Forecasting",

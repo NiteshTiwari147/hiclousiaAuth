@@ -30,9 +30,8 @@ const style = {
 class SkillModal extends Component {
     constructor(props) {
         super(props);
-        console.log("from constructor ", this.props.skillList)
         this.state= {
-            selectedSkill: '',
+            selectedSkill: [],
             selectedPriority: 0,
             skillList: this.props.skillList,
             industryExperienceYears: 0,
@@ -46,7 +45,9 @@ class SkillModal extends Component {
 
     handleSelectedOption(event) {
         console.log(event);
-        this.setState({selectedSkill: skills[event]});
+        let newSkillList = this.state.selectedSkill;
+        newSkillList.push(skills[event]);
+        this.setState({selectedSkill: newSkillList});
     }
 
     handleIndustryExperienceYearsChange(event) {
@@ -67,6 +68,8 @@ class SkillModal extends Component {
 
     addSkillHandle() {
         const skillName = this.state.selectedSkill;
+        const obj = this.state.skillList;
+
         const industryExpObj = {
             yr: this.state.industryExperienceYears,
             mon: this.state.industryExperienceMonths
@@ -75,20 +78,21 @@ class SkillModal extends Component {
             yr: this.state.otherExperienceYears,
             mon: this.state.otherExperienceMonths
         }
-        const temp = {
-            skillName: skillName,
-            industryExperience: industryExpObj,
-            otherExperience: otherExpObj
-        }
-
-        const obj = this.state.skillList;
-        obj.push(temp);
+        skillName.map(ob => {
+            const temp = {
+                skillName: ob,
+                industryExperience: industryExpObj,
+                otherExperience: otherExpObj
+            }
+            obj.push(temp);
+        })
+             
         this.setState({
             skillList: obj
         })
 
         this.setState({
-            selectedSkill: '',
+            selectedSkill: [],
             industryExperienceYears: 0,
             industryExperienceMonths: 0,
             otherExperienceYears: 0,
@@ -167,12 +171,14 @@ class SkillModal extends Component {
                         <h5>Add Skill data</h5>
                         <div className='skillAddPane'>
                                 <Autocomplete
-                                    id="free-solo-demo"
-                                    fullWidth
+                                    multiple
+                                    id="skill adder"                                 
                                     onChange={(event) => {
                                         this.handleSelectedOption(event.target.dataset.optionIndex);
                                     }}
                                     options={skills.map((option) => option)}
+                                    getOptionLabel={(option) => option}
+                                    defaultValue={[skills[13]]}
                                     renderInput={(params) => <TextField {...params} label="Skill" />}
                                 />
                             <div style={{marginLeft: '1rem'}}/>
