@@ -21,16 +21,16 @@ class EmployerDashboard extends Component {
             <div className='dashboardStack'>
                 <EmployerATS />
                 <AddJobBar />
-                <div className='postedJobCarousel'>
-                    {jobs && <Carousel
+                {jobs.length > 0 && <div className='postedJobCarousel'>
+                    <Carousel
                         autoPlay={false}
                         animation='slide'
                         navButtonsAlwaysVisible={true}
                         onChange={(now,prev) => console.log(now)}
                     > 
                         {jobs.map(job => <PostedJobCard data={job} />)}
-                    </Carousel>}
-                </div>             
+                    </Carousel>
+                </div>    }         
             </div>
             <div className='dashboardStack'>
                 <JobView />

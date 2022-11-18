@@ -58,7 +58,7 @@ class ExpectationForm extends Component {
         })
         .then(res => {
             this.props.fetchCandidate();
-            this.props.history.push("home");
+            this.props.history.push("/talent/dashboard");
         })
         this.setState({
             submitted: true

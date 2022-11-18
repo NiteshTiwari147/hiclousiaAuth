@@ -9,17 +9,17 @@ class EmployerInfo extends Component {
             <div className='basicInfoContainer shadow'>
                 <img className="profilePic" src={avatar} alt="Avatar"/>
                 <h5 className="profileName">{name}</h5>
-                <div style={{alignSelf: 'baseline'}}>
+                <div style={{alignSelf: 'baseline', display: 'flex', flexDirection: 'column'}}>
                     <label>Position:</label>
                     <text className="profilePosition">TA at {companyName}</text>
                 </div>
-                <div style={{alignSelf: 'baseline'}}>
+                <div style={{alignSelf: 'baseline', display: 'flex', flexDirection: 'column'}}>
                     <label>Location:</label>
                     <text className="profilePosition">{city}</text>
                 </div>
-                <div style={{alignSelf: 'baseline'}}>
+                <div style={{alignSelf: 'baseline', display: 'flex', flexDirection: 'column'}}>
                     <label>Contact:</label>
-                    <h7 className="profilePosition">{email}</h7>
+                    <p className="profilePosition" style={{fontSize: '12px'}}>{email}</p>
                 </div>               
             </div>
         )

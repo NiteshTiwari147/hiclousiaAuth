@@ -3,6 +3,7 @@ const bcrypt = require("bcryptjs");
 const mongoose = require('mongoose');
 const LocalStrategy = require("passport-local").Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+var customId = require("custom-id");
 
 const keys = require('../config/keys');
 const User = mongoose.model('users');
@@ -41,11 +42,11 @@ module.exports = function (passport) {
     proxy: true
   },
   async (accessToken, refreshToken, profile, done) => {
-      const existingUser = await User.findOne({ hiclousiaID: profile.id});   // matching googleID with profile ID 
+      const existingUser = await User.findOne({ email: profile.emails[0].value});   // matching googleID with profile ID 
       if(existingUser) {
           return done(null, existingUser);
       }
-      const user = await  new User({hiclousiaID: profile.id, email: profile.emails[0].value, role: 'HR'}).save();
+      const user = await  new User({hiclousiaID: customId({email: profile.emails[0].value}), email: profile.emails[0].value, role: 'HR'}).save();
       done(null,user);
   }));
 
@@ -56,11 +57,11 @@ module.exports = function (passport) {
     proxy: true
 },
 async (accessToken, refreshToken, profile, done) => {
-    const existingUser = await User.findOne({ hiclousiaID: profile.id});   // matching googleID with profile ID 
+    const existingUser = await User.findOne({ email: profile.emails[0].value});   // matching googleID with profile ID 
     if(existingUser) {
         return done(null, existingUser);
     }
-    const user = await  new User({hiclousiaID: profile.id, email: profile.emails[0].value, role: 'candidate'}).save();
+    const user = await  new User({hiclousiaID: customId({email: profile.emails[0].value}), email: profile.emails[0].value, role: 'candidate'}).save();
     done(null,user);
 }));
 };
