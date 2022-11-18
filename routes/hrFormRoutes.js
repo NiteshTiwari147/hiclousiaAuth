@@ -31,7 +31,7 @@ module.exports = app => {
       const postedJobSchema = mongoose.model('jobpost');
       try {
         if(req && req.user && req.user.email) {
-            const postedJobs = await postedJobSchema.find({department: req.user.email})
+            const postedJobs = await postedJobSchema.find({email: req.user.email})
             res.send(postedJobs);
         }
         res.status({status: 204});
