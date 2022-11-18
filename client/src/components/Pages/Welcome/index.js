@@ -28,7 +28,7 @@ class Welcome extends Component {
                             <li key='3'>3) Get a suitable job on Skills, Ability & Experience</li>
                         </ul>
                         <Button size='large' variant='contained' color='primary'>
-                            <a href='/signin' style={{color: 'white'}}>
+                            <a href='/talent/login' style={{color: 'white'}}>
                                 Get a suitable Job Now
                             </a>
                         </Button>
@@ -41,7 +41,7 @@ class Welcome extends Component {
                             <li key='3'>3) Verified Skills set</li>
                         </ul>
                         <Button size='large' variant='contained' color='primary'>
-                            <a href='/signin' style={{color: 'white'}}>
+                            <a href='/hr/login' style={{color: 'white'}}>
                                 Hire now 
                             </a>
                         </Button>

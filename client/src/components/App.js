@@ -15,6 +15,12 @@ import gateway from './utils/gateway';
 import Candidates from './Pages/Candidates';
 import Welcome from './Pages/Welcome';
 import SignUp from './SignUp';
+import onBoardingTalent from './utils/onBoardingCandidate';
+import PostedJob from './Pages/postedJobs';
+import EmployerDashboard from './Pages/employerDashboard';
+import candidateLogin from './Pages/signIn/candidateLogin';
+import hrLogin from './Pages/signIn/hrLogin';
+import onBoardingHR from './utils/onBoardingHR';
 
 const signUp = () => <SignUp />
 
@@ -22,11 +28,6 @@ class App extends Component {
 
     componentDidMount() {
         this.props.fetchUser();
-        this.props.fetchCandidate();
-        this.props.fetchEducation();
-        this.props.fetchExperience();
-        this.props.fetchProject();
-        this.props.fetchSkillSet();
     }
     
     render() {
@@ -35,14 +36,18 @@ class App extends Component {
                 <BrowserRouter>
                    <div>    
                         <Header />
-                        <Route exact path="/signin" component={signUp}></Route>
-                        <Route exact path="/">
-                            <Redirect to="/welcome" />
-                        </Route>
-                        <Route exact path="/welcome" component={Welcome} />                 
+                        <Route exact path="/signup" component={signUp}></Route>
+                        <Route exact path="/" component={Welcome} />
+                        <Route exact path="/talent/login" component={candidateLogin} />
+                        <Route exact path="/talent/onboarding" component={onBoardingTalent} />
+                        <Route exact path="/hr/onboarding" component={onBoardingHR} />
+                        <Route exact path="/talent/dashboard" component={gateway} />
+                        <Route exact path="/hr/login" component={hrLogin} />             
                         <Route exact path="/home" component={gateway} />
                         <Route exact path="/careerprofile" component={CandidateHome} />
-                        <Route exact path="/dashboard" component={Dashboard} />
+                        <Route exact path="/hr/dashboard" component={gateway} />
+                        <Route exact path="/employer/postedJob" component={PostedJob} />
+
                         <Route exact path="/jobs" component={Jobs} />
                         <Route exact path="/candidates" component={Candidates} />
                         <Route exact path="/projectForm" component={ProjectForm} />

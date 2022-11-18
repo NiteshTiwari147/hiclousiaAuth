@@ -4,6 +4,7 @@
     flex-direction: column;
     height: fit-content;
     margin: 2rem;
+    margin-left: 3rem;
     border: 2px solid white !important;
     border-radius: 7px;
     padding: 0px !important;
@@ -13,7 +14,8 @@
 
 .postedJobCardHeadingContainer {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    margin-left: 1rem;
     align-items: center;
 }
 
@@ -41,7 +43,7 @@
 }
 
 .postedJobCardHeadingContainer:second-child {
-    width: 25rem;
+    width: 20rem;
 } 
 
 .postedJobstateBoxContainer {

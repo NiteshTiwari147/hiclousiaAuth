@@ -2,19 +2,35 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
-import FlowManager from '../FlowManager';
+import TalentFlowManager from './talentFlowManager';
+import LoadingScreen from './loadingScreen';
+import EmployerDashboard from '../Pages/employerDashboard';
+import HRFlowManager from './hrFlowManager';
 
 class GateWay extends Component {
 
-    componentDidMount(){
-        
+    componentDidMount() {
+        this.props.fetchHR();
+        this.props.fetchJobs();
+        this.props.fetchCandidate();
+        this.props.fetchEducation();
+        this.props.fetchExperience();
+        this.props.fetchProject();
+        this.props.fetchSkillSet();
     }
 
     render() {
-        return (
-                <FlowManager />
-        )
+        if(this.props.auth && this.props.auth.role == 'candidate') {
+            return <TalentFlowManager />
+        } else if(this.props.auth && this.props.auth.role == 'HR') {
+            return <HRFlowManager />
+        }
+        return <LoadingScreen />
     }
 };
 
-export default connect(null, actions)(GateWay);
+function mapStateToProps({auth, candidate}) {
+    return { auth, candidate }
+}
+
+export default connect(mapStateToProps, actions)(GateWay);

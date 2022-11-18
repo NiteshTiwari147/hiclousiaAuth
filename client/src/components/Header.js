@@ -15,7 +15,6 @@ class Header extends Component {
                 return <ul id="nav-mobile" class="right hide-on-med-and-down">
                     <li><a className='headerBtn'>Products</a></li>
                     <li><a className='headerBtn'>About us</a></li>
-                    <li><a className='headerBtn' href="/auth/google">Login</a></li>
                 </ul>
             default: 
                 return <ul id="nav-mobile" class="right hide-on-med-and-down">
@@ -35,9 +34,12 @@ class Header extends Component {
             <nav className='navigationBar'>
                  <div className="navigationBarContent">
                     <div>
-                        <Link to='/home' className="brand-logo companyLogo">
+                        {this.props.auth && <Link to='/home' className="brand-logo companyLogo">
                             HICLOUSIA
-                        </Link>
+                        </Link>}
+                        {!this.props.auth && <Link to='/home' className="brand-logo companyLogo">
+                            HICLOUSIA
+                        </Link>}
                     </div>
                     {/* <img src={reactImage} alt="" />; */}
                     <div className='nav-wrapper'>

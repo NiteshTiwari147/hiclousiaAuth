@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from "react-router-dom";
 
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -40,6 +41,7 @@ class ExpectationForm extends Component {
     }
 
     handleSubmit() {
+       
         this.props.sendBasicInfo({          
             value: {
                 name: this.state.name,
@@ -56,10 +58,11 @@ class ExpectationForm extends Component {
         })
         .then(res => {
             this.props.fetchCandidate();
+            this.props.history.push("home");
         })
         this.setState({
             submitted: true
-        })
+        });
     }
 
     handleIndustryChange(event) {
@@ -208,4 +211,4 @@ class ExpectationForm extends Component {
     }
 }
 
-export default connect(null, actions)(ExpectationForm);
+export default withRouter(connect(null, actions)(ExpectationForm));

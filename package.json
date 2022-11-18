@@ -18,12 +18,18 @@
   "author": "Nitesh Tiwari",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "concurrently": "^7.1.0",
     "cookie-session": "^2.0.0",
+    "custom-id": "^1.2.0",
     "express": "^4.17.3",
+    "express-flash": "0.0.2",
+    "express-session": "^1.17.3",
     "mongoose": "^6.3.1",
     "nodemon": "^2.0.15",
     "passport": "^0.5.2",
-    "passport-google-oauth20": "^2.0.0"
+    "passport-google-oauth20": "^2.0.0",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^7.1.2"
   }
 }

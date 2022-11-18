@@ -5,16 +5,25 @@ require('../models/projectInfo');
 require('../models/educationInfo');
 require('../models/experienceInfo');
 require('../models/skillSet');
+var customId = require("custom-id");
 
 const { processSkillData }  =  require('../services/stats');
 
 module.exports = app => {
 
-    app.get('/fetch/Candidate', async function(req,res, done) {
+    function checkAuthenticated(req, res, next) {
+        if (req.isAuthenticated()) {
+          return next()
+        }
+      
+        res.redirect('/')
+    }
+
+    app.get('/fetch/Candidate', checkAuthenticated, async function(req,res, done) {
         const basicInfo = mongoose.model('basicInfo');
         try {
-            if(req && req.user && req.user.googleId) {
-                const candidate = await basicInfo.findOne({googleId: req.user.googleId})
+            if(req && req.user && req.user.email) {
+                const candidate = await basicInfo.findOne({email: req.user.email})
                 res.send(candidate);
             }
             res.status({status: 204});
@@ -25,11 +34,11 @@ module.exports = app => {
         }   
     });
 
-    app.get('/fetch/skillSet', async function(req, res, done) {
+    app.get('/fetch/skillSet', checkAuthenticated, async function(req, res, done) {
         const skillSet = mongoose.model('skillSet');
         try {
-            if(req, req.user && req.user.googleId) {
-                const candidateSkillSet = await skillSet.findOne({googleId: req.user.googleId});
+            if(req, req.user && req.user.email) {
+                const candidateSkillSet = await skillSet.findOne({email: req.user.email});
                 res.send(candidateSkillSet);
             }
             res.status({status: 200});   
@@ -40,11 +49,11 @@ module.exports = app => {
         } 
     })
 
-    app.get('/fetch/Education', async function(req,res, done) {
+    app.get('/fetch/Education',checkAuthenticated, async function(req,res, done) {
         const basicInfo = mongoose.model('education');
         try {
-            if(req && req.user && req.user.googleId) {
-                const candidate = await basicInfo.find({googleId: req.user.googleId})
+            if(req && req.user && req.user.email) {
+                const candidate = await basicInfo.find({email: req.user.email})
                 res.send(candidate);
             }
             res.status({status: 204});
@@ -55,11 +64,11 @@ module.exports = app => {
         }   
     })
 
-    app.get('/fetch/Experience', async function(req,res, done) {
+    app.get('/fetch/Experience', checkAuthenticated, async function(req,res, done) {
         const basicInfo = mongoose.model('experiences');
         try {
-            if(req && req.user && req.user.googleId) {
-                const candidate = await basicInfo.find({googleId: req.user.googleId})
+            if(req && req.user && req.user.email) {
+                const candidate = await basicInfo.find({email: req.user.email})
                 res.send(candidate);
             }
             res.status({status: 204});
@@ -70,11 +79,11 @@ module.exports = app => {
         }   
     })
 
-    app.get('/fetch/Project', async function(req,res, done) {
+    app.get('/fetch/Project', checkAuthenticated, async function(req,res, done) {
         const projects = mongoose.model('projects');
         try {
-            if(req && req.user && req.user.googleId) {
-                const projectList = await projects.find({googleId: req.user.googleId})
+            if(req && req.user && req.user.email) {
+                const projectList = await projects.find({email: req.user.email})
                 res.send(projectList);
             }
             res.status({status: 204});
@@ -86,7 +95,7 @@ module.exports = app => {
     })
 
 
-    app.post('/create/candidate', async function (req,res) {
+    app.post('/create/candidate', checkAuthenticated, async function (req,res) {
         const basicInfo = mongoose.model('basicInfo');
         const { name,
             age, 
@@ -98,8 +107,8 @@ module.exports = app => {
             expectedSalary,
             expectedIndustry,
             expectedDepartment } = req.body;
-        const { googleId, email } = req.user;
-        const response = await new basicInfo({googleId, 
+        const { hiclousiaID, email } = req.user;
+        const response = await new basicInfo({hiclousiaID, 
             email, 
             name,
             age, 
@@ -114,29 +123,29 @@ module.exports = app => {
         res.send({response: 204});
     })
 
-    app.post('/create/project',async function (req,res) {
+    app.post('/create/project', checkAuthenticated, async function (req,res) {
         const project =  mongoose.model('projects');
         const { title, description, typeOfProject,  startDate, endDate, skills, duration, industry, department} = req.body;
-        const { googleId, email } = req.user;
-        const response = await new project({googleId, email, title, description, typeOfProject,  startDate, endDate, skills, duration, industry, department}).save();    
+        const { hiclousiaID, email } = req.user;
+        const response = await new project({hiclousiaID, email, title, description, typeOfProject,  startDate, endDate, skills, duration, industry, department}).save();    
         res.send(response);
     })
 
-    app.post('/update/skills',async function (req,res) {
+    app.post('/update/skills', checkAuthenticated, async function (req,res) {
         const skillList = mongoose.model('skillSet');
         try {
-            if(req, req.user && req.user.googleId) {
-                const candidateSkillSet = await skillList.findOne({googleId: req.user.googleId});
+            if(req, req.user && req.user.hiclousiaID) {
+                const candidateSkillSet = await skillList.findOne({email: req.user.email});
                 if(candidateSkillSet === null) {
                     const processedSKillList = processSkillData([], req.body)
-                    const { googleId, email } = req.user;
-                    const response = await new skillList({googleId, email, processedSKillList}).save();
+                    const { hiclousiaID, email } = req.user;
+                    const response = await new skillList({hiclousiaID, email, processedSKillList}).save();
                     res.send({response});
                 } else {
                     const processedSKillList = processSkillData(candidateSkillSet.processedSKillList, req.body)
-                    const { googleId, email } = req.user;
-                    var newvalues = { $set: { googleId, email, processedSKillList} };
-                    const resposne = await skillList.updateOne({googleId: googleId}, newvalues)
+                    const { hiclousiaID, email } = req.user;
+                    var newvalues = { $set: { hiclousiaID, email, processedSKillList} };
+                    const resposne = await skillList.updateOne({hiclousiaID: hiclousiaID}, newvalues)
                     res.send({resposne});
                 }
             }
@@ -154,42 +163,42 @@ module.exports = app => {
         // //         otherExperience: skill.otherExperience
         // //     })
         // // })
-        // const { googleId, email } = req.user;
-        // var newvalues = { $set: { googleId, email, coreSkills} };
+        // const { hiclousiaID, email } = req.user;
+        // var newvalues = { $set: { hiclousiaID, email, coreSkills} };
         // console.log("body: ",skillsObj," processed: ",coreSkills);
         // res.send({});
-        // const resposne = await skillList.updateOne({googleId: googleId}, newvalues)
+        // const resposne = await skillList.updateOne({hiclousiaID: hiclousiaID}, newvalues)
         // res.send({resposne});
     });
 
-    app.post('/create/skills',async function (req,res) {
+    app.post('/create/skills', checkAuthenticated, async function (req,res) {
         const skillList = mongoose.model('skillSet');
         let coreSkills = [];
-        const { googleId, email } = req.user;
-        var newvalues = { $set: { googleId, email, coreSkills} };
-        const response = await new skillList({googleId, email, coreSkills}).save();
+        const { hiclousiaID, email } = req.user;
+        var newvalues = { $set: { hiclousiaID, email, coreSkills} };
+        const response = await new skillList({hiclousiaID, email, coreSkills}).save();
         res.send({response});
     });
 
-    app.post('/create/education',async function (req,res) {
+    app.post('/create/education', checkAuthenticated, async function (req,res) {
         const education =  mongoose.model('education');
         const { institute, course, field_of_course, start_date, end_date, grade} = req.body;
-        const { googleId, email } = req.user;
-        const response = await new education({googleId, email, institute, course, field_of_course, start_date, end_date, grade}).save();
+        const { hiclousiaID, email } = req.user;
+        const response = await new education({hiclousiaID, email, institute, course, field_of_course, start_date, end_date, grade}).save();
         res.send(response);
     })
-    app.post('/create/experience',async function (req,res) {
+    app.post('/create/experience', checkAuthenticated, async function (req,res) {
         const experience =  mongoose.model('experiences');
         const { company, designation, duration, isCurrent, endDate, skills, industry, department, typeOfExperience, startDate} = req.body;
-        const { googleId, email } = req.user;
-        const response = await new experience({googleId, email, company, designation, duration, isCurrent, endDate, skills, industry, department, typeOfExperience, startDate}).save();
+        const { hiclousiaID, email } = req.user;
+        const response = await new experience({hiclousiaID, email, company, designation, duration, isCurrent, endDate, skills, industry, department, typeOfExperience, startDate}).save();
         res.send(response);
     })
 
-    app.put('/update/education', async function (req, res) {
+    app.put('/update/education', checkAuthenticated, async function (req, res) {
         const education =  mongoose.model('education');
         try {
-            if(req && req.user && req.user.googleId) {
+            if(req && req.user && req.user.hiclousiaID) {
                 const { id } = req.body
                 const { institute, course, field_of_course, start_date, end_date, grade} = req.body;
                 var newvalues = { $set: { id, institute, course, field_of_course, start_date, end_date, grade} };
@@ -203,10 +212,10 @@ module.exports = app => {
         }
     });
 
-    app.put('/delete/education', async function (req, res) {
+    app.put('/delete/education', checkAuthenticated, async function (req, res) {
         const education =  mongoose.model('education');
         try {
-            if(req && req.user && req.user.googleId) {
+            if(req && req.user && req.user.hiclousiaID) {
                 const { id } = req.body
                 const response = await education.deleteOne({_id: id});
                 res.send({response});          
@@ -218,10 +227,10 @@ module.exports = app => {
         }   
     });
 
-    app.put('/update/experience', async function (req, res) {
+    app.put('/update/experience', checkAuthenticated, async function (req, res) {
         const experience =  mongoose.model('experiences');
         try {
-            if(req && req.user && req.user.googleId) {
+            if(req && req.user && req.user.hiclousiaID) {
                 const { id } = req.body
                 const { company, designation, description, isCurrent, industryExperience, skills, industry, department, typeOfExperience} = req.body;
                 var newvalues = { $set: { id, company, designation, description, isCurrent, industryExperience, skills, industry, department, typeOfExperience} };
@@ -235,10 +244,10 @@ module.exports = app => {
         
     });
 
-    app.put('/delete/experience', async function (req, res) {
+    app.put('/delete/experience', checkAuthenticated, async function (req, res) {
         const experience =  mongoose.model('experiences');
         try {
-            if(req && req.user && req.user.googleId) {
+            if(req && req.user && req.user.hiclousiaID) {
                 const { id } = req.body
                 const response = await experience.deleteOne({_id: id});
                 res.send({response});          

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FETCH_USER,FETCH_CANDIDATE,FETCH_EDUCATION,FETCH_EXPERIENCE,FETCH_PROJECT, FETCH_SKILLSET } from './types';
+import { FETCH_USER,FETCH_CANDIDATE,FETCH_EDUCATION,FETCH_EXPERIENCE,FETCH_PROJECT, FETCH_SKILLSET, FETCH_HR, FETCH_JOBS } from './types';
 
 export const fetchUser = () => async dispatch => {
     const res = await axios.get('/api/current_user');
@@ -13,6 +13,22 @@ export const fetchCandidate = () => async dispatch => {
     const res = await axios.get('/fetch/Candidate');
     dispatch({
         type: FETCH_CANDIDATE,
+        payload: res.data
+    });
+}
+
+export const fetchHR = () => async dispatch => {
+    const res = await axios.get('/fetch/hr');
+    dispatch({
+        type: FETCH_HR,
+        payload: res.data
+    });
+}
+
+export const fetchJobs = () => async dispatch => {
+    const res = await axios.get('/fetch/jobs');
+    dispatch({
+        type: FETCH_JOBS,
         payload: res.data
     });
 }
@@ -49,6 +65,34 @@ export const fetchExperience = () => async dispatch => {
     });
 }
 
+export const logIn = (props) => async dispatch => {
+    const obj = {
+        email: props.value.email,
+        password: props.value.password
+    }
+    const res = await axios.post('/api/login', obj);
+    console.log(res);
+    dispatch({
+        type: FETCH_USER,
+        payload: res.data.user
+    });
+    return res;
+}
+
+export const signUp = (props) => async dispatch => {
+    const obj = {
+        email: props.value.email,
+        password: props.value.password,
+        role: props.value.role
+    }
+    const res = await axios.post('/api/signin', obj);
+    dispatch({
+        type: FETCH_USER,
+        payload: res.data.user
+    });
+    return res;
+}
+
 export const sendBasicInfo =  (props) => async dispatch => {
     const obj = {
             name: props.value.name,
@@ -65,6 +109,15 @@ export const sendBasicInfo =  (props) => async dispatch => {
     const res = await axios.post('/create/candidate', obj);
 }
 
+export const sendHRBasicInfo = (props) => async dispatch => {
+    const obj = {
+        name: props.value.name,
+        companyName: props.value.company,
+        city: props.value.city
+    }
+    const res = await axios.post('/create/hr', obj);
+}
+
 export const sendProjectInfo = (props) => async dispatch => {
     const obj = {
         department: props.value.department,
@@ -79,6 +132,26 @@ export const sendProjectInfo = (props) => async dispatch => {
         
     };
     const res = await axios.post('/create/project', obj);
+}
+
+export const sendJobPostInfo = (props) => async dispatch => {
+    const obj = {
+        companyName: props.value.company,
+        experience: {
+            min: props.value.minExp,
+            max: props.value.maxExp,
+        },
+        description: props.value.desc,
+        industry: props.value.industry,
+        department: props.value.department,
+        skills: props.value.skills,
+        cities: props.value.cities,
+        budget: {
+            min: props.value.minBudget,
+            max: props.value.maxBudget,
+        }
+    }
+   const res = await axios.post('/create/jobPost', obj);
 }
 
 export const sendExperienceInfo = (props) => async dispatch => {

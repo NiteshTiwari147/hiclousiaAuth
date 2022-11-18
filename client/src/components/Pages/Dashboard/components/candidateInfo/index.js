@@ -29,7 +29,7 @@ class CandidateInfo extends Component {
                 <img className="profilePic" src={avatar} alt="Avatar"/>
                 <h5 className="profileName">{name}</h5>
                 <h7 className="profilePosition">{email}</h7>
-                {currentEmploymnt.map( obj => this.renderCurrentRole(obj))}
+                {currentEmploymnt && currentEmploymnt.map( obj => this.renderCurrentRole(obj))}
             </div>
         )
     }

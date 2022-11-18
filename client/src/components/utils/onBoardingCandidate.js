@@ -1,21 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { sendBasicInfo } from '../actions/index';
 
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 
-import ExpectationForm from './Forms/expectationForm';
-import CompositeForm from './Forms/CompositeForm';
-import SkillForm from './Forms/SkillForm';
-import LoadingScreen from './utils/loadingScreen';
+import ExpectationForm from '../Forms/expectationForm';
+import LoadingScreen from './loadingScreen';
 
-import formIcon from '../data/formImage.jpg';
-import './styles.css';
+import formIcon from '../../data/formImage.jpg';
+import '../styles.css';
 
-class Landing extends Component {
+class Onboarding extends Component {
 
     constructor(props) {
         super(props);
@@ -109,33 +105,12 @@ class Landing extends Component {
                 </form> 
             </div>
         }
-        else if (this.props.candidate === null) {
+        else if (this.props.auth === null) {
             return <LoadingScreen />
-        }
-        
-        return <div className='signUp'>
-            <div className='signUpTitle'>          
-                <h1>Hello !!!</h1>
-                <h1>Welcome to Hiclousia, Here we helps you in becoming your best</h1>
-            </div>
-            <div>
-                <a href='/form' className='updateCardContainer shadow fillBox'>
-                Fill you basic Information
-                </a>
-            </div>
-        </div>
-    }
-
-    renderSubmitButton() {
-        if(this.props.candidate && this.props.skillSet && this.props.skillSet.coreSkills.length > 0) {
-           return  <Button size='small' variant='contained' color='success'>
-                <a href='/home'>
-                    Lets Go
-                </a>
-            </Button>
         }
     }
     render() {
+        console.log("here we came");
         if(!this.state.buttonClicked) {
             return <div className='basicForm'>
             <div className='signUpLogo'>
@@ -164,4 +139,4 @@ function mapStateToProps({auth, candidate, skillSet}) {
     return { auth, candidate, skillSet }
 }
 
-export default connect(mapStateToProps)(Landing);
+export default connect(mapStateToProps)(Onboarding);

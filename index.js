@@ -1,30 +1,40 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
-const cookieSession = require('cookie-session');
 const passport = require('passport');
+const flash = require('express-flash');
+const session = require('express-session');
 const keys = require('./config/keys');
 require('./models/User');
-require('./services/passport');
 
 
 mongoose.connect(keys.mongoURI);
 
 const app = express();
 
-app.use(
-    cookieSession({
-        maxAge: 30*24*60*60*1000,
-        keys: [keys.cookieKey]
-    })
-);
+// app.use(
+//     cookieSession({
+//         maxAge: 30*24*60*60*1000,
+//         keys: [keys.cookieKey]
+//     })
+// );
+
+app.use(session({
+    secret: "secret",
+    resave: false ,
+    saveUninitialized: true ,
+}));
+
+app.use(flash())
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use(passport.initialize());
 app.use(passport.session());
+require('./services/passport')(passport);
 
+require('./routes/hrFormRoutes')(app);
 require('./routes/authRoutes')(app);
 require('./routes/formRoutes')(app);
 

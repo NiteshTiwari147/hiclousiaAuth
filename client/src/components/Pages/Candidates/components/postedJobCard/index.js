@@ -12,6 +12,29 @@ class PostedJobCard extends Component {
         super(props);
         this.state = {selectedJob: false, modalOpen: false}
     }
+
+    renderStatBox(title, value) {
+        return <div className="statBox" style={{backgroundColor: 'white'}}>
+        <div className="statBoxText">
+            {title}
+        </div>
+        <div className="statBoxScore">                            
+        <p style={{marginTop: '0.5rem', fontSize: '10px'}}>{value} </p>
+        </div>
+    </div>
+    }
+
+    renderStatListBox(title, values) {
+        return <div className="statBox" style={{width: 'fit-content', backgroundColor: 'white'}}>
+            <div className="statBoxText">
+                {title}
+            </div>
+            <div className="statBoxScore">                            
+            {values.map( value => <p style={{marginTop: '0.5rem', fontSize: '10px'}}>{value} </p>)}
+            </div>
+        </div>
+
+    }
     handleModalOpen() {
         this.setState({modalOpen: true})
     }
@@ -19,32 +42,48 @@ class PostedJobCard extends Component {
         this.setState({modalOpen: false})
     }
     render() {
-        const { logo, companyName, slryRnge, position, skills, origin, exp } = this.props;
+        const {companyName,
+            experience,
+            description,
+            industry,
+            department,
+            skills,
+            cities,
+            budget } = this.props.data;
         return (
                 <div className='postedJobCardContainer shadow'>
                     <div className="postedJobCardHeadingContainer">
-                        <div className='sectionOne'>
-                            <img className="postedJobCompanyImage"  src={logo} /> 
+                        <div style={{display: 'flex'}}>
+                            <div className='sectionOne' style={{marginRight: '1rem'}}>
+                                <label>Company Name</label>
+                                <p style={{fontWeight: 500}}>{companyName}</p>
+                            </div>
+                            <div className='sectionOne' style={{marginRight: '1rem'}}>
+                                <label>Posted Date</label>
+                                <p style={{fontWeight: 500}}>12 Nov 2022</p>
+                            </div>
                         </div>
-                        <div className="introductionPostedJob">
-                            <h5 style={{marginTop: '2.5rem',marginBottom: '0.2rem'}}>{companyName}</h5>
-                            <div style={{fontSize: 'smaller', marginTop: '0.3rem'}}>Posted Date: 12/july</div>
-                        </div>
-                        <div className='viewDetails'>
-                            <Button variant="contained" size='small' onClick={this.handleModalOpen.bind(this)}>
-                                <div style={{fontSize: 'smaller'}}>view Job description</div>
-                            </Button>
-                            <BasicModal open={this.state.modalOpen} close={this.handleModalClose.bind(this)} />
+                        <div style={{display: 'flex'}}>
+                            <div className='viewDetails'>
+                                <Button variant="contained" size='small'>
+                                    <div style={{fontSize: '9px'}}>view candidates</div>
+                                </Button>
+                            </div>
+                            <div className='viewDetails'>
+                                <Button variant="contained" size='small' onClick={this.handleModalOpen.bind(this)}>
+                                    <div style={{fontSize: '9px'}}>view Job details</div>
+                                </Button>
+                                <BasicModal open={this.state.modalOpen} close={this.handleModalClose.bind(this)} />
+                            </div>
                         </div>
                     </div>
                     <div className="postedJobstateBoxContainer">
-                        <StatBox title='Industry' value='IT' />
-                        <StatBox title='Department' value='Front End' />
-                        <StatBox title='Position' value={position} />
-                        <StatBox title='Experience' value={exp} />
-                        <StatBox title='Skills' value={skills} />
-                        <StatBox title='Location' value='Bangalore' />
-                        <StatBox title='Budget' value='4-5 LPA' />
+                        {this.renderStatBox('Industry', industry)}
+                        {this.renderStatBox('Budget', `${budget.min}-${budget.max} LPA`)}
+                        {this.renderStatBox('Experience', `${experience.min}-${experience.max} yrs`)}
+                        {this.renderStatBox('Skills', skills.length)}
+                        {this.renderStatListBox('Department', department)}
+                        {this.renderStatListBox('Location', cities)}
                     </div>
                 </div>
         )

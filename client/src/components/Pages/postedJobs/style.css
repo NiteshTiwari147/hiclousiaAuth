@@ -1,0 +1,48 @@
+.postedJobContainer {
+    width: 100%;
+    display: flex;
+}
+
+.postedJobDetail {
+    width: 30%;
+    border: 1px 2px 3px 4px solid #333;
+    height: fit-content;
+    box-shadow: 10px 0 5px -2px #888;
+}
+
+.candidateSuggestion {  
+    width: 70%;
+    height: 60%; 
+}
+
+.candidateSuggestionContainer {
+    padding: 1rem;
+    width: 60%;
+    height: 28rem;
+    position: absolute;
+    overflow: auto;
+}
+
+.suggestedCandidateRow {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    height: 12rem !important;
+    margin: 2rem;
+    padding: 1rem;
+    box-shadow: 10px 10px 5px -2px #888;
+    background: white;
+}
+
+.candidateRowStatBox {
+    padding: 8px;
+    margin-bottom: 1rem;
+    font-weight:  500;
+    background:#e2efff;
+    width: fit-content;
+    border-radius: 8px;
+}
+
+.jobDetailRow {
+    margin-bottom: 1rem;
+}

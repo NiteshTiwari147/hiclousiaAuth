@@ -270,35 +270,35 @@ class ExperienceModal extends Component {
                   </div>
                     <form className="col s16 formContent">
                         <div className='inputBoxColumn' style={{width: '80%'}}>
-                        <div className="form_inputBox input-field">
-                            <div className='formLabel_title'>
-                                Organization
+                            <div className="form_inputBox input-field">
+                                <div className='formLabel_title'>
+                                    Organization
+                                </div>
+                                <div className='formInput'>
+                                    <input 
+                                        placeholder="Enter organization name"
+                                        value={this.state.organization}
+                                        onChange={ e => this.setState({ organization: e.target.value })}
+                                    />    
+                                </div>                    
                             </div>
-                            <div className='formInput'>
-                                <input 
-                                    placeholder="Enter organization name"
-                                    value={this.state.organization}
-                                    onChange={ e => this.setState({ organization: e.target.value })}
-                                />    
-                            </div>                    
-                        </div>
-                        <div className="form_inputBox input-field">
-                            <div className='formLabel_title'>
-                                Type of Experience
+                            <div className="form_inputBox input-field">
+                                <div className='formLabel_title'>
+                                    Type of Experience
+                                </div>
+                                <div className='formInput'>
+                                    <Select
+                                    id="experienceTypeSelect"
+                                    value={this.state.typeOfExperience}
+                                    fullWidth
+                                    variant="outlined"
+                                    onChange={this.handleExperienceTypeChange.bind(this)}
+                                    >
+                                        <MenuItem value={'fullTime'}>Full Time</MenuItem>
+                                        <MenuItem value={'intern'}>Intern</MenuItem>
+                                    </Select>  
+                                </div>                    
                             </div>
-                            <div className='formInput'>
-                                <Select
-                                id="experienceTypeSelect"
-                                value={this.state.typeOfExperience}
-                                fullWidth
-                                variant="outlined"
-                                onChange={this.handleExperienceTypeChange.bind(this)}
-                                >
-                                    <MenuItem value={'fullTime'}>Full Time</MenuItem>
-                                    <MenuItem value={'intern'}>Intern</MenuItem>
-                                </Select>  
-                            </div>                    
-                        </div>
                         </div>
                         <div className='inputBoxColumn' style={{width: '80%'}}>
                             <div className="form_inputBox input-field">

@@ -128,7 +128,6 @@ class SkillModal extends Component {
 
     renderSkillList() {
         const skillList = this.state.skillList || [];
-        console.log(" here is the ;isdt",skillList, this.props.skillList)
         if(skillList.length === 0) {
             return <div style={{'textAlign': 'center', margin: '1rem'}}>
                 Please add skill 
