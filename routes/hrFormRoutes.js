@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 require('../models/HR/basicInfo');
 require('../models/HR/jobPost');
+require('../models/Talent/talentReq');
 require('../models/BasicInfo');
 var customId = require("custom-id");
 
@@ -30,13 +31,18 @@ module.exports = app => {
     })
 
     app.get('/fetch/talent', checkAuthenticated, async function(req,res, done) {
-      const basicInfo = mongoose.model('basicInfo');
+      const talentReq = mongoose.model('talentReq');
       try { 
         const {
           industry,
           department,
         } = req.query;
-        const candidates = await basicInfo.find({expectedIndustry: industry, expectedDepartment: department});
+
+        const candidates = await talentReq.find({expectedIndustry: industry, expectedDepartment: {
+          $elemMatch: {
+            $in: department
+          }
+        }});
         res.send(candidates);
         res.status(200);
 

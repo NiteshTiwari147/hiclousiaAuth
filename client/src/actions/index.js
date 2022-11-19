@@ -125,7 +125,10 @@ export const sendBasicInfo =  (props) => async dispatch => {
             role: props.value.role,
             purpose: props.value.purpose,
             expectedPosition: props.value.expectedPosition,
-            expectedSalary: props.value.expectedSalary,
+            expectedSalary: {
+                min: props.value.expectedSalary.min,
+                max: props.value.expectedSalary.max
+            },
             expectedIndustry: props.value.expectedIndustry,
             expectedDepartment: props.value.expectedDepartment,
     };

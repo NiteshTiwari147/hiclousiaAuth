@@ -2,18 +2,21 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const BISchema = new Schema({
-    googleId: String,
+    hiclousiaID: String,
     email: String,
     name: String,
     age: String, 
-    city: String,
+    city: [String],
     gender: String,
     role: String,
     purpose: String,
     expectedPosition: String,
-    expectedSalary: String,
+    expectedSalary: {
+        min: String,
+        max: String
+    },
     expectedIndustry: String,
-    expectedDepartment: String,
+    expectedDepartment: [String],
 });
 
 mongoose.model('basicInfo', BISchema);

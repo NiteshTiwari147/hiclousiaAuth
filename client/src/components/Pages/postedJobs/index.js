@@ -9,13 +9,13 @@ import './style.css';
 
 class PostedJob extends Component {
     componentDidMount() {
+        const params = new URLSearchParams(this.props.location.search)
         this.props.fetchPostedJob({
             value: {
-                jobID: localStorage.getItem("jobID")
+                jobID: params.get('jobID')
             }
         })
         .then(res => {
-            console.log("here is the jon detial", this.props.postedJobDetail);
             const {companyName,
                 jobID,
                 experience,
@@ -46,6 +46,7 @@ class PostedJob extends Component {
                 skills,
                 cities,
                 budget } = this.props.postedJobDetail;
+            const { suggestedTalent } = this.props;
             return <div className="postedJobContainer">
                 <div className="postedJobDetail">
                     <div style={{padding: '2rem'}}>
@@ -56,6 +57,10 @@ class PostedJob extends Component {
                         <div className="jobDetailRow">
                             <label>Company Name:</label>
                             <div>{companyName}</div>
+                        </div>
+                        <div className="jobDetailRow">
+                            <label>Skills:</label>
+                            <div style={{display: 'flex'}}>{skills && skills.map(s => <p style={{marginRight: '5px', border: '1px solid red'}}>{`${s} `}</p>)}</div> 
                         </div>
                         <div className="jobDetailRow">
                             <label>Industry:</label>
@@ -80,7 +85,7 @@ class PostedJob extends Component {
                     </div>
                 </div>
                 <div className="candidateSuggestion">
-                    <CandidateSuggestion />
+                    <CandidateSuggestion data={suggestedTalent}/>
                 </div>
             </div>
         } else {
@@ -89,8 +94,8 @@ class PostedJob extends Component {
     }
 }
 
-function mapStateToProps({auth, hr, postedJobDetail}) {
-    return { auth, hr, postedJobDetail }
+function mapStateToProps({auth, hr, postedJobDetail, suggestedTalent}) {
+    return { auth, hr, postedJobDetail, suggestedTalent }
 }
 
 export default connect(mapStateToProps, actions)(PostedJob);

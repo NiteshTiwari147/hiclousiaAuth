@@ -49,7 +49,6 @@ class PostedJobCard extends Component {
             skills,
             cities,
             budget } = this.props.data;
-        localStorage.setItem("jobID", jobID);
         this.props.fetchTalent({
             value: {
                 industry: industry,
@@ -67,7 +66,9 @@ class PostedJobCard extends Component {
         this.setState({modalOpen: false})
     }
     render() {
-        const {companyName,
+        const {
+            jobID,
+            companyName,
             experience,
             description,
             industry,
@@ -91,7 +92,7 @@ class PostedJobCard extends Component {
                         <div style={{display: 'flex'}}>
                             <div className='viewDetails'>
                                 <Button variant="contained" size='small' onClick={this.handleViewCandidate.bind(this)}>
-                                    <a style={{fontSize: '9px', color: 'white'}} href={`/postedJob?jobID=${123}`}>view candidates</a>
+                                    <a style={{fontSize: '9px', color: 'white'}} href={`/postedJob?jobID=${jobID}`}>view candidates</a>
                                 </Button>
                             </div>
                             {/* <div className='viewDetails'>

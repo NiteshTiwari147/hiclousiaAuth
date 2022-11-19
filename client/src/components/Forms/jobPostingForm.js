@@ -237,7 +237,7 @@ class JobPostingForm extends Component {
                                         <ListItemText primary={name} />
                                         </MenuItem>
                                     ))}
-                                    </Select>        
+                                </Select>        
                             </div>
                         </div>
                         <div className="form_inputBox input-field" style={{width: '77%'}}>

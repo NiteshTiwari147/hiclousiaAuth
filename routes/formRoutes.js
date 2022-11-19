@@ -5,6 +5,7 @@ require('../models/projectInfo');
 require('../models/educationInfo');
 require('../models/experienceInfo');
 require('../models/skillSet');
+require('../models/Talent/talentReq');
 var customId = require("custom-id");
 
 const { processSkillData }  =  require('../services/stats');
@@ -97,78 +98,117 @@ module.exports = app => {
 
     app.post('/create/candidate', checkAuthenticated, async function (req,res) {
         const basicInfo = mongoose.model('basicInfo');
-        const { name,
-            age, 
-            city,
-            gender,
-            role,
-            purpose,
-            expectedPosition,
-            expectedSalary,
-            expectedIndustry,
-            expectedDepartment } = req.body;
-        const { hiclousiaID, email } = req.user;
-        const response = await new basicInfo({hiclousiaID, 
-            email, 
-            name,
-            age, 
-            city,
-            purpose,
-            gender,
-            role,
-            expectedPosition,
-            expectedSalary,
-            expectedIndustry,
-            expectedDepartment}).save(); 
-        res.send({response: 204});
+        const talentReq = mongoose.model('talentReq');
+        try {
+            const { name,
+                age, 
+                city,
+                gender,
+                role,
+                purpose,
+                expectedPosition,
+                expectedSalary,
+                expectedIndustry,
+                expectedDepartment } = req.body;
+            const { hiclousiaID, email } = req.user;
+            const response = await new basicInfo({hiclousiaID, 
+                email, 
+                name,
+                age, 
+                city,
+                purpose,
+                gender,
+                role,
+                expectedPosition,
+                expectedSalary,
+                expectedIndustry,
+                expectedDepartment}).save(); 
+            await new talentReq({
+                hiclousiaID,
+                email, 
+                name,
+                cities: city,
+                gender,
+                skills: null,
+                budget: {
+                   min: expectedSalary.min,
+                   max: expectedSalary.max
+                },
+                experience: {
+                    expList: [],
+                    totalExp: {
+                        mon: '0',
+                        yr: '0'
+                    }
+                },
+                skillScore: 0,
+                educationScore: 0,
+                industryScore: 0,
+                selfScore: 0,
+                expectedIndustry,
+                expectedDepartment}).save();
+            res.send({response: 204});
+        } catch(err) {
+            res.send({response: 500});
+        }
     })
 
     app.post('/create/project', checkAuthenticated, async function (req,res) {
         const project =  mongoose.model('projects');
-        const { title, description, typeOfProject,  startDate, endDate, skills, duration, industry, department} = req.body;
-        const { hiclousiaID, email } = req.user;
-        const response = await new project({hiclousiaID, email, title, description, typeOfProject,  startDate, endDate, skills, duration, industry, department}).save();    
-        res.send(response);
+        const talentReq = mongoose.model('talentReq');
+        try {
+            const { title, description, typeOfProject,  startDate, endDate, skills, duration, industry, department} = req.body;
+            const { hiclousiaID, email } = req.user;
+            const response = await new project({hiclousiaID, email, title, description, typeOfProject,  startDate, endDate, skills, duration, industry, department}).save();    
+            const talentReqData = await talentReq.findOne({email: req.user.email});
+            talentReqData.selfScore = Math.floor(Math.random() * 100) + 60;
+            const newTalenReq = { $set: talentReqData };
+            await talentReq.updateOne({email: req.user.email}, newTalenReq);
+            res.send(response);
+            res.status({status: 200});   
+
+        } catch(err) {
+            console.log("error occured while saving project ",err);
+            res.send({status: 304})
+        }
+        
     })
 
     app.post('/update/skills', checkAuthenticated, async function (req,res) {
         const skillList = mongoose.model('skillSet');
+        const talentReq = mongoose.model('talentReq');
         try {
             if(req, req.user && req.user.hiclousiaID) {
                 const candidateSkillSet = await skillList.findOne({email: req.user.email});
+                const talentReqData = await talentReq.findOne({email: req.user.email});
                 if(candidateSkillSet === null) {
                     const processedSKillList = processSkillData([], req.body)
                     const { hiclousiaID, email } = req.user;
                     const response = await new skillList({hiclousiaID, email, processedSKillList}).save();
+                    talentReqData.skills = processedSKillList;
+                    talentReqData.skillScore = Math.floor(Math.random() * 100) + 60;
+                    const newTalenReq = { $set: talentReqData };
+                    await talentReq.updateOne({email: req.user.email}, newTalenReq);
                     res.send({response});
                 } else {
                     const processedSKillList = processSkillData(candidateSkillSet.processedSKillList, req.body)
                     const { hiclousiaID, email } = req.user;
                     var newvalues = { $set: { hiclousiaID, email, processedSKillList} };
-                    const resposne = await skillList.updateOne({hiclousiaID: hiclousiaID}, newvalues)
+                    talentReqData.skills = processedSKillList;
+                    talentReqData.skillScore = Math.floor(Math.random() * 100) + 60;
+                    const newTalenReq = { $set: talentReqData };
+                    const resposne = await skillList.updateOne({hiclousiaID: hiclousiaID}, newvalues);
+                    await talentReq.updateOne({email: req.user.email}, newTalenReq);
                     res.send({resposne});
                 }
+                res.status({status: 200});   
             }
-            res.status({status: 200});   
+            res.status({status: 304});   
         }
         catch (err) {
             console.log("candidate skillset not found ",err);
             res.send({status: 204})
         } 
-        // let coreSkills = [];
-        // // skillsObj.map( skill => {
-        // //     coreSkills.push({
-        // //         skillName: skill.skillName.toLowerCase().trim(),
-        // //         industryExperience: skill.industryExperience,
-        // //         otherExperience: skill.otherExperience
-        // //     })
-        // // })
-        // const { hiclousiaID, email } = req.user;
-        // var newvalues = { $set: { hiclousiaID, email, coreSkills} };
-        // console.log("body: ",skillsObj," processed: ",coreSkills);
-        // res.send({});
-        // const resposne = await skillList.updateOne({hiclousiaID: hiclousiaID}, newvalues)
-        // res.send({resposne});
     });
 
     app.post('/create/skills', checkAuthenticated, async function (req,res) {
@@ -182,17 +222,39 @@ module.exports = app => {
 
     app.post('/create/education', checkAuthenticated, async function (req,res) {
         const education =  mongoose.model('education');
-        const { institute, course, field_of_course, start_date, end_date, grade} = req.body;
-        const { hiclousiaID, email } = req.user;
-        const response = await new education({hiclousiaID, email, institute, course, field_of_course, start_date, end_date, grade}).save();
-        res.send(response);
+        const talentReq = mongoose.model('talentReq');
+        try {
+            const { institute, course, field_of_course, start_date, end_date, grade} = req.body;
+            const { hiclousiaID, email } = req.user;
+            const response = await new education({hiclousiaID, email, institute, course, field_of_course, start_date, end_date, grade}).save();
+            const talentReqData = await talentReq.findOne({email: req.user.email});
+            talentReqData.educationScore = Math.floor(Math.random() * 100) + 60;
+            const newTalenReq = { $set: talentReqData };
+            await talentReq.updateOne({email: req.user.email}, newTalenReq);
+            res.send(response);
+            res.send({status: 200})
+        } catch (err) {
+            console.log("Error occured while saving education ",err);
+            res.send({status: 304})
+        }
     })
     app.post('/create/experience', checkAuthenticated, async function (req,res) {
         const experience =  mongoose.model('experiences');
-        const { company, designation, duration, isCurrent, endDate, skills, industry, department, typeOfExperience, startDate} = req.body;
-        const { hiclousiaID, email } = req.user;
-        const response = await new experience({hiclousiaID, email, company, designation, duration, isCurrent, endDate, skills, industry, department, typeOfExperience, startDate}).save();
-        res.send(response);
+        const talentReq = mongoose.model('talentReq');
+        try {
+            const { company, designation, duration, isCurrent, endDate, skills, industry, department, typeOfExperience, startDate} = req.body;
+            const { hiclousiaID, email } = req.user;
+            const response = await new experience({hiclousiaID, email, company, designation, duration, isCurrent, endDate, skills, industry, department, typeOfExperience, startDate}).save();
+            const talentReqData = await talentReq.findOne({email: req.user.email});
+            talentReqData.industryScore = Math.floor(Math.random() * 100) + 60;
+            const newTalenReq = { $set: talentReqData };
+            await talentReq.updateOne({email: req.user.email}, newTalenReq);
+            res.send(response);
+            res.send({status: 200})
+        } catch(err) {
+            console.log("Error occured while saving experience ",err);
+            res.send({status: 304})
+        }
     })
 
     app.put('/update/education', checkAuthenticated, async function (req, res) {

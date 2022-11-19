@@ -7,9 +7,13 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import ListItemText from '@mui/material/ListItemText';
+import Checkbox from '@mui/material/Checkbox';
 
 
 import './styles.css';
+import { cities } from "../../constants/city";
 import * as actions from '../../actions';
 import { jobCategory } from '../../constants/jobCategoryAndPositions'
 import LoadingScreen from '../utils/loadingScreen';
@@ -18,6 +22,19 @@ const style = {
     width: '13rem',
     marginBottom: '2rem'
 }
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+const dep = new Set();
 
 class ExpectationForm extends Component {
 
@@ -29,15 +46,26 @@ class ExpectationForm extends Component {
             age: this.props.age,
             gender: this.props.gender,
             role: 'candidate',
-            city: '',
             jobRoles: [],
+            selectedDepartment: [],
             submitted: false,
             purpose: 'job',
-            budget: 'B1',
-            position: 'L1',
+            cityName: [],
+            minBudget: '0',
+            maxBudget: '0',
             department: 'department',
             industry: 'industry'
         }
+    }
+
+    showDepartmentSelect(params) {
+        dep.clear();
+        const final = params?.InputProps?.startAdornment || [];
+        final.map(o => {
+           if(this.state.selectedDepartment.includes(o.props.label)) {
+                dep.add(o.props.label);
+            }
+        });
     }
 
     handleSubmit() {
@@ -45,14 +73,16 @@ class ExpectationForm extends Component {
             value: {
                 name: this.state.name,
                 age: this.state.age,
-                city: this.state.city,
+                city: this.state.cityName,
                 gender: this.state.gender,
                 role: this.state.role,
                 purpose: this.state.purpose,
-                expectedPosition: this.state.position,
-                expectedSalary: this.state.budget,
+                expectedSalary: {
+                    min: this.state.minBudget,
+                    max: this.state.maxBudget
+                },
                 expectedIndustry: this.state.industry,
-                expectedDepartment: this.state.department,
+                expectedDepartment: Array.from(dep)
             }      
         })
         .then(res => {
@@ -70,7 +100,9 @@ class ExpectationForm extends Component {
     }
 
     handleDepartmentChange(event) {
-        this.setState({department: this.state.jobRoles[event]})
+        let newPositions = this.state.selectedDepartment;
+        newPositions.push(this.state.jobRoles[event])
+        this.setState({selectedDepartment: newPositions})
     }
 
     handleSalaryChange(event) {
@@ -86,9 +118,19 @@ class ExpectationForm extends Component {
     }
 
     handleCityChange(event) {
-        this.setState({
-            city: event.target.value
-        })
+        const {
+            target: { value },
+          } = event;
+          const res = typeof value === 'string' ? value.split(',') : value
+          this.setState({cityName: res});
+    }
+
+    handleMinBudgetChange(event) {
+        this.setState({minBudget: event.target.value})
+    }
+
+    handleMaxBudgetChange(event) {
+        this.setState({maxBudget: event.target.value})
     }
 
     renderSalary() {
@@ -152,13 +194,23 @@ class ExpectationForm extends Component {
                             <div className='formLabel_title'>
                                 Please prefred location
                             </div>
-                            <div className='formInput'>
-                                <input 
-                                    placeholder="Enter your preffered city"
-                                    value={this.state.city}
-                                    onChange={this.handleCityChange.bind(this)}
-                                />  
-                            </div>                    
+                            <Select
+                                labelId="demo-multiple-checkbox-label"
+                                id="demo-multiple-checkbox"
+                                multiple
+                                value={this.state.cityName}
+                                onChange={this.handleCityChange.bind(this)}
+                                input={<OutlinedInput label="Tag" />}
+                                renderValue={(selected) => selected.join(', ')}
+                                MenuProps={MenuProps}
+                                >
+                                {cities.map((name) => (
+                                    <MenuItem key={name} value={name}>
+                                    <Checkbox checked={this.state.cityName.indexOf(name) > -1} />
+                                    <ListItemText primary={name} />
+                                    </MenuItem>
+                                ))}
+                            </Select>                   
                     </div>
                         <div className='inputBoxColumn' style={{'flex-direction': 'column', 'align-items': 'flex-start'}}>
                             <h6>Select desired industry and role</h6>
@@ -174,28 +226,32 @@ class ExpectationForm extends Component {
                                 />
                                 <div style={{'margin': '1rem'}}/>
                                 <Autocomplete
-                                    id="free-solo-demo"
+                                    multiple
+                                    id="department-adder"
                                     fullWidth
                                     onChange={(event) => {
-                                        console.log("autocomplete ", event.target.dataset.optionIndex)
                                         this.handleDepartmentChange(event.target.dataset.optionIndex);
                                     }}
                                     options={this.state.jobRoles.map((option) => option)}
-                                    renderInput={(params) => <TextField {...params} label="Department" />}
+                                    getOptionLabel={(option) => option}
+                                    renderInput={(params) => {
+                                        this.showDepartmentSelect({...params})
+                                        return <TextField {...params} label="Department" />
+                                    }}
                                 />
                             </div>
                         </div>
                         {this.state.purpose !='upgrade' && <div className='inputBoxColumn' style={{marginTop: '1rem'}}>
                             <div className='formLabel_title' style={{'marginBottom': '1rem'}}>
-                                Designation :
-                            </div>
-                            {this.renderPosition()}
-                        </div>}
-                        {this.state.purpose !='upgrade' && <div className='inputBoxColumn' style={{marginTop: '1rem'}}>
-                            <div className='formLabel_title' style={{'marginBottom': '1rem'}}>
                                 Budget :
                             </div>
-                            {this.renderSalary()}
+                            <div style={{display: 'flex', marginTop: '1rem'}}>
+                                <TextField value={this.state.minBudget} label="Min" onChange={this.handleMinBudgetChange.bind(this)}/>
+                                <p>LPA</p>
+                                <div style={{marginLeft: '1rem'}} />
+                                <TextField value={this.state.maxBudget} label="Max" onChange={this.handleMaxBudgetChange.bind(this)} />
+                                <p>LPA</p>
+                            </div>
                         </div>}
                         <div style={{'display': 'flex', 'justifyContent': 'center', 'margin': '2rem'}}>
                             <Button size='large' variant='contained' onClick={this.handleSubmit.bind(this)}>
