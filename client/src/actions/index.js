@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FETCH_USER,FETCH_CANDIDATE,FETCH_EDUCATION,FETCH_EXPERIENCE,FETCH_PROJECT, FETCH_SKILLSET, FETCH_HR, FETCH_JOBS } from './types';
+import { FETCH_USER,FETCH_CANDIDATE,FETCH_EDUCATION,FETCH_EXPERIENCE,FETCH_PROJECT, FETCH_SKILLSET, FETCH_HR, FETCH_JOBS, FETCH_POSTEDJOB, SUGGESTED_TALENT } from './types';
 
 export const fetchUser = () => async dispatch => {
     const res = await axios.get('/api/current_user');
@@ -17,6 +17,19 @@ export const fetchCandidate = () => async dispatch => {
     });
 }
 
+export const fetchTalent = (props) => async dispatch => {
+    const res = await axios.get('/fetch/talent',{ params: {
+        industry: props.value.industry,
+        department: props.value.department,
+        experience: props.value.experience,
+        budget: props.value.budget
+    }});
+    dispatch({
+        type: SUGGESTED_TALENT,
+        payload: res.data
+    })
+}
+
 export const fetchHR = () => async dispatch => {
     const res = await axios.get('/fetch/hr');
     dispatch({
@@ -29,6 +42,16 @@ export const fetchJobs = () => async dispatch => {
     const res = await axios.get('/fetch/jobs');
     dispatch({
         type: FETCH_JOBS,
+        payload: res.data
+    });
+}
+
+export const fetchPostedJob = (props) => async dispatch => {
+    const res = await axios.get('/fetch/jobDetail', { params: {
+        jobID: props.value.jobID
+    }});
+    dispatch({
+        type: FETCH_POSTEDJOB,
         payload: res.data
     });
 }
@@ -106,6 +129,7 @@ export const sendBasicInfo =  (props) => async dispatch => {
             expectedIndustry: props.value.expectedIndustry,
             expectedDepartment: props.value.expectedDepartment,
     };
+    console.log(props.value, obj);
     const res = await axios.post('/create/candidate', obj);
 }
 

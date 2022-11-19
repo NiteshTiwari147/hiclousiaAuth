@@ -41,7 +41,6 @@ class ExpectationForm extends Component {
     }
 
     handleSubmit() {
-       
         this.props.sendBasicInfo({          
             value: {
                 name: this.state.name,
@@ -52,8 +51,8 @@ class ExpectationForm extends Component {
                 purpose: this.state.purpose,
                 expectedPosition: this.state.position,
                 expectedSalary: this.state.budget,
-                expectedIndustry: this.state.expectedIndustry,
-                expectedDepartment: this.state.expectedDepartment,
+                expectedIndustry: this.state.industry,
+                expectedDepartment: this.state.department,
             }      
         })
         .then(res => {

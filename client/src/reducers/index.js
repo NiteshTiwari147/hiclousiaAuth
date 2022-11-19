@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 import authReducer from "./authReducer";
 import {candidateInfo, educationInfo, experienceInfo, projectInfo, skillSetInfo} from "./candidateReducer";
-import { HRInfo,jobsInfo } from "./hrReducer";
+import { HRInfo,jobsInfo, postedJobInfo, suggestedTalent } from "./hrReducer";
 
 export default combineReducers({
    auth: authReducer,
@@ -11,5 +11,7 @@ export default combineReducers({
    project: projectInfo,
    skillSet: skillSetInfo,
    hr: HRInfo,
-   jobs: jobsInfo
+   jobs: jobsInfo,
+   postedJobDetail: postedJobInfo,
+   suggestedTalent: suggestedTalent
 });

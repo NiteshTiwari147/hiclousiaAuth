@@ -46,7 +46,7 @@ class App extends Component {
                         <Route exact path="/home" component={gateway} />
                         <Route exact path="/careerprofile" component={CandidateHome} />
                         <Route exact path="/hr/dashboard" component={gateway} />
-                        <Route exact path="/employer/postedJob" component={PostedJob} />
+                        <Route exact path="/postedJob" component={PostedJob} />
 
                         <Route exact path="/jobs" component={Jobs} />
                         <Route exact path="/candidates" component={Candidates} />

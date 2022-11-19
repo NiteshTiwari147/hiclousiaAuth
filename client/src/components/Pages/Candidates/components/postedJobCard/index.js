@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import Button from '@mui/material/Button';
+import { connect } from 'react-redux';
+import { withRouter } from "react-router-dom";
 
+import * as actions from '../../../../../actions';
 import StatBox from '../../../Jobs/components/statBox';
 import BasicModal from '../../../../utils/modal';
 import './styles.css';
@@ -35,6 +38,28 @@ class PostedJobCard extends Component {
         </div>
 
     }
+
+    handleViewCandidate() {
+        const {companyName,
+            jobID,
+            experience,
+            description,
+            industry,
+            department,
+            skills,
+            cities,
+            budget } = this.props.data;
+        localStorage.setItem("jobID", jobID);
+        this.props.fetchTalent({
+            value: {
+                industry: industry,
+                department: department,
+                experience: experience,
+                budget: budget
+            }
+        });
+    }
+
     handleModalOpen() {
         this.setState({modalOpen: true})
     }
@@ -65,16 +90,16 @@ class PostedJobCard extends Component {
                         </div>
                         <div style={{display: 'flex'}}>
                             <div className='viewDetails'>
-                                <Button variant="contained" size='small'>
-                                    <div style={{fontSize: '9px'}}>view candidates</div>
+                                <Button variant="contained" size='small' onClick={this.handleViewCandidate.bind(this)}>
+                                    <a style={{fontSize: '9px', color: 'white'}} href={`/postedJob?jobID=${123}`}>view candidates</a>
                                 </Button>
                             </div>
-                            <div className='viewDetails'>
+                            {/* <div className='viewDetails'>
                                 <Button variant="contained" size='small' onClick={this.handleModalOpen.bind(this)}>
                                     <div style={{fontSize: '9px'}}>view Job details</div>
                                 </Button>
                                 <BasicModal open={this.state.modalOpen} close={this.handleModalClose.bind(this)} />
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                     <div className="postedJobstateBoxContainer">
@@ -90,4 +115,5 @@ class PostedJobCard extends Component {
     };
 };
 
-export default PostedJobCard;
+
+export default withRouter(connect(null, actions)(PostedJobCard));

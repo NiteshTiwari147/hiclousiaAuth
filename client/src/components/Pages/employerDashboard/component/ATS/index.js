@@ -8,7 +8,7 @@ class EmployerATS extends Component {
                     <h6 className="headingATS">Job Posted</h6> 
                 </div>
                 <h6 className="ATS_score" style={{marginRight: '1rem'}}>
-                    2
+                    {this.props.data.length}
                 </h6>
             </div>
             <div className="miniBox">
@@ -16,7 +16,7 @@ class EmployerATS extends Component {
                     <h6 className="headingATS">Active Job</h6> 
                 </div>
                 <h6 className="ATS_score" style={{marginRight: '1rem'}}>
-                    2
+                    {this.props.data.length}
                 </h6>
             </div>
             <div className="miniBox">

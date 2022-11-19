@@ -3,6 +3,7 @@ const { Schema } = mongoose;
 
 const JobPost = new Schema({
     hiclousiaID: String,
+    jobID: String,
     email: String,
     companyName: String,
     description: String,

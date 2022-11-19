@@ -1,4 +1,4 @@
-import { FETCH_HR,FETCH_JOBS } from "../actions/types";
+import { FETCH_HR,FETCH_JOBS, FETCH_POSTEDJOB, SUGGESTED_TALENT } from "../actions/types";
 
 export function HRInfo(state = null, action) {
     switch(action.type) {
@@ -12,6 +12,24 @@ export function HRInfo(state = null, action) {
 export function jobsInfo(state=null, action) {
     switch(action.type) {
         case FETCH_JOBS: 
+            return action.payload || false;
+        default: 
+            return state;
+    }
+}
+
+export function postedJobInfo(state=null, action) {
+    switch(action.type) {
+        case FETCH_POSTEDJOB: 
+            return action.payload || false;
+        default: 
+            return state;
+    }
+}
+
+export function suggestedTalent(state=null, action) {
+    switch(action.type) {
+        case SUGGESTED_TALENT: 
             return action.payload || false;
         default: 
             return state;

@@ -6,3 +6,5 @@ export const FETCH_PROJECT = 'fetch_project';
 export const FETCH_SKILLSET = 'fetch_skillSet';
 export const FETCH_HR = 'fetch_hr';
 export const FETCH_JOBS = 'fetch_jobs'
+export const FETCH_POSTEDJOB = 'fetch_posted_job'
+export const SUGGESTED_TALENT = 'suggested_talent'

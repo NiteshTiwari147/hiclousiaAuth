@@ -19,7 +19,7 @@ class EmployerDashboard extends Component {
                 <EmployerInfo data={hr}/>
             </div>
             <div className='dashboardStack'>
-                <EmployerATS />
+                <EmployerATS data={jobs}/>
                 <AddJobBar />
                 {jobs.length > 0 && <div className='postedJobCarousel'>
                     <Carousel
@@ -30,7 +30,7 @@ class EmployerDashboard extends Component {
                     > 
                         {jobs.map(job => <PostedJobCard data={job} />)}
                     </Carousel>
-                </div>    }         
+                </div>}         
             </div>
             <div className='dashboardStack'>
                 <JobView />

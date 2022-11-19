@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 
 require('../models/HR/basicInfo');
 require('../models/HR/jobPost');
+require('../models/BasicInfo');
+var customId = require("custom-id");
 
 module.exports = app => {
     function checkAuthenticated(req, res, next) {
@@ -27,12 +29,47 @@ module.exports = app => {
       }
     })
 
+    app.get('/fetch/talent', checkAuthenticated, async function(req,res, done) {
+      const basicInfo = mongoose.model('basicInfo');
+      try { 
+        const {
+          industry,
+          department,
+        } = req.query;
+        const candidates = await basicInfo.find({expectedIndustry: industry, expectedDepartment: department});
+        res.send(candidates);
+        res.status(200);
+
+      } catch(err) {
+        console.log("Somewith went wrong while fetching talent ",err);
+        res.send({status: 500})
+      }
+    } )
+
     app.get('/fetch/jobs', checkAuthenticated,  async function(req,res, done) {
       const postedJobSchema = mongoose.model('jobpost');
       try {
         if(req && req.user && req.user.email) {
             const postedJobs = await postedJobSchema.find({email: req.user.email})
             res.send(postedJobs);
+        }
+        res.status({status: 204});
+      }
+      catch (err) {
+          console.log("Somewith went wrong not found ",err);
+          res.send({status: 204})
+      }
+    })
+
+    app.get('/fetch/jobDetail', checkAuthenticated,  async function(req,res, done) {
+      const postedJobSchema = mongoose.model('jobpost');
+      try {
+        const {
+          jobID
+        } = req.query;
+        if(req && req.query && jobID) {
+            const postedJob = await postedJobSchema.findOne({jobID: jobID})
+            res.send(postedJob);
         }
         res.status({status: 204});
       }
@@ -71,7 +108,22 @@ module.exports = app => {
           cities,
           budget
         } = req.body;
+        const jobID = customId({
+          hiclousiaID: hiclousiaID,
+          email: email,
+          companyName: companyName,
+        })
+        const existingJob = await jobPost.findOne({jobID: jobID})
+        while(existingJob) {
+          jobID = customId({
+            hiclousiaID: hiclousiaID,
+            email: email,
+            companyName: companyName,
+          })
+          existingJob = await jobPost.findOne({jobID: jobID})
+        }
         const response = await new jobPost({hiclousiaID,
+          jobID,
           email,
           companyName,
           experience,
