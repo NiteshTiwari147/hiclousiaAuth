@@ -4,6 +4,11 @@ require('../models/HR/basicInfo');
 require('../models/HR/jobPost');
 require('../models/Talent/talentReq');
 require('../models/BasicInfo');
+require('../models/projectInfo');
+require('../models/educationInfo');
+require('../models/experienceInfo');
+require('../models/skillSet');
+
 var customId = require("custom-id");
 
 module.exports = app => {
@@ -19,13 +24,45 @@ module.exports = app => {
       const basicInfo = mongoose.model('hrBasicInfo');
       try {
         if(req && req.user && req.user.email) {
-            const candidate = await basicInfo.findOne({email: req.user.email})
-            res.send(candidate);
+            const hr = await basicInfo.findOne({email: req.user.email})
+            res.send(hr);
         }
         res.status({status: 204});
       }
       catch (err) {
           console.log("HR not found ",err);
+          res.send({status: 204})
+      }
+    })
+
+    app.get('/fetch/talentDetail', checkAuthenticated, async function(req,res, done) {
+      const basicInfoSchema = mongoose.model('basicInfo');
+      const skillSetSchema = mongoose.model('skillSet');
+      const educationSchema = mongoose.model('education');
+      const experienceSchema = mongoose.model('experiences');
+      const projectSchema = mongoose.model('projects');
+      const talentReqSchema = mongoose.model('talentReq');
+      try {
+        const {
+          hiclousiaID
+        } = req.query;
+        let talentDetailData = {}
+        const talentReq = await talentReqSchema.findOne({hiclousiaID: hiclousiaID});
+        const basicInfo = await basicInfoSchema.findOne({hiclousiaID: hiclousiaID});
+        const skillSet = await skillSetSchema.findOne({hiclousiaID: hiclousiaID});
+        const education = await educationSchema.find({hiclousiaID: hiclousiaID});
+        const experience = await experienceSchema.find({hiclousiaID: hiclousiaID});
+        const project = await projectSchema.find({hiclousiaID: hiclousiaID});
+        talentDetailData.talentReq = talentReq;
+        talentDetailData.basicInfo = basicInfo;
+        talentDetailData.skillSet = skillSet;
+        talentDetailData.education = education;
+        talentDetailData.experience = experience;
+        talentDetailData.project = project;
+        res.send(talentDetailData);
+        res.status({status: 200});
+      } catch(err) {
+          console.log("Somewith went wrong not found ",err);
           res.send({status: 204})
       }
     })

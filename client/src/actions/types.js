@@ -8,3 +8,4 @@ export const FETCH_HR = 'fetch_hr';
 export const FETCH_JOBS = 'fetch_jobs'
 export const FETCH_POSTEDJOB = 'fetch_posted_job'
 export const SUGGESTED_TALENT = 'suggested_talent'
+export const TALENT_DETAILS = 'talent_detail'

@@ -51,10 +51,10 @@ module.exports = app => {
     })
 
     app.get('/fetch/Education',checkAuthenticated, async function(req,res, done) {
-        const basicInfo = mongoose.model('education');
+        const educationSchema = mongoose.model('education');
         try {
             if(req && req.user && req.user.email) {
-                const candidate = await basicInfo.find({email: req.user.email})
+                const candidate = await educationSchema.find({email: req.user.email})
                 res.send(candidate);
             }
             res.status({status: 204});
@@ -66,10 +66,10 @@ module.exports = app => {
     })
 
     app.get('/fetch/Experience', checkAuthenticated, async function(req,res, done) {
-        const basicInfo = mongoose.model('experiences');
+        const experienceSchema = mongoose.model('experiences');
         try {
             if(req && req.user && req.user.email) {
-                const candidate = await basicInfo.find({email: req.user.email})
+                const candidate = await experienceSchema.find({email: req.user.email})
                 res.send(candidate);
             }
             res.status({status: 204});

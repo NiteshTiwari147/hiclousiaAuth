@@ -5,7 +5,7 @@ import * as actions from '../actions';
 
 import Header from './Header';
 import Footer from './Footer';
-import Dashboard from './Pages/Dashboard';
+import TalentView from './Pages/talentView';
 import Jobs from './Pages/Jobs';
 import CandidateHome from './Pages/Home/Candidate';
 import ProjectForm from './Forms/ProjectForm';
@@ -47,7 +47,7 @@ class App extends Component {
                         <Route exact path="/careerprofile" component={CandidateHome} />
                         <Route exact path="/hr/dashboard" component={gateway} />
                         <Route exact path="/postedJob" component={PostedJob} />
-
+                        <Route exact path="/candidate" component={TalentView} />
                         <Route exact path="/jobs" component={Jobs} />
                         <Route exact path="/candidates" component={Candidates} />
                         <Route exact path="/projectForm" component={ProjectForm} />

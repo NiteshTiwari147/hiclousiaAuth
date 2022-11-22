@@ -1,20 +1,34 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import CandidateInfo from './components/candidateInfo';
-import ATS from './components/ATS';
-import FormBar from './components/formBar';
-import Project from './components/project';
+import CandidateInfo from '../Dashboard/components/candidateInfo';
+import ATS from '../Dashboard/components/ATS';
+import FormBar from '../Dashboard/components/formBar';
+import Project from '../Dashboard/components/project';
 import SkillPieChart from '../../visualization/skillPieChart';
-import Education from './components/education';
-import ExperienceTab from './components/experience';
-import Certificate from './components/certificates';
+import Education from '../Dashboard/components/education';
+import ExperienceTab from '../Dashboard/components/experience';
+import Certificate from '../Dashboard/components/certificates';
 import LoadingScreen from '../../utils/loadingScreen';
 import CompentencyPieChart from '../../visualization/compentencyChart';
 
-import './styles.css';
+import * as actions from '../../../actions';
 
-class Dashboard extends Component {
+
+class TalentView extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    componentDidMount() {
+        const params = new URLSearchParams(this.props.location.search);
+        console.log(params.get('id'))
+        this.props.fetchTalentDetail({
+            value: {
+                id: params.get('id')
+            }
+        });
+    }
 
     renderCandidateInfo(candidate, experience) {
         if(candidate) {
@@ -22,32 +36,34 @@ class Dashboard extends Component {
         }
     }
 
-    calculateExperience(experience) {
+    calculateExperience() {
         return {yr: 3, mo: 1};
     }
 
-    renderATS() {
-        const {project, skillSet, candidate, education, experience } = this.props
-        const {yr, mo} = this.calculateExperience(this.props.experience ? this.props.experience : [])
-        return <ATS projectLen={project ? project.length : 0} skills={skillSet && skillSet.coreSkills? this.props.skillSet.coreSkills.length : 0} experienceYears={yr} experienceMonths={mo} />
+    renderATS(project, skillSet) {
+        if(this.props.talentDetail) {
+            const {yr, mo} = this.calculateExperience()
+            return <ATS projectLen={project ? project.length : 0} skills={skillSet && skillSet.coreSkills? skillSet.coreSkills.length : 0} experienceYears={yr} experienceMonths={mo} />
+        }
+        
     }
 
     render() {
-        if(this.props.auth && this.props.candidate) {
-            const {project, skillSet, candidate, education, experience } = this.props
-            console.log(this.props);
+        console.log(this.props.talentDetail);
+        if(this.props.talentDetail) {
+            const {project, skillSet, basicInfo, education, experience } = this.props.talentDetail;
+            console.log(project, skillSet, basicInfo, education, experience);
             return (
                 <div className='dashboardLayout'>
                     <div className='dashboardStack'>
-                        {this.renderCandidateInfo(candidate, experience)}
+                        {this.renderCandidateInfo(basicInfo, experience)}
                         {experience && experience.length > 0 ? <ExperienceTab data={experience} isEmpty={false} /> : 
                         <ExperienceTab data={experience} isEmpty={true} />}
                         {education && education.length > 0 ? <Education data={education} isEmpty={false} /> : 
                         <Education data={education} isEmpty={true} />}
                     </div>
                     <div className='dashboardStack'>
-                        {this.renderATS()}
-                        <FormBar skillList={skillSet && skillSet.coreSkills ? skillSet.coreSkills : []} />
+                        {this.renderATS(project, skillSet)}
                         {project && project.length ? project.map((value,index) => <Project key={index} idx={index} data={value} isEmpty={false} /> ) : 
                          <Project data={null} isEmpty={true} />    
                         }
@@ -63,16 +79,14 @@ class Dashboard extends Component {
                     </div>
                 </div>
             )
-        }
-        else {
+        } else {
             return <LoadingScreen />
         }
-        
     }
 }
 
-function mapStateToProps({auth, candidate, education, experience, project, skillSet}) {
-    return { auth, candidate, education, experience, project, skillSet }
+function mapStateToProps({postedJobDetail, talentDetail}) {
+    return {postedJobDetail, talentDetail }
 }
 
-export default connect(mapStateToProps)(Dashboard);
+export default connect(mapStateToProps, actions)(TalentView);

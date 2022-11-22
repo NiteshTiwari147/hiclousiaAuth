@@ -28,7 +28,7 @@
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
-    height: 12rem !important;
+    height: 15rem !important;
     margin: 2rem;
     padding: 1rem;
     box-shadow: 10px 10px 5px -2px #888;
