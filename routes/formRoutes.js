@@ -4,6 +4,7 @@ require('../models/BasicInfo');
 require('../models/projectInfo');
 require('../models/educationInfo');
 require('../models/experienceInfo');
+require('../models/HR/jobPost');
 require('../models/skillSet');
 require('../models/Talent/talentReq');
 var customId = require("custom-id");
@@ -93,7 +94,27 @@ module.exports = app => {
             console.log("candidate not found ",err);
             res.send({status: 204})
         }   
-    })
+    });
+
+    app.get('/fetch/relevantJobs', checkAuthenticated, async function(req,res, done) {
+        const postedJobsSchema = mongoose.model('jobpost');
+        try {
+            const {
+                industry,
+                department,
+            } = req.query;
+            const relevantJobs = await postedJobsSchema.find({industry: industry, department: {
+                $elemMatch: {
+                  $in: department
+                }
+            }});
+            res.send(relevantJobs);
+            res.status(200);
+        } catch(err) {
+            console.log("Somewith went wrong while fetching jobs ",err);
+            res.send({status: 500})
+        }
+    });
 
 
     app.post('/create/candidate', checkAuthenticated, async function (req,res) {

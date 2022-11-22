@@ -93,52 +93,30 @@ class FilterPane extends Component {
         </Select>
     }
     render() {
+        const { industry , department, expectedSalary, cities } = this.props;
         return (
             <div className='filterContainer shadow'>
                 <div className='filter'> 
                     <label className='filterTitle'>Experience</label>
-                    {this.renderFilterOptions(industryOptions, this.handeIndustryChange.bind(this), this.state.industry)}
+                    {industry}
                 </div>
                 <div className='filter'>
-                <label className='filterTitle'>Department</label>
-                    {this.renderFilterOptions(departmentOptions, this.handleDepartmentChange.bind(this), this.state.department)}
+                    <label className='filterTitle'>Department</label>
+                    {department && department.map(d => <div>{d}</div>)}
                 </div>
                 <div className='filter'>
-                    <label className='filterTitle'>Experience</label>
-                    <div className='jobExperienceSelect'>
-                        <Select
-                            id="experienceYearsSelect"
-                            value={this.state.experienceYears}
-                            fullWidth
-                            variant="outlined"
-                            onChange={this.handleExperienceYearsChange.bind(this)}
-                        >
-                            {this.renderExperienceYears()}
-                        </Select> 
-                    <div style={{'margin': '1rem', 'fontSize': 'small'}}>Years</div>
-                        <Select
-                            id="experienceMonthsSelect"
-                            value={this.state.experienceMonths}
-                            fullWidth
-                            variant="outlined"
-                            onChange={this.handleExperienceMonthsChange.bind(this)}
-                        >
-                            {this.renderExperienceMonths()}
-                        </Select>
-                        <div style={{'margin-top': '1rem','margin-left': '1rem', 'fontSize': 'smaller'}}>Months</div>
+                    <label className='filterTitle'>Expected Salary</label>
+                    <div>
+                        {expectedSalary.min} - {expectedSalary.max} LPA
                     </div>
                 </div>
                 <div style={{'margin': '1rem'}} />
                 <div className='fitler'>
-                    <label className='filterTitle'>Location</label>
-                    <input 
-                        placeholder={this.state.city}
-                        value={this.state.city}
-                        onChange={ e => this.setState({ city: e.target.value })}
-                    />
+                    <label className='filterTitle'>Preferred Locations</label>
+                    {cities && cities.map(c => <div>{c}</div>)}
                 </div>
                 <Button className='searchBox' variant="contained">
-                    < SearchIcon fontSize="large" />
+                    Edit
                 </Button>
             </div>
         )

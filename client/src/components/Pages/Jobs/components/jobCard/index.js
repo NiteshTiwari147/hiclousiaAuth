@@ -3,6 +3,8 @@ import Button from '@mui/material/Button';
 
 import StatBox from '../statBox';
 
+import companyLogo from '../../../../../data/companyLogo.jpg';
+
 import './styles.css';
 
 class JobCard extends Component {
@@ -11,37 +13,42 @@ class JobCard extends Component {
         super(props)
     }
 
-    renderOptions(origin) {
-        if(origin === 'client') {
-            return  <div style={{ marginTop: '0.3rem'}}>
-                    <Button className='applyBtn' variant="contained" size='small'>
-                        <div style={{fontSize: 'smaller'}}>view candidates</div>
-                    </Button>
-            </div>
-        }
+    renderOptions() {
         return  <Button className='applyBtn' variant="contained" size='small'>
                 Apply
             </Button>
     }
 
+    calculateSkillMatching(skillReq, skillPos) {
+        const total = skillReq.length;
+        var match=0;
+        skillReq.map(skill => {
+            const found = skillPos.find(el => el.skillName === skill);
+            if(found) {
+            match++;
+            }
+        })
+        return Math.ceil((match/total) * 100);
+    }
+
     render() {
-        const { logo, companyName, slryRnge, position, skills, origin } = this.props;
+        const { companyName, exp, budget, skills, skillPos } = this.props;
         return (
             <div className='jobCardContainer shadow'>
                 <div className="jobCardHeadingContainer">
                     <div>
-                        <img className="companyImage"  src={logo} /> 
+                        <img className="companyImage"  src={companyLogo} /> 
                     </div>
                     <div className="introduction">
                         <h5 style={{marginBottom: '0.2rem'}}>{companyName}</h5>
                         <a style={{fontSize: 'smaller', marginTop: '0.3rem'}}>Read Job Description</a>
-                        {this.renderOptions(origin)}
+                        {this.renderOptions()}
                     </div>
                 </div>
                 <div className="stateBoxContainer">
-                    <StatBox title='Position' value={position} />
-                    <StatBox title='Skill Req' value={skills} />
-                    <StatBox title='Experience' value='2-4' />
+                    <StatBox title='Budget' value={`${budget.min}-${budget.max} LPA`} />
+                    <StatBox title='Skill Matched' value={`${this.calculateSkillMatching(skills, skillPos)} %`} />
+                    <StatBox title='Experience' value={`${exp.min}-${exp.max} yrs`} />
                     <StatBox title='Compatibilty' value='83%' />
                 </div>
             </div>

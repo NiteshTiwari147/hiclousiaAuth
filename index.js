@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const passport = require('passport');
 const flash = require('express-flash');
 const session = require('express-session');
+const cookieSession = require('cookie-session');
 const keys = require('./config/keys');
 require('./models/User');
 
@@ -12,12 +13,12 @@ mongoose.connect(keys.mongoURI);
 
 const app = express();
 
-// app.use(
-//     cookieSession({
-//         maxAge: 30*24*60*60*1000,
-//         keys: [keys.cookieKey]
-//     })
-// );
+app.use(
+    cookieSession({
+        maxAge: 30*24*60*60*1000,
+        keys: [keys.cookieKey]
+    })
+);
 
 app.use(session({
     secret: "secret",

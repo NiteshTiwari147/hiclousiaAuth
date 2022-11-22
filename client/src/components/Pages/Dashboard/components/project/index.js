@@ -4,6 +4,7 @@ import ProjectDetail from './sub-component/projectDetailModal';
 
 import { projectImages } from '../../../../../data/projectImages';
 import './styles.css';
+import { Button } from '@mui/material';
 
 class Project extends Component {
 
@@ -41,6 +42,7 @@ class Project extends Component {
                 alignItems: 'center'}}>
                 <h4>You have not added any project</h4>
                 <p>Adding your work is the best way to showcase your skills</p>
+                <Button>Add project</Button>
             </div>
         }
 

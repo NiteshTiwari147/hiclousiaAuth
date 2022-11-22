@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FETCH_USER,FETCH_CANDIDATE,FETCH_EDUCATION,FETCH_EXPERIENCE,FETCH_PROJECT, FETCH_SKILLSET, FETCH_HR, FETCH_JOBS, FETCH_POSTEDJOB, SUGGESTED_TALENT, TALENT_DETAILS } from './types';
+import { FETCH_USER,FETCH_CANDIDATE,FETCH_EDUCATION,FETCH_EXPERIENCE,FETCH_PROJECT, FETCH_SKILLSET, FETCH_HR, FETCH_JOBS, FETCH_POSTEDJOB, SUGGESTED_TALENT, TALENT_DETAILS, FETCH_RELEVANT_JOBS } from './types';
 
 export const fetchUser = () => async dispatch => {
     const res = await axios.get('/api/current_user');
@@ -36,6 +36,17 @@ export const fetchTalent = (props) => async dispatch => {
     }});
     dispatch({
         type: SUGGESTED_TALENT,
+        payload: res.data
+    })
+}
+
+export const fetchRelevantJobs = (props) => async dispatch => {
+    const res = await axios.get('/fetch/relevantJobs',{ params: {
+        industry: props.value.industry,
+        department: props.value.department,
+    }});
+    dispatch({
+        type: FETCH_RELEVANT_JOBS,
         payload: res.data
     })
 }

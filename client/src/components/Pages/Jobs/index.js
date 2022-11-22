@@ -1,33 +1,55 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import * as actions from '../../../actions';
 import FilterPane from './components/filterPane';
 import JobCard from './components/jobCard';
 import LoadingScreen from '../../utils/loadingScreen';
 
 import { companyData } from '../../../data/companyData';
-import './styles.css'
+import './styles.css';
 
 class Jobs extends Component {
+
+    componentDidMount() {
+        this.props.fetchCandidate()
+        .then(res => {
+            const {
+                expectedIndustry,
+                expectedDepartment
+            } = this.props.candidate;
+            this.props.fetchSkillSet()
+            this.props.fetchRelevantJobs({
+                value: {
+                    industry: expectedIndustry,
+                    department: expectedDepartment
+                }
+            });
+        });
+       
+    }
+
     render() {
-        if(this.props.candidate) {
-            const { industry, department, experienceYears, experienceMonths} = this.props.candidate
+        if(this.props.candidate && this.props.relevantJobs && this.props.skillSet) {
+            const { expectedIndustry, expectedDepartment, experienceYears, experienceMonths, city, expectedSalary} = this.props.candidate
+            const relevantJobsData = this.props.relevantJobs;
+            const { processedSKillList } = this.props.skillSet;
         return (
             <div className='jobsContainer'>
                 <label className='filterPaneTitle'>
-                    Fitlers : 
+                    Expectations : 
                 </label>
                 <FilterPane 
-                industry={industry}
-                department={department}
-                experienceYears={experienceYears}
-                experienceMonths={experienceMonths}
+                industry={expectedIndustry}
+                department={expectedDepartment}
+                expectedSalary={expectedSalary}
+                cities={city}
                  />
                 <label className='filterPaneTitle'>
-                    Jobs Results : 
+                    Relevant Oppurtunities : 
                 </label>
                 <div className='jobResultContainer'>
-                    {companyData.map(obj => <JobCard logo={obj.url} companyName={obj.name} slryRnge={obj.slryRnge} position={obj.position} skills={obj.skills} origin='candidate' />)}    
+                    {relevantJobsData.map(obj => <JobCard exp={obj.experience} companyName={obj.companyName} budget={obj.budget} skills={obj.skills} skillPos={processedSKillList}/>)}    
                 </div>
             </div>
         )
@@ -38,8 +60,8 @@ class Jobs extends Component {
     }
 }
 
-function mapStateToProps({candidate}) {
-    return { candidate }
+function mapStateToProps({candidate, relevantJobs, skillSet}) {
+    return { candidate, relevantJobs, skillSet }
 }
 
-export default connect(mapStateToProps)(Jobs);
+export default connect(mapStateToProps, actions)(Jobs);
