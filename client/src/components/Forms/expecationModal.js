@@ -120,6 +120,7 @@ class ExpectationModal extends Component {
                 }
             })
             .then(res => {
+                this.props.close();
                 window.location.reload();
             });
         } else {
