@@ -42,8 +42,7 @@ module.exports = app => {
             if(req, req.user && req.user.email) {
                 const candidateSkillSet = await skillSet.findOne({email: req.user.email});
                 res.send(candidateSkillSet);
-            }
-            res.status({status: 200});   
+            } 
         }
         catch (err) {
             console.log("candidate skillset not found ",err);
@@ -58,7 +57,6 @@ module.exports = app => {
                 const candidate = await educationSchema.find({email: req.user.email})
                 res.send(candidate);
             }
-            res.status({status: 204});
         }
         catch (err) {
             console.log("candidate not found ",err);
@@ -73,7 +71,6 @@ module.exports = app => {
                 const candidate = await experienceSchema.find({email: req.user.email})
                 res.send(candidate);
             }
-            res.status({status: 204});
         }
         catch (err) {
             console.log("candidate not found ",err);
@@ -88,7 +85,6 @@ module.exports = app => {
                 const projectList = await projects.find({email: req.user.email})
                 res.send(projectList);
             }
-            res.status({status: 204});
         }
         catch (err) {
             console.log("candidate not found ",err);
@@ -109,7 +105,6 @@ module.exports = app => {
                 }
             }});
             res.send(relevantJobs);
-            res.status(200);
         } catch(err) {
             console.log("Somewith went wrong while fetching jobs ",err);
             res.send({status: 500})
@@ -186,8 +181,6 @@ module.exports = app => {
             const newTalenReq = { $set: talentReqData };
             await talentReq.updateOne({email: req.user.email}, newTalenReq);
             res.send(response);
-            res.status({status: 200});   
-
         } catch(err) {
             console.log("error occured while saving project ",err);
             res.send({status: 304})
@@ -221,10 +214,8 @@ module.exports = app => {
                     const resposne = await skillList.updateOne({hiclousiaID: hiclousiaID}, newvalues);
                     await talentReq.updateOne({email: req.user.email}, newTalenReq);
                     res.send({resposne});
-                }
-                res.status({status: 200});   
+                } 
             }
-            res.status({status: 304});   
         }
         catch (err) {
             console.log("candidate skillset not found ",err);
@@ -253,7 +244,6 @@ module.exports = app => {
             const newTalenReq = { $set: talentReqData };
             await talentReq.updateOne({email: req.user.email}, newTalenReq);
             res.send(response);
-            res.send({status: 200})
         } catch (err) {
             console.log("Error occured while saving education ",err);
             res.send({status: 304})
@@ -271,7 +261,6 @@ module.exports = app => {
             const newTalenReq = { $set: talentReqData };
             await talentReq.updateOne({email: req.user.email}, newTalenReq);
             res.send(response);
-            res.send({status: 200})
         } catch(err) {
             console.log("Error occured while saving experience ",err);
             res.send({status: 304})
@@ -318,7 +307,6 @@ module.exports = app => {
             const newTalenReq = { $set: talentReqData };
             await talentReq.updateOne({hiclousiaID: hiclousiaID}, newTalenReq);
             res.send(resp);
-            res.send({status: 200});
         } catch(err) {
             console.log("error occured while update ",err);
             res.send({status: 304})
