@@ -19,7 +19,7 @@ class JobCard extends Component {
             </Button>
     }
 
-    calculateSkillMatching(skillReq, skillPos) {
+    calculateSkillMatching(skillReq=[], skillPos=[]) {
         const total = skillReq.length;
         var match=0;
         skillReq.map(skill => {
