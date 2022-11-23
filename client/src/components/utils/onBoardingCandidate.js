@@ -110,7 +110,6 @@ class Onboarding extends Component {
         }
     }
     render() {
-        console.log("here we came");
         if(!this.state.buttonClicked) {
             return <div className='basicForm'>
             <div className='signUpLogo'>

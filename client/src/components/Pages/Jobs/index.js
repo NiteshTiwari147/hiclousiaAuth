@@ -31,7 +31,7 @@ class Jobs extends Component {
 
     render() {
         if(this.props.candidate && this.props.relevantJobs && this.props.skillSet) {
-            const { expectedIndustry, expectedDepartment, experienceYears, experienceMonths, city, expectedSalary} = this.props.candidate
+            const { expectedIndustry, expectedDepartment, city, expectedSalary} = this.props.candidate
             const relevantJobsData = this.props.relevantJobs;
             const { processedSKillList } = this.props.skillSet;
         return (
@@ -40,16 +40,13 @@ class Jobs extends Component {
                     Expectations : 
                 </label>
                 <FilterPane 
-                industry={expectedIndustry}
-                department={expectedDepartment}
-                expectedSalary={expectedSalary}
-                cities={city}
+                    data={this.props.candidate}
                  />
                 <label className='filterPaneTitle'>
                     Relevant Oppurtunities : 
                 </label>
                 <div className='jobResultContainer'>
-                    {relevantJobsData.map(obj => <JobCard exp={obj.experience} companyName={obj.companyName} budget={obj.budget} skills={obj.skills} skillPos={processedSKillList}/>)}    
+                    {relevantJobsData.length > 0 && relevantJobsData.map(obj => <JobCard exp={obj.experience} companyName={obj.companyName} budget={obj.budget} skills={obj.skills} skillPos={processedSKillList}/>)}    
                 </div>
             </div>
         )

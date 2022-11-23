@@ -153,7 +153,6 @@ export const sendBasicInfo =  (props) => async dispatch => {
             expectedIndustry: props.value.expectedIndustry,
             expectedDepartment: props.value.expectedDepartment,
     };
-    console.log(props.value, obj);
     const res = await axios.post('/create/candidate', obj);
 }
 
@@ -237,17 +236,6 @@ export const sendSkillList = (props) => async dispatch => {
         typeOfProject: props.value.typeOfProject, 
     }
     const res = await axios.post('/update/skills', obj);
-    // if(props.value.skillList.length > 0) {
-    //     const obj = {
-    //         skillsObj: props.value.skillList
-    //     };
-    //     const res = await axios.post('/update/skills', obj);
-    // } else {
-    //     const obj = {
-    //         skillsObj: []
-    //     };
-    //     const res = await axios.post('/create/skills', obj);
-    // }
 }
 
 export const updateEducationInfo = (props) => async dispatch => {
@@ -262,6 +250,24 @@ export const updateEducationInfo = (props) => async dispatch => {
     };
     const res = await axios.put('/update/education', obj);
 };
+
+export const updateExpectation = (props) => async dispatch => {
+    const obj = {
+        name: props.value.name,
+        age: props.value.age,
+        city: props.value.city,
+        gender: props.value.gender,
+        role: props.value.role,
+        purpose: props.value.purpose,
+        expectedSalary: {
+            min: props.value.expectedSalary.min,
+            max: props.value.expectedSalary.max
+        },
+        expectedIndustry: props.value.expectedIndustry,
+        expectedDepartment: props.value.expectedDepartment,
+    };
+    const res = await axios.put('/update/expectation', obj);
+}
 
 export const updateExperienceInfo = (props) => async dispatch => {
     const obj = {

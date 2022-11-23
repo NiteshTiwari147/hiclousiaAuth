@@ -54,8 +54,28 @@ class ExpectationForm extends Component {
             minBudget: '0',
             maxBudget: '0',
             department: 'department',
-            industry: 'industry'
+            industry: 'industry',
+            isError: false
         }
+    }
+
+    isValid() {
+        const value = this.state;
+        for (var key in value) {
+            if (value.hasOwnProperty(key)) {
+                if(key === 'minBudget' || key === 'maxBudget') {
+                    if(isNaN(Number(value[key]))) {
+                        return false;
+                    }
+                }
+                if(typeof value[key] === 'string' && (value[key]==='' || value[key] == undefined || value[key] == null)) {
+                    return false;
+                } else if(typeof value[key] === 'object' && value[key].length === 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     showDepartmentSelect(params) {
@@ -69,52 +89,62 @@ class ExpectationForm extends Component {
     }
 
     handleSubmit() {
-        this.props.sendBasicInfo({          
-            value: {
-                name: this.state.name,
-                age: this.state.age,
-                city: this.state.cityName,
-                gender: this.state.gender,
-                role: this.state.role,
-                purpose: this.state.purpose,
-                expectedSalary: {
-                    min: this.state.minBudget,
-                    max: this.state.maxBudget
-                },
-                expectedIndustry: this.state.industry,
-                expectedDepartment: Array.from(dep)
-            }      
-        })
-        .then(res => {
-            this.props.fetchCandidate();
-            this.props.history.push("/talent/dashboard");
-        })
-        this.setState({
-            submitted: true
-        });
+        if(this.isValid()) {
+            this.props.sendBasicInfo({          
+                value: {
+                    name: this.state.name,
+                    age: this.state.age,
+                    city: this.state.cityName,
+                    gender: this.state.gender,
+                    role: this.state.role,
+                    purpose: this.state.purpose,
+                    expectedSalary: {
+                        min: this.state.minBudget,
+                        max: this.state.maxBudget
+                    },
+                    expectedIndustry: this.state.industry,
+                    expectedDepartment: Array.from(dep)
+                }      
+            })
+            .then(res => {
+                this.props.fetchCandidate();
+                this.props.history.push("/talent/dashboard");
+            })
+            this.setState({
+                submitted: true
+            });
+        } else {
+            this.setState({isError: true});
+        }
+        
     }
 
     handleIndustryChange(event) {
         this.setState({industry: jobCategory[event].title,
             jobRoles: jobCategory[event].roles})
+        this.setState({isError: false});
     }
 
     handleDepartmentChange(event) {
         let newPositions = this.state.selectedDepartment;
         newPositions.push(this.state.jobRoles[event])
         this.setState({selectedDepartment: newPositions})
+        this.setState({isError: false});
     }
 
     handleSalaryChange(event) {
         this.setState({budget: event.target.value})
+        this.setState({isError: false});
     }
 
     handlePositionChange(event) {
         this.setState({position: event.target.value})
+        this.setState({isError: false});
     }
 
     handlePurposeChange(event) {
         this.setState({purpose: event.target.value})
+        this.setState({isError: false});
     }
 
     handleCityChange(event) {
@@ -123,14 +153,17 @@ class ExpectationForm extends Component {
           } = event;
           const res = typeof value === 'string' ? value.split(',') : value
           this.setState({cityName: res});
+          this.setState({isError: false});
     }
 
     handleMinBudgetChange(event) {
         this.setState({minBudget: event.target.value})
+        this.setState({isError: false});
     }
 
     handleMaxBudgetChange(event) {
         this.setState({maxBudget: event.target.value})
+        this.setState({isError: false});
     }
 
     renderSalary() {
@@ -147,22 +180,6 @@ class ExpectationForm extends Component {
             <MenuItem value={'B4'}>10-15 lac</MenuItem>
             <MenuItem value={'B5'}>15+</MenuItem>
     </Select>
-    }
-
-    renderPosition() {
-        return <Select
-                id="experienceYearsSelect"
-                value={this.state.position}
-                sx={style}
-                variant="outlined"
-                onChange={this.handlePositionChange.bind(this)}
-            >
-                <MenuItem value={'L1'}>Level 1</MenuItem>
-                <MenuItem value={'L2'}>Level 2</MenuItem>
-                <MenuItem value={'L3'}>Level 3</MenuItem>
-                <MenuItem value={'L4'}>Level 4</MenuItem>
-                <MenuItem value={'L5'}>Level 5</MenuItem>
-            </Select>
     }
 
     renderRoles() {
@@ -183,38 +200,44 @@ class ExpectationForm extends Component {
         return (
             <div>
                 {!this.state.submitted && <div>   
-                    <form className="col s16">
-                        <div className='inputBoxColumn' style={{'flex-direction': 'column', 'align-items': 'flex-start'}}>
-                            <div className='formLabel_title' style={{'marginBottom': '1rem'}}>
-                                <h6>What are you looking for ?</h6>
+                    {this.state.isError && <div className='form_title'>
+                        <p style={{color: 'red'}}>Please fill correct information</p>
+                    </div>}
+                    <form className="col s16 formContent">
+                        <div className='inputBoxColumn' style={{width: '100%'}}>
+                            <div className="form_inputBox input-field" >
+                                <div className='formLabel_title' style={{'marginBottom': '1rem'}}>
+                                    <h6>What are you looking for ?</h6>
+                                </div>
+                                {this.renderRoles()}
                             </div>
-                            {this.renderRoles()}
+                            <div className="form_inputBox input-field">
+                                <div className='formLabel_title' style={{'marginBottom': '1rem'}}>
+                                    <h6>Please prefred location</h6>
+                                </div>
+                                <Select
+                                    labelId="demo-multiple-checkbox-label"
+                                    id="demo-multiple-checkbox"
+                                    multiple
+                                    value={this.state.cityName}
+                                    onChange={this.handleCityChange.bind(this)}
+                                    input={<OutlinedInput label="Tag" />}
+                                    renderValue={(selected) => selected.join(', ')}
+                                    MenuProps={MenuProps}
+                                    sx={style}
+                                    >
+                                    {cities.map((name) => (
+                                        <MenuItem key={name} value={name}>
+                                        <Checkbox checked={this.state.cityName.indexOf(name) > -1} />
+                                        <ListItemText primary={name} />
+                                        </MenuItem>
+                                    ))}
+                                </Select>                   
+                                </div>                                
                         </div>
-                        <div className="form_inputBox input-field" style={{margin: '0rem'}}>
-                            <div className='formLabel_title'>
-                                Please prefred location
-                            </div>
-                            <Select
-                                labelId="demo-multiple-checkbox-label"
-                                id="demo-multiple-checkbox"
-                                multiple
-                                value={this.state.cityName}
-                                onChange={this.handleCityChange.bind(this)}
-                                input={<OutlinedInput label="Tag" />}
-                                renderValue={(selected) => selected.join(', ')}
-                                MenuProps={MenuProps}
-                                >
-                                {cities.map((name) => (
-                                    <MenuItem key={name} value={name}>
-                                    <Checkbox checked={this.state.cityName.indexOf(name) > -1} />
-                                    <ListItemText primary={name} />
-                                    </MenuItem>
-                                ))}
-                            </Select>                   
-                    </div>
-                        <div className='inputBoxColumn' style={{'flex-direction': 'column', 'align-items': 'flex-start'}}>
+                        <div className='inputBoxColumn' style={{'flex-direction': 'column', 'align-items': 'flex-start', width: '95%'}}>
                             <h6>Select desired industry and role</h6>
-                            <div className='industryAndDepartmentSelect' style={{marginLeft: '0rem'}}>
+                            <div className='industryAndDepartmentSelect' style={{marginLeft: '0rem', width: '100%'}}>
                                 <Autocomplete
                                     id="free-solo-demo"
                                     fullWidth
@@ -241,7 +264,7 @@ class ExpectationForm extends Component {
                                 />
                             </div>
                         </div>
-                        {this.state.purpose !='upgrade' && <div className='inputBoxColumn' style={{marginTop: '1rem'}}>
+                        {this.state.purpose !='upgrade' && <div className='inputBoxColumn' style={{'flex-direction': 'column', 'align-items': 'flex-start', width: '95%'}}>
                             <div className='formLabel_title' style={{'marginBottom': '1rem'}}>
                                 Budget :
                             </div>

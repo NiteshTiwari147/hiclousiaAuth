@@ -278,6 +278,54 @@ module.exports = app => {
         }
     })
 
+    app.put('/update/expectation',checkAuthenticated, async function (req, res) {
+        const talentReq = mongoose.model('talentReq');
+        const basicInfo = mongoose.model('basicInfo');
+        try {
+            const { name,
+                age, 
+                city,
+                gender,
+                role,
+                purpose,
+                expectedPosition,
+                expectedSalary,
+                expectedIndustry,
+                expectedDepartment } = req.body;
+            const { hiclousiaID, email } = req.user;
+            console.log(req.body, req.user);
+            var newValues = { $set: {
+                hiclousiaID, 
+                email, 
+                name,
+                age, 
+                city,
+                purpose,
+                gender,
+                role,
+                expectedPosition,
+                expectedSalary,
+                expectedIndustry,
+                expectedDepartment
+            }}
+            const resp = await basicInfo.updateOne({hiclousiaID: hiclousiaID}, newValues);
+            const talentReqData = await talentReq.findOne({email: email});
+            talentReqData.cities = city;
+            talentReqData.budget.min = expectedSalary.min;
+            talentReqData.budget.max = expectedSalary.max;
+            talentReqData.expectedIndustry = expectedIndustry;
+            talentReqData.expectedDepartment = expectedDepartment;
+            const newTalenReq = { $set: talentReqData };
+            await talentReq.updateOne({hiclousiaID: hiclousiaID}, newTalenReq);
+            res.send(resp);
+            res.send({status: 200});
+        } catch(err) {
+            console.log("error occured while update ",err);
+            res.send({status: 304})
+        }
+
+    })
+
     app.put('/update/education', checkAuthenticated, async function (req, res) {
         const education =  mongoose.model('education');
         try {

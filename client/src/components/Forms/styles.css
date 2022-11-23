@@ -106,7 +106,6 @@
 
 .industryAndDepartmentSelect {
     display: flex;
-    width: 40rem;
     height: fit-content;
     margin: 1rem;
 }
