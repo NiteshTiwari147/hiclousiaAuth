@@ -156,6 +156,7 @@ module.exports = app => {
           email: email,
           companyName: companyName,
         })
+        const postedDate = Date.now();
         const existingJob = await jobPost.findOne({jobID: jobID})
         while(existingJob) {
           jobID = customId({
@@ -171,6 +172,7 @@ module.exports = app => {
           companyName,
           experience,
           description,
+          postedDate,
           industry,
           department,
           skills,

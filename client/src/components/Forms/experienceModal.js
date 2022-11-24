@@ -46,8 +46,8 @@ class ExperienceModal extends Component {
             desc: this.props.data ? this.props.data.desc : '',
             start_year: this.props.data ? new Date(this.props.data.start_data) : '',
             skill: '',
-            startDate: '',
-            endDate: '',
+            startDate: Date.now(),
+            endDate: Date.now(),
             duration: {},
             childProp: {},
             skills:  this.props.data ? this.props.data.skills : [],
@@ -56,12 +56,27 @@ class ExperienceModal extends Component {
             current: true, 
             industryExperienceYears: 0,
             industryExperienceMonths: 0,
-            industry: this.props.data ? this.props.data.industry :'industry',
-            department: this.props.data ? this.props.data.department :'department',
+            industry: this.props.data ? this.props.data.industry :'',
+            department: this.props.data ? this.props.data.department :'',
             typeOfExperience: 'fullTime',
             alertModalOpen:false,
-            projectModalOpen: false
+            projectModalOpen: false,
+            isError: false
         }
+    }
+
+    isValid(obj) {
+        const {value} = obj;
+        for (var key in value) {
+            if (value.hasOwnProperty(key)) {
+                if(typeof value[key] === 'string' && (value[key]==='' || value[key] == undefined || value[key] == null)) {
+                    return false;
+                } else if(typeof value[key] === 'object' && value[key].length === 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     handleProjectModalOpen() {
@@ -114,6 +129,7 @@ class ExperienceModal extends Component {
     handleAlertModalOpen() {
         this.setState({alertModalOpen: true})
     }
+
     handleAlertModalClose() {
         this.setState({alertModalOpen: false})
         this.setState({
@@ -136,14 +152,6 @@ class ExperienceModal extends Component {
         this.props.close();
     }
 
-    handleIndustryExperienceYearsChange(event) {
-        this.setState({industryExperienceYears: event.target.value})
-    }
-
-    handleIndustryExperienceMonthsChange(event) {
-        this.setState({industryExperienceMonths: event.target.value})
-    }
-
     renderExperienceYears() {
         const years = new Array(50).fill(0);
         return years.map( (year,index) => <MenuItem value={index}>{index}</MenuItem>)
@@ -161,51 +169,11 @@ class ExperienceModal extends Component {
         coreSkills.push(skill);
         this.setState({skill: ''})
         this.setState({skills: coreSkills});
-
+        this.setState({isError: false});
     }
 
     submitExperience() {
         if(this.props.edit) {
-            this.props.updateExperienceInfo({
-                value: {
-                    id: this.state.id,
-                    company: this.state.organization,
-                    designation: this.state.position,
-                    typeOfExperience: this.state.typeOfExperience,
-                    desc: this.state.desc,
-                    isCurrent: this.state.current,
-                    industryExperience: {
-                        yr: this.state.industryExperienceYears,
-                        mo: this.state.industryExperienceMonths
-                    },
-                    skills: this.state.skills,
-                    industry: this.state.industry,
-                    department: this.state.department
-                }     
-            })
-            .then(res => {
-                this.setState({
-                organization: '',
-                id: '',
-                position: '',
-                desc: '',
-                start_year: '',
-                skill: '',
-                skills:  [],
-                end_year: '',
-                jobRoles: [],
-                current: false, 
-                industryExperienceYears: 0,
-                industryExperienceMonths: 0,
-                industry: 'industry',
-                department: 'department',
-                typeOfExperience: 'fullTime'})
-                this.props.fetchExperience();
-                this.props.close();
-            });
-        }
-        else {
-            this.handleAlertModalOpen();
             const valueObj = {
                 value: {
                     company: this.state.organization,
@@ -219,7 +187,65 @@ class ExperienceModal extends Component {
                     department: this.state.department
                 }
             }
-            this.setState({childProp: valueObj});
+            if(this.isValid(valueObj)) {
+                this.props.updateExperienceInfo({
+                    value: {
+                        id: this.state.id,
+                        company: this.state.organization,
+                        designation: this.state.position,
+                        typeOfExperience: this.state.typeOfExperience,
+                        isCurrent: this.state.current,
+                        duration: this.state.duration,
+                        startDate: this.state.startDate,
+                        endDate: this.state.endDate,
+                        industry: this.state.industry,
+                        department: this.state.department
+                    }     
+                })
+                .then(res => {
+                    this.setState({
+                    organization: '',
+                    id: '',
+                    position: '',
+                    desc: '',
+                    start_year: '',
+                    skill: '',
+                    skills:  [],
+                    end_year: '',
+                    jobRoles: [],
+                    current: false, 
+                    industryExperienceYears: 0,
+                    industryExperienceMonths: 0,
+                    industry: 'industry',
+                    department: 'department',
+                    typeOfExperience: 'fullTime'})
+                    this.props.fetchExperience();
+                    this.props.close();
+                });
+            } else {
+                this.setState({isError: true});
+            }   
+        }
+        else {
+            const valueObj = {
+                value: {
+                    company: this.state.organization,
+                    designation: this.state.position,
+                    typeOfExperience: this.state.typeOfExperience,
+                    isCurrent: this.state.current,
+                    duration: this.state.duration,
+                    startDate: this.state.startDate,
+                    endDate: this.state.endDate,
+                    industry: this.state.industry,
+                    department: this.state.department
+                }
+            }
+            if(this.isValid(valueObj)) {
+                this.handleAlertModalOpen();
+                this.setState({childProp: valueObj});
+            } else {
+                this.setState({isError: true});
+            }       
         }
         
     }
@@ -230,29 +256,33 @@ class ExperienceModal extends Component {
         const date1 = dayjs(this.state.endDate);
         const date2 = dayjs(this.state.startDate);
         this.setState({duration: durationCalculator(date1.diff(date2))});
-        console.log(this.state.endDate, this.state.startDate, durationCalculator(date1.diff(date2)));
     }
 
     handleStartDateChange(value) {
         this.setState({startDate: value});
+        this.setState({isError: false});
     }
 
     handleEndDateChange(value) {
         this.setState({endDate: value});
         setTimeout(() =>this.calculateExpDuration(), 2000);
+        this.setState({isError: false});
     }
 
     handleExperienceTypeChange(event) {
         this.setState({typeOfExperience: event.target.value})
+        this.setState({isError: false});
     }
 
     handleIndustryChange(event) {
         this.setState({industry: jobCategory[event].title,
             jobRoles: jobCategory[event].roles})
+        this.setState({isError: false});
     }
 
     handleDepartmentChange(event) {
         this.setState({department: this.state.jobRoles[event]})
+        this.setState({isError: false});
     }
     
     render() {  
@@ -265,9 +295,12 @@ class ExperienceModal extends Component {
             >
               <Box sx={style}>
                 <div className='form_container'>
-                  <div className='form_title'>
-                      <h5>Add Experience data</h5>
-                  </div>
+                    <div className='form_title'>
+                        <h5>Add Experience data</h5>
+                    </div>
+                    {this.state.isError && <div className='form_title'>
+                        <p style={{color: 'red'}}>Please fill correct information</p>
+                    </div>}
                     <form className="col s16 formContent">
                         <div className='inputBoxColumn' style={{width: '80%'}}>
                             <div className="form_inputBox input-field">

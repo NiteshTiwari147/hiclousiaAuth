@@ -38,8 +38,24 @@ const res = new Set();
 class ProjectModal extends Component {
     constructor(props) {
       super(props);
-      this.state = { fromExp: false,tittle: '', desc: '', startDate: '',duration: {}, endDate: '',
-      industry: 'industry', department: 'department', jobRoles: [],  typeOfProject: 'industry', selectedSkill: []}
+      this.state = { fromExp: false,tittle: '', desc: '', startDate: Date.now(),duration: {}, endDate: Date.now(),
+      industry: '', department: '', jobRoles: [],  typeOfProject: 'industry', selectedSkill: [], isError: false}
+    }
+
+    isValid(obj) {
+        const {value} = obj;
+        for (var key in value) {
+            if (value.hasOwnProperty(key)) {
+                if(typeof value[key] === 'string' && (value[key]==='' || value[key] == undefined || value[key] == null)) {
+                    console.log(key, value[key]);
+                    return false;
+                } else if(typeof value[key] === 'object' && value[key].length === 0) {
+                    console.log(key, value[key]);
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     calculateExpDuration() {
@@ -48,7 +64,6 @@ class ProjectModal extends Component {
         const date1 = dayjs(this.state.endDate);
         const date2 = dayjs(this.state.startDate);
         this.setState({duration: durationCalculator(date1.diff(date2))});
-        console.log(this.state.endDate, this.state.startDate, durationCalculator(date1.diff(date2)));
     }
 
     handleStartDateChange(value) {
@@ -89,7 +104,7 @@ class ProjectModal extends Component {
     }
 
     addMoreProject() {
-        this.props.sendProjectInfo({          
+        const obj = {
             value: {
                 title: this.state.tittle,
                 desc: this.state.desc,
@@ -100,9 +115,11 @@ class ProjectModal extends Component {
                 industry: this.state.industry,
                 selectedSkill: Array.from(res),
                 department: this.state.department
-            }      
-        })
-        .then( _ => {
+            }
+        }
+        if(this.isValid(obj)) {
+            this.props.sendProjectInfo(obj)
+            .then( _ => {
             this.props.sendSkillList({
                 value: {
                     skillList: Array.from(res),
@@ -110,18 +127,20 @@ class ProjectModal extends Component {
                     duration: this.state.duration,
                 }
             })
-        })
-        .then(res => {
-            this.props.fetchSkillSet();
-            this.setState({ tittle: '', desc: '', startDate: '',duration: {}, endDate: '',
-            jobRoles: [], selectedSkill: []})
-            this.props.fetchProject();
-            this.props.addMore();
-        })
+            })
+            .then( _ => {
+                this.props.fetchSkillSet();
+                this.setState({ tittle: '', desc: '', startDate: Date.now(),duration: {}, endDate: Date.now(),
+                jobRoles: [], selectedSkill: [], isError: false})
+                this.props.fetchProject();
+                this.props.addMore();
+            })
+        }
+        
     }
 
     submitProject() {
-        this.props.sendProjectInfo({          
+        const obj = {
             value: {
                 title: this.state.tittle,
                 desc: this.state.desc,
@@ -132,27 +151,32 @@ class ProjectModal extends Component {
                 industry: this.state.industry,
                 selectedSkill: Array.from(res),
                 department: this.state.department
-            }      
-        })
-        .then( () => {
-            this.props.sendSkillList({
-                value: {
-                    skillList: Array.from(res),
-                    typeOfProject: this.state.typeOfProject,
-                    duration: this.state.duration,
-                }
-            });
-        })
-        .then(res => {
-            this.props.fetchSkillSet();
-            this.setState({ tittle: '', desc: '', startDate: '',duration: {}, endDate: '',
-            industry: 'industry', department: 'department', jobRoles: [],  typeOfProject: 'industry', selectedSkill: []})
-            if(this.state.fromExp) {
-                this.props.closeParent();
             }
-            this.props.close();
-            this.props.fetchProject();
-        })
+        }
+        if(this.isValid(obj)) {
+            this.props.sendProjectInfo(obj)
+            .then( () => {
+                this.props.sendSkillList({
+                    value: {
+                        skillList: Array.from(res),
+                        typeOfProject: this.state.typeOfProject,
+                        duration: this.state.duration,
+                    }
+                });
+            })
+            .then(res => {
+                this.props.fetchSkillSet();
+                this.setState({ tittle: '', desc: '', startDate: '',duration: {}, endDate: '',
+                industry: 'industry', department: 'department', jobRoles: [],  typeOfProject: 'industry', selectedSkill: []})
+                if(this.state.fromExp) {
+                    this.props.closeParent();
+                }
+                this.props.close();
+                this.props.fetchProject();
+            })
+        } else {
+            this.setState({isError: true})
+        }
     }
 
     handleProjectTypeChange(event) {
@@ -313,6 +337,9 @@ class ProjectModal extends Component {
                                 Thats all
                             </Button>
                         </div>
+                        {this.state.isError && <div className='form_title'>
+                            <p style={{color: 'red'}}>Please fill correct information</p>
+                        </div>}
                     </form>
                 </div>
               </div>

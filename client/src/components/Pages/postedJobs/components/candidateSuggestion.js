@@ -40,7 +40,12 @@ class CandidateSuggestion extends Component {
     renderDepartment(expectedDepartment) {
         if(this.props.postedJobDetail && expectedDepartment) {
             const { department } = this.props.postedJobDetail;
-            return department.map(el => expectedDepartment.find(val => el === val));
+            const found = department.filter((el) => {
+                return expectedDepartment.includes(el)
+            });
+            if(found.length>0) {
+                return found[0];
+            }
         }
         return 'N.A'
     }

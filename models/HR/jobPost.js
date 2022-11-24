@@ -8,6 +8,7 @@ const JobPost = new Schema({
     companyName: String,
     description: String,
     industry: String,
+    postedDate: String,
     department: [String],
     skills: [String],
     cities: [String],

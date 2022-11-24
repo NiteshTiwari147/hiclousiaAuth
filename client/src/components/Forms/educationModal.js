@@ -32,84 +32,87 @@ class EducationModal extends Component {
     super(props);
 
     this.state = { errors: [], 
-      institute: this.props.data ? this.props.data.institute : 'select' ,
-      id: this.props.data ? this.props.data.id : '',
+      institute: this.props.data ? this.props.data.institute : 'iit' ,
       instituteName: '',
-      course: this.props.data ? this.props.data.course : 'select', 
+      course: this.props.data ? this.props.data.course : 'bachelor', 
       field_of_course: this.props.data ? this.props.data.field_of_course : '', 
-      start_year: this.props.data ? new Date(this.props.data.start_year) : '',  
-      end_year: this.props.data ? new Date(this.props.data.end_year) : '',  
+      start_year: this.props.data ? this.props.data.start_year : Date.now(),  
+      end_year: this.props.data ? this.props.data.end_year : Date.now(),  
       grade: this.props.data ? this.props.data.grade : '',  
-      industry: this.props.data ? this.props.data.industry : ''
+      industry: this.props.data ? this.props.data.industry : '',
+      isError: false
     }
   }
 
-  addEducation() {
-    this.props.sendEducationInfo({          
-        value: {
-            institute: this.state.institute,
-            course: this.state.course,
-            field_of_course: this.state.field_of_course,
-            startDate: this.state.start_year,
-            endDate: this.state.end_year,
-            grade: this.state.grade
-        }      
-    })
-    .then(res => window.location.reload());
+  isValid(obj) {
+    const {value} = obj;
+    for (var key in value) {
+        if (value.hasOwnProperty(key)) {
+            if(typeof value[key] === 'string' && (value[key]==='' || value[key] == undefined || value[key] == null)) {
+                return false;
+            } else if(typeof value[key] === 'object' && value[key].length === 0) { 
+                return false;
+            }
+        }
+    }
+    return true;
   }
+
   submitEducation() {
+    const obj = {          
+      value: {
+          id: this.state.id,
+          institute: this.state.institute,
+          course: this.state.course,
+          field_of_course: this.state.field_of_course,
+          startDate: this.state.start_year,
+          endDate: this.state.end_year,
+          grade: this.state.grade
+      }      
+    }
     if(this.props.edit) {
-      this.props.updateEducationInfo({          
-        value: {
-            id: this.state.id,
-            institute: this.state.institute,
-            course: this.state.course,
-            field_of_course: this.state.field_of_course,
-            startDate: this.state.start_year,
-            endDate: this.state.end_year,
-            grade: this.state.grade
-        }      
-      })
-      .then(res => {
-        this.props.fetchEducation();
-        this.props.close();
-      });
+      if(this.isValid(obj)) {
+        this.props.updateEducationInfo(obj)
+        .then(res => {
+          this.props.fetchEducation();
+          this.props.close();
+        });
+      } else {
+        this.setState({isError: true})
+      }
     }
     else {
-      this.props.sendEducationInfo({          
-        value: {
-            institute: this.state.institute,
-            course: this.state.course,
-            field_of_course: this.state.field_of_course,
-            startDate: this.state.start_year,
-            endDate: this.state.end_year,
-            grade: this.state.grade
-        }      
-      })
-      .then(res => {
-        this.setState({
-          institute: 'select' ,
-          id: '',
-          instituteName: '',
-          course: 'select', 
-          field_of_course: '', 
-          start_year: '',  
-          end_year: '',  
-          grade: '',  
-          industry: ''
-        })
-        this.props.fetchEducation();
-        this.props.close();
-      });
+      if(this.isValid(obj)) {
+        this.props.sendEducationInfo(obj)
+        .then(res => {
+          this.setState({
+            institute: 'iit' ,
+            id: '',
+            instituteName: '',
+            course: 'bachelor', 
+            field_of_course: '', 
+            start_year: '',  
+            end_year: '',  
+            grade: '',  
+            industry: ''
+          })
+          this.props.fetchEducation();
+          this.props.close();
+        });
+      } else {
+        this.setState({isError: true})
+      }
     }
   }
 
   handleUniversityTypeChange(event) {
     this.setState({institute: event.target.value})
+    this.setState({isError: false})
   }
 
   handleDegreeTypeChange(event) {
     this.setState({course: event.target.value})
+    this.setState({isError: false})
   }
     render() {
       return (
@@ -125,6 +128,9 @@ class EducationModal extends Component {
                 <div className='form_title'>
                     <h5>Fill Education Information</h5>
                 </div>
+                {this.state.isError && <div className='form_title'>
+                    <p style={{color: 'red'}}>Please fill correct information</p>
+                </div>}
                 <form className="col s16 formContent">
                       <div className='inputBoxColumn'>
                         <div className="form_inputBox input-field">
@@ -139,7 +145,6 @@ class EducationModal extends Component {
                                 variant="outlined"
                                 onChange={this.handleUniversityTypeChange.bind(this)}
                                 >
-                                <MenuItem value={'select'}>Select university</MenuItem>
                                 <MenuItem value={'iit'}>IITs</MenuItem>
                                 <MenuItem value={'nit'}>NITs</MenuItem>
                                 <MenuItem value={'central'}>Central university</MenuItem>
@@ -160,7 +165,6 @@ class EducationModal extends Component {
                               variant="outlined"
                               onChange={this.handleDegreeTypeChange.bind(this)}
                               >
-                                <MenuItem value={'select'}>Select Degree type</MenuItem>
                                 <MenuItem value={'doctorate'}>Doctrate</MenuItem>
                                 <MenuItem value={'masters'}>Masters</MenuItem>
                                 <MenuItem value={'bachelor'}>Bachelor</MenuItem>
@@ -179,7 +183,10 @@ class EducationModal extends Component {
                                 <input 
                                     placeholder="Enter Field of course"
                                     value={this.state.field_of_course}
-                                    onChange={ e => this.setState({ field_of_course: e.target.value })}
+                                    onChange={ e => {
+                                      this.setState({ field_of_course: e.target.value })
+                                      this.setState({isError: false})
+                                    }}
                                 />    
                             </div>                    
                         </div>
@@ -191,7 +198,10 @@ class EducationModal extends Component {
                                 <input 
                                     placeholder="Enter Grade"
                                     value={this.state.grade}
-                                    onChange={ e => this.setState({ grade: e.target.value })}
+                                    onChange={ e => {
+                                      this.setState({ grade: e.target.value })
+                                      this.setState({isError: false})
+                                  }}
                                 />    
                             </div>                    
                         </div>
@@ -212,7 +222,7 @@ class EducationModal extends Component {
                                 Year of ending
                             </div>
                             <div className='formInput'>
-                                <Datepicker selected={this.state.end_year} onChange={(date) => this.setState({ end_year: date})} 
+                                <Datepicker selected={this.state.end_year} onChange={(date) => {this.setState({ end_year: date})}} 
                                     dateFormat='dd/MM/yyyy' isClearable showYearDropdown scrollableYearDropdown placeholderText="DD/MM/YYYY"
                                 />   
                             </div>                    
@@ -226,7 +236,9 @@ class EducationModal extends Component {
                             <input 
                                 placeholder="Enter institure name"
                                 value={this.state.instituteName}
-                                onChange={ e => this.setState({ instituteName: e.target.instituteName })}
+                                onChange={ e => {
+                                  this.setState({isError: false})
+                                  this.setState({ instituteName: e.target.instituteName })}}
                             />    
                         </div> 
                         </div>

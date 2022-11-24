@@ -63,8 +63,25 @@ class JobPostingForm extends Component {
             cityName: [],
             minExp: '1',
             maxExp: '2',
-            selectedSkill: []
+            selectedSkill: [],
+            isError: false
         }
+    }
+
+    isValid(obj) {
+        const {value} = obj;
+        for (var key in value) {
+            if (value.hasOwnProperty(key)) {
+                if(typeof value[key] === 'string' && (value[key]==='' || value[key] == undefined || value[key] == null)) {
+                    console.log(key)
+                    return false;
+                } else if(typeof value[key] === 'object' && value[key].length === 0) {
+                    console.log(key)
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     showDepartmentSelect(params) {
@@ -81,6 +98,7 @@ class JobPostingForm extends Component {
         let newSkillList = this.state.selectedSkill;
         newSkillList.push(skills[event]);
         this.setState({selectedSkill: newSkillList});
+        this.setState({isError: false})
     }
 
     showSelect(params) {
@@ -99,37 +117,44 @@ class JobPostingForm extends Component {
         } = event;
         const res = typeof value === 'string' ? value.split(',') : value
         this.setState({cityName: res});
+        this.setState({isError: false})
     };
 
     handleMinExpChange(event) {
         this.setState({minExp: event.target.value})
+        this.setState({isError: false})
     }
 
     handleMaxExpChange(event) {
         this.setState({maxExp: event.target.value})
+        this.setState({isError: false})
     }
 
     handleMinBudgetChange(event) {
         this.setState({minBudget: event.target.value})
+        this.setState({isError: false})
     }
 
     handleMaxBudgetChange(event) {
         this.setState({maxBudget: event.target.value})
+        this.setState({isError: false})
     }
 
     handleIndustryChange(event) {
         this.setState({industry: jobCategory[event].title,
             jobRoles: jobCategory[event].roles})
+        this.setState({isError: false})
     }
 
     handleDepartmentChange(event) {
         let newPositions = this.state.selectedDepartment;
         newPositions.push(this.state.jobRoles[event])
         this.setState({selectedDepartment: newPositions})
+        this.setState({isError: false})
     }
 
     handlePostJob() {
-        this.props.sendJobPostInfo({
+        const obj = {
             value: {
                 company: this.state.organization,
                 minExp: this.state.minExp,
@@ -142,27 +167,34 @@ class JobPostingForm extends Component {
                 minBudget: this.state.minBudget,
                 maxBudget: this.state.maxBudget
             }
-        })
-        .then(res => {
-            this.props.fetchJobs();
-        })
-        .then(res => { 
-            this.setState({
-                organization: '',
-                designation: '',
-                desc: '',
-                industry: '',
-                selectedDepartment: [],
-                jobRoles: [],
-                minBudget: '4',
-                maxBudget: '10',
-                cityName: [],
-                minExp: '1',
-                maxExp: '2',
-                selectedSkill: []
+        }
+        if(this.isValid(obj)) {
+            this.props.sendJobPostInfo(obj)
+            .then(res => {
+                this.props.fetchJobs();
             })
-            this.props.close();
-        })
+            .then(res => { 
+                this.setState({
+                    organization: '',
+                    designation: '',
+                    desc: '',
+                    industry: '',
+                    selectedDepartment: [],
+                    jobRoles: [],
+                    minBudget: '4',
+                    maxBudget: '10',
+                    cityName: [],
+                    minExp: '1',
+                    maxExp: '2',
+                    selectedSkill: [],
+                    isError: false
+                })
+                this.props.close();
+            })
+        } else {
+            this.setState({isError: true})
+        }
+        
     }
 
     render() {
@@ -185,7 +217,7 @@ class JobPostingForm extends Component {
                                     <input 
                                         placeholder="Enter organization name"
                                         value={this.state.organization}
-                                        onChange={ e => this.setState({ organization: e.target.value })}
+                                        onChange={ e => this.setState({ organization: e.target.value, isError: false })}
                                     />    
                                 </div>                    
                             </div>
@@ -298,13 +330,16 @@ class JobPostingForm extends Component {
                                         fullWidth  
                                         multiline
                                         rows={4}
-                                        onChange={ e => this.setState({ desc: e.target.value })}
+                                        onChange={ e => this.setState({ desc: e.target.value, isError: false })}
                                         defaultValue={this.state.desc}
                                     />
                                 </div>                         
                             </div>
                         </div>
                         <Button color="primary" variant="contained" onClick={this.handlePostJob.bind(this)}>Post Job</Button>
+                        {this.state.isError && <div className='form_title'>
+                            <p style={{color: 'red'}}>Please fill correct information</p>
+                        </div>}
                     </form>
                 </div>
               </Box>
