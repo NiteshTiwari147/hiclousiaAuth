@@ -70,12 +70,8 @@
 }
 
 .projectInfoContainer {
-    width: 15rem;
+    width: 17rem;
     height: 4rem;
-    /* color: #1072EB;
-    font-size: larger;
-    font-weight: 1000;
-    font-family: system-ui; */
     margin-left: 1rem;
     margin-bottom: 1rem;
 }
@@ -88,8 +84,13 @@
     overflow: hidden;
     font-weight: 1000;
     font-family: system-ui;
-    margin-left: 1rem;
     margin-bottom: 1rem;
+}
+
+.projectHeaderContainer {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
 }
 
 .skillsContainer {

@@ -1,11 +1,9 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 
-import EducationModal from "../../../../Forms/educationModal";
 import ProjectModal from "../../../../Forms/projectModal";
-import ExperienceModal from "../../../../Forms/experienceModal";
-import SkillFormModal from "../../../../Forms/SkillFormModal";
 
 import './styles.css';
 
@@ -55,16 +53,25 @@ class FormBar extends Component {
     }
 
     render() {
-        return(
-            <div className="pageBarContainer shadow">
-                <div style={{fontSize: '20px',color: '#1072EB', fontWeight: 'bold'}}>Projects :</div>
-                <ProjectModal addMore={this.handleAddMoreProject.bind(this)} open={this.state.projectModalOpen} close={this.handleProjectModalClose.bind(this)} />
-                <Button  style={{marginBottom: '0.5rem'}} variant="contained" color='success' size='small' onClick={this.handleProjectModalOpen.bind(this)}>
-                    <AddIcon  />
-                </Button>   
-            </div>
-        )
+        const { skillSet } = this.props;
+        if(skillSet) {
+            return(
+                <div className="pageBarContainer shadow">
+                    <div style={{fontSize: '20px',color: '#1072EB', fontWeight: 'bold'}}>Projects :</div>
+                    <ProjectModal addMore={this.handleAddMoreProject.bind(this)} open={this.state.projectModalOpen} close={this.handleProjectModalClose.bind(this)} skillData={this.props.skillSet ? this.props.skillSet.processedSKillList : []}/>
+                    <Button  style={{marginBottom: '0.5rem'}} variant="contained" color='success' size='small' onClick={this.handleProjectModalOpen.bind(this)}>
+                        <AddIcon  />
+                    </Button>   
+                </div>
+            )  
+        } else {
+            return <div className="pageBarContainer shadow">Please add skills</div>
+        }
     }
 }
 
-export default FormBar;
+function mapStateToProps({auth, candidate, skillSet}) {
+    return { auth, candidate, skillSet }
+}
+
+export default connect(mapStateToProps)(FormBar);

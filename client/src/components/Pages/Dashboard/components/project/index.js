@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import DeleteIcon from '@mui/icons-material/Delete';
+
+import * as actions from '../../../../../actions'
 
 import ProjectDetail from './sub-component/projectDetailModal';
 
@@ -21,6 +25,15 @@ class Project extends Component {
 
     handleProjectDetailModalClose() {
         this.setState({projectDetailModalOpen: false})
+    }
+
+    handleDelete(id) {
+        this.props.deleteProject({
+            value: {
+                id: id
+            }
+        })
+        .then(() => this.props.fetchProject())
     }
 
     renderSkills(skills) {
@@ -46,13 +59,16 @@ class Project extends Component {
             </div>
         }
 
-        const { title, skills, typeOfProject, industry, department } = this.props.data;
+        const { title, skills, typeOfProject, industry, department, _id } = this.props.data;
         const idx = this.props.idx % 10;
         return(
             <div className='projectContainer shadow'>
                 <img className='projectImage' src={projectImages[idx].url} />
                 <div className='projectInfoContainer'>
-                    <div className='projectTitle'>{title}</div>
+                    <div className='projectHeaderContainer'>
+                        <div className='projectTitle'>{title}</div>
+                        <Button size='small' color='error' onClick={this.handleDelete.bind(this, _id)}><DeleteIcon size='small' /></Button>
+                    </div>
                     { skills && <div style={{'fontSize': 'medium'}}>
                         Skills: {skills.length}
                     </div>}
@@ -106,4 +122,4 @@ class Project extends Component {
     }
 }
 
-export default Project;
+export default connect(null, actions)(Project);

@@ -6,7 +6,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 
 export default function MaterialUIPickers(props) {
-  const [value, setValue] = React.useState(Date.now);
+  const [value, setValue] = React.useState(props.value);
 
   const handleChange = (newValue) => {
     setValue(newValue);

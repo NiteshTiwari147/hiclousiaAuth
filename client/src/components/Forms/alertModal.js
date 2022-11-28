@@ -91,7 +91,6 @@ class AlertModal extends Component {
         this.setState({showSkillList: true})
     }
     render () {
-        console.log('alert', this.props.data.value, res);
         return (
             <div>
                 <Modal

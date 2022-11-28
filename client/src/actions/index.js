@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FETCH_USER,FETCH_CANDIDATE,FETCH_EDUCATION,FETCH_EXPERIENCE,FETCH_PROJECT, FETCH_SKILLSET, FETCH_HR, FETCH_JOBS, FETCH_POSTEDJOB, SUGGESTED_TALENT, TALENT_DETAILS, FETCH_RELEVANT_JOBS } from './types';
+import { FETCH_USER,FETCH_CANDIDATE,FETCH_EDUCATION,FETCH_EXPERIENCE,FETCH_PROJECT, FETCH_SKILLSET, FETCH_HR, FETCH_JOBS, FETCH_POSTEDJOB, SUGGESTED_TALENT, TALENT_DETAILS, FETCH_RELEVANT_JOBS, TOTAL_EXP } from './types';
 
 export const fetchUser = () => async dispatch => {
     const res = await axios.get('/api/current_user');
@@ -103,9 +103,14 @@ export const fetchSkillSet = () => async dispatch => {
 
 export const fetchExperience = () => async dispatch => {
     const res = await axios.get('/fetch/Experience');
+    console.log(res);
     dispatch({
         type: FETCH_EXPERIENCE,
-        payload: res.data
+        payload: res.data.expData.experiences
+    });
+    dispatch({
+        type: TOTAL_EXP,
+        payload: res.data.expData.totalExp
     });
 }
 
@@ -203,16 +208,16 @@ export const sendJobPostInfo = (props) => async dispatch => {
 
 export const sendExperienceInfo = (props) => async dispatch => {
     const obj = {
-        company: props.value.expFormData.company,
-        department: props.value.expFormData.department,
-        designation: props.value.expFormData.designation,
-        duration: props.value.expFormData.duration,
-        endDate:  props.value.expFormData.endDate,
-        industry: props.value.expFormData.industry,   
-        isCurrent: props.value.expFormData.isCurrent,
-        startDate: props.value.expFormData.startDate,
-        skills:  Array.from(props.value.res),
-        typeOfExperience: props.value.expFormData.typeOfExperience,   
+        company: props.value.company,
+        department: props.value.department,
+        designation: props.value.designation,
+        duration: props.value.duration,
+        endDate:  props.value.endDate,
+        industry: props.value.industry,   
+        isCurrent: props.value.isCurrent,
+        startDate: props.value.startDate,
+        skills:  props.value.skills,
+        typeOfExperience: props.value.typeOfExperience,   
     };
     const res = await axios.post('/create/experience', obj);
 }
@@ -289,6 +294,14 @@ export const deleteEducation = (props) => async dispatch => {
         id: props.value.id,
     }
     const res = await axios.put('/delete/education', obj);
+};
+
+export const deleteProject = (props) => async dispatch => {
+    const obj = {
+        id: props.value.id,
+    }
+    console.log(obj)
+    const res = await axios.put('/delete/project', obj);
 };
 
 export const deleteExperience = (props) => async dispatch => {

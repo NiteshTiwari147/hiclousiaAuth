@@ -15,8 +15,8 @@ const TalentReqSchema = new Schema({
     experience: {
         expList: [Object],
         totalExp: {
-            mon: String,
-            yr: String
+            mon: Number,
+            yr: Number
         }
     },
     skillScore: Number,

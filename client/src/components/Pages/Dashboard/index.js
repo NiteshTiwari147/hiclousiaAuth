@@ -27,15 +27,19 @@ class Dashboard extends Component {
     }
 
     renderATS() {
-        const {project, skillSet, candidate, education, experience } = this.props
-        const {yr, mo} = this.calculateExperience(this.props.experience ? this.props.experience : [])
-        return <ATS projectLen={project ? project.length : 0} skills={skillSet && skillSet.coreSkills? this.props.skillSet.coreSkills.length : 0} experienceYears={yr} experienceMonths={mo} />
+        const {project, skillSet, candidate, education, experience, totalExp } = this.props;
+        var year=0;
+        var month=0;
+        if(totalExp) {
+            year = totalExp.year;
+            month = totalExp.month;
+        } 
+        return <ATS projectLen={project ? project.length : 0} skills={skillSet && skillSet.coreSkills? this.props.skillSet.coreSkills.length : 0} experienceYears={year} experienceMonths={month} />
     }
 
     render() {
         if(this.props.auth && this.props.candidate) {
-            const {project, skillSet, candidate, education, experience } = this.props
-            console.log(this.props);
+            const {project, skillSet, candidate, education, experience, totalExp } = this.props
             return (
                 <div className='dashboardLayout'>
                     <div className='dashboardStack'>
@@ -71,8 +75,8 @@ class Dashboard extends Component {
     }
 }
 
-function mapStateToProps({auth, candidate, education, experience, project, skillSet}) {
-    return { auth, candidate, education, experience, project, skillSet }
+function mapStateToProps({auth, candidate, education, experience, project, skillSet, totalExp}) {
+    return { auth, candidate, education, experience, project, skillSet, totalExp }
 }
 
 export default connect(mapStateToProps)(Dashboard);

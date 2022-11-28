@@ -9,4 +9,5 @@ export const FETCH_JOBS = 'fetch_jobs';
 export const FETCH_POSTEDJOB = 'fetch_posted_job';
 export const SUGGESTED_TALENT = 'suggested_talent';
 export const TALENT_DETAILS = 'talent_detail';
+export const TOTAL_EXP = 'total_experience';
 export const FETCH_RELEVANT_JOBS = 'fetch_relevant_jobs';

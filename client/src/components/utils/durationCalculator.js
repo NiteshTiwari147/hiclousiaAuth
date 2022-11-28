@@ -19,4 +19,4 @@ export default function durationCalculator(t) {
     month = month % 12;
   
     return { year, month, day, hour, minute, second };
-  }
+}

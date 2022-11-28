@@ -9,7 +9,7 @@ require('../models/skillSet');
 require('../models/Talent/talentReq');
 var customId = require("custom-id");
 
-const { processSkillData }  =  require('../services/stats');
+const { processSkillData, calculateExperience }  =  require('../services/stats');
 
 module.exports = app => {
 
@@ -68,8 +68,13 @@ module.exports = app => {
         const experienceSchema = mongoose.model('experiences');
         try {
             if(req && req.user && req.user.email) {
-                const candidate = await experienceSchema.find({email: req.user.email})
-                res.send(candidate);
+                const experiences = await experienceSchema.find({email: req.user.email});
+                const totalExp  = calculateExperience(experiences)
+                const expData = {
+                    experiences: experiences,
+                    totalExp: totalExp
+                }
+                res.send({expData, status: 200});
             }
         }
         catch (err) {
@@ -377,4 +382,18 @@ module.exports = app => {
             res.send({status: 204})
         }   
     })
+
+    app.put('/delete/project', checkAuthenticated,async function (req, res) {
+        const projects = mongoose.model('projects');
+        try {
+            if(req && req.user && req.user.hiclousiaID) {
+                const { id } = req.body
+                const response = await projects.deleteOne({_id: id});
+                res.send({response});          
+            }
+        } catch (err) {
+            console.log("error occured while delete ",err);
+            res.send({status: 204})
+        } 
+    });
 }

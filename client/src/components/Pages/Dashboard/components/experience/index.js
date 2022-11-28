@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import BusinessIcon from '@mui/icons-material/Business';
 import Divider from '@mui/material/Divider';
 import Button from  '@mui/material/Button';
@@ -55,8 +56,9 @@ class ExperienceTab extends Component {
     }
     render() {
         const isEmpty = this.props.isEmpty;
-
-        if(isEmpty) {
+        const { skillSet } = this.props;
+        console.log(skillSet);
+        if(isEmpty && skillSet) {
             return <div className='experienceContainer shadow' style={{flexDirection: 'column' ,justifyContent: 'center',
             alignItems: 'center'}}>
             <h5 style={{"color": "#1072EB"}}>Experience</h5>
@@ -66,10 +68,10 @@ class ExperienceTab extends Component {
                      Please add experience
                 </Button>
             </div>
-            <ExperienceModal open={this.state.experienceModalOpen} close={this.handleExperienceModalClose.bind(this)} />
+            <ExperienceModal open={this.state.experienceModalOpen} close={this.handleExperienceModalClose.bind(this)} skillData={this.props.skillSet ? this.props.skillSet.processedSKillList : []}/>
         </div>
-        }
-        const experienceList = this.props.data;
+        } else if(skillSet) {
+            const experienceList = this.props.data;
         return (
             <div className='experienceContainer shadow'>
                <div className='educationContainerTitle'>
@@ -93,10 +95,15 @@ class ExperienceTab extends Component {
                         Add Experience
                     </Button>
                 </div>
-                <ExperienceModal open={this.state.experienceModalOpen} close={this.handleExperienceModalClose.bind(this)} />
+                <ExperienceModal open={this.state.experienceModalOpen} close={this.handleExperienceModalClose.bind(this)} skillData={this.props.skillSet ? this.props.skillSet.processedSKillList : []} />
             </div>
         )
+        } 
     }
 }
 
-export default ExperienceTab;
+function mapStateToProps({auth, candidate, skillSet}) {
+    return { auth, candidate, skillSet }
+}
+
+export default connect(mapStateToProps)(ExperienceTab);

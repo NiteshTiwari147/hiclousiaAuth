@@ -13,7 +13,7 @@ const listSchema = new Schema({
 })
 
 const skillSetSchema = new Schema({
-    googleId: String,
+    hiclousiaID: String,
     email: String,
     processedSKillList: Object
 })

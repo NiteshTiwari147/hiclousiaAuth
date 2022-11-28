@@ -15,6 +15,7 @@ import Checkbox from '@mui/material/Checkbox';
 import './styles.css';
 import { cities } from "../../constants/city";
 import * as actions from '../../actions';
+import { skills } from '../../constants/skills'
 import { jobCategory } from '../../constants/jobCategoryAndPositions'
 import LoadingScreen from '../utils/loadingScreen';
 
@@ -35,6 +36,7 @@ const MenuProps = {
 };
 
 const dep = new Set();
+const res = new Set();
 
 class ExpectationForm extends Component {
 
@@ -55,7 +57,9 @@ class ExpectationForm extends Component {
             maxBudget: '0',
             department: 'department',
             industry: 'industry',
-            isError: false
+            isError: false,
+            selectedSkill: [],
+            duration: { year: 0, month: 0, day: 0, hour: 0, minute: 0, second: 0 }
         }
     }
 
@@ -76,6 +80,22 @@ class ExpectationForm extends Component {
             }
         }
         return true;
+    }
+
+    handleSelectedOption(event) {
+        let newSkillList = this.state.selectedSkill;
+        newSkillList.push(skills[event]);
+        this.setState({selectedSkill: newSkillList});
+    }
+
+    showSelect(params) {
+        res.clear();
+        const final = params?.InputProps?.startAdornment || [];
+        final.map(o => {
+           if(this.state.selectedSkill.includes(o.props.label)) {
+                res.add(o.props.label);
+            }
+        });
     }
 
     showDepartmentSelect(params) {
@@ -105,6 +125,15 @@ class ExpectationForm extends Component {
                     expectedIndustry: this.state.industry,
                     expectedDepartment: Array.from(dep)
                 }      
+            })
+            .then( _ => {
+                this.props.sendSkillList({
+                    value: {
+                        skillList: Array.from(res),
+                        typeOfProject: 'industry',
+                        duration: this.state.duration,
+                    }
+                })
             })
             .then(res => {
                 this.props.fetchCandidate();
@@ -233,7 +262,26 @@ class ExpectationForm extends Component {
                                         </MenuItem>
                                     ))}
                                 </Select>                   
-                                </div>                                
+                            </div>                                
+                        </div>
+                        <div className='inputBoxColumn' style={{'flex-direction': 'column', 'align-items': 'flex-start', width: '95%'}}>
+                            <div className='formLabel_title' style={{'marginBottom': '1rem'}}>
+                                <h6>Please add your primary skills</h6>
+                            </div>
+                            <Autocomplete
+                                multiple
+                                fullWidth
+                                id="skill adder"                                 
+                                onChange={(event) => {
+                                    this.handleSelectedOption(event.target.dataset.optionIndex);
+                                }}
+                                options={skills.map((option) => option)}
+                                getOptionLabel={(option) => option}
+                                renderInput={(params) => {
+                                    this.showSelect({...params})
+                                    return <TextField {...params} label="Skill" />
+                                }}
+                            />
                         </div>
                         <div className='inputBoxColumn' style={{'flex-direction': 'column', 'align-items': 'flex-start', width: '95%'}}>
                             <h6>Select desired industry and role</h6>

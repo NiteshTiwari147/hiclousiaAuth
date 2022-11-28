@@ -2,15 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import dayjs from 'dayjs';
 import Modal from '@mui/material/Modal';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
-import Datepicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
-
+import OutlinedInput from '@mui/material/OutlinedInput';
+import ListItemText from '@mui/material/ListItemText';
+import Checkbox from '@mui/material/Checkbox';
 
 import AlertModal from './alertModal';
 import ProjectModal from './projectModal';
@@ -20,13 +18,29 @@ import * as actions from '../../actions';
 import { jobCategory } from '../../constants/jobCategoryAndPositions'
 import './styles.css';
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+const skillStyle = {
+    width: '13rem',
+    marginBottom: '2rem'
+}
+
 const style = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%) scale(0.8)',
   width: '60%',
-  height: '100%',
+  height: 'fit-content',
   overflow: 'auto',
   bgcolor: 'background.paper',
   border: '2px solid white',
@@ -45,13 +59,13 @@ class ExperienceModal extends Component {
             position: this.props.data ? this.props.data.position : '',
             desc: this.props.data ? this.props.data.desc : '',
             start_year: this.props.data ? new Date(this.props.data.start_data) : '',
-            skill: '',
-            startDate: Date.now(),
-            endDate: Date.now(),
-            duration: {},
+            startDate: dayjs(Date.now()).format('YYYY-MM-DD'),
+            endDate: dayjs(Date.now()).format('YYYY-MM-DD'),
+            duration: { year: 0, month: 0, day: 0, hour: 0, minute: 0, second: 0 },
             childProp: {},
-            skills:  this.props.data ? this.props.data.skills : [],
+            skills:  this.props.skillData || [],
             end_year: '',
+            skillUsed: [],
             jobRoles: [],
             current: true, 
             industryExperienceYears: 0,
@@ -77,6 +91,15 @@ class ExperienceModal extends Component {
             }
         }
         return true;
+    }
+
+    handleSKillChange(event) {
+        const {
+            target: { value },
+          } = event;
+          const res = typeof value === 'string' ? value.split(',') : value
+          this.setState({skillUsed: res});
+          this.setState({isError: false});
     }
 
     handleProjectModalOpen() {
@@ -183,8 +206,7 @@ class ExperienceModal extends Component {
                     duration: this.state.duration,
                     startDate: this.state.startDate,
                     endDate: this.state.endDate,
-                    industry: this.state.industry,
-                    department: this.state.department
+                    skills: this.state.skillUsed,
                 }
             }
             if(this.isValid(valueObj)) {
@@ -197,6 +219,7 @@ class ExperienceModal extends Component {
                         isCurrent: this.state.current,
                         duration: this.state.duration,
                         startDate: this.state.startDate,
+                        skills: this.state.skillUsed,
                         endDate: this.state.endDate,
                         industry: this.state.industry,
                         department: this.state.department
@@ -235,14 +258,23 @@ class ExperienceModal extends Component {
                     isCurrent: this.state.current,
                     duration: this.state.duration,
                     startDate: this.state.startDate,
+                    skills: this.state.skillUsed,
                     endDate: this.state.endDate,
-                    industry: this.state.industry,
-                    department: this.state.department
                 }
             }
             if(this.isValid(valueObj)) {
-                this.handleAlertModalOpen();
-                this.setState({childProp: valueObj});
+                this.props.sendExperienceInfo(valueObj);
+                const type = this.state.typeOfExperience === 'fullTime' ? 'industry': 'intern'
+                this.props.sendSkillList({
+                    value: {
+                        skillList: this.state.skillUsed,
+                        typeOfProject: type,
+                        duration:this.state.duration,
+                    }
+                })
+                this.props.close();
+                // this.handleAlertModalOpen();
+                // this.setState({childProp: valueObj});
             } else {
                 this.setState({isError: true});
             }       
@@ -260,6 +292,7 @@ class ExperienceModal extends Component {
 
     handleStartDateChange(value) {
         this.setState({startDate: value});
+        setTimeout(() =>this.calculateExpDuration(), 2000);
         this.setState({isError: false});
     }
 
@@ -284,16 +317,16 @@ class ExperienceModal extends Component {
         this.setState({department: this.state.jobRoles[event]})
         this.setState({isError: false});
     }
-    
-    render() {  
-      return (<div>
+ 
+    render() { 
+        return (<div>
             <Modal
-              open={this.props.open}
-              onClose={this.props.close}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
+            open={this.props.open}
+            onClose={this.props.close}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
             >
-              <Box sx={style}>
+            <Box sx={style}>
                 <div className='form_container'>
                     <div className='form_title'>
                         <h5>Add Experience data</h5>
@@ -346,6 +379,31 @@ class ExperienceModal extends Component {
                                     />    
                                 </div>                    
                             </div>
+                            {this.state.skills.length>0 && <div className="form_inputBox input-field">
+                                    <div className='formLabel_title'>
+                                        Skills Used
+                                    </div>
+                                    <div>
+                                    <Select
+                                        labelId="demo-multiple-checkbox-label"
+                                        id="demo-multiple-checkbox"
+                                        multiple
+                                        value={this.state.skillUsed}
+                                        onChange={this.handleSKillChange.bind(this)}
+                                        input={<OutlinedInput label="Tag" />}
+                                        renderValue={(selected) => selected.join(', ')}
+                                        MenuProps={MenuProps}
+                                        sx={skillStyle}
+                                        >
+                                        {this.state.skills.map(({skillName}) => (
+                                            <MenuItem key={skillName} value={skillName}>
+                                            <Checkbox checked={this.state.skillUsed.indexOf(skillName) > -1} />
+                                            <ListItemText primary={skillName} />
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                    </div>
+                            </div>}
                         </div>
                         <div className='inputBoxColumn' style={{width: '80%'}}>
                             <div className="form_inputBox input-field">
@@ -353,7 +411,7 @@ class ExperienceModal extends Component {
                                     Start Date
                                 </div>
                                 <div className='candidateExperienceSelect'>
-                                    <MaterialUIPickers setTime={this.handleStartDateChange.bind(this)}/>
+                                    <MaterialUIPickers value={this.state.startDate} setTime={this.handleStartDateChange.bind(this)}/>
                                 </div>                  
                             </div>
                             {this.state.current && <div className="form_inputBox input-field">
@@ -370,36 +428,9 @@ class ExperienceModal extends Component {
                                     End Date
                                 </div>
                                 <div className='candidateExperienceSelect'>
-                                    <MaterialUIPickers setTime={this.handleEndDateChange.bind(this)}/>
+                                    <MaterialUIPickers value={this.state.endDate} setTime={this.handleEndDateChange.bind(this)}/>
                                 </div>
                             </div>}
-                        </div>
-                        <div className="form_inputBox input-field" style={{width: '77%'}}>
-                            <div className='formLabel_title'>
-                                Industry And Department
-                            </div>
-                            <div className='industryAndDepartmentSelect'>
-                                <Autocomplete
-                                    id="free-solo-demo"
-                                    fullWidth
-                                    onChange={(event) => {
-                                        this.handleIndustryChange(event.target.dataset.optionIndex);
-                                    }}
-                                    options={jobCategory.map((option) => option.title)}
-                                    renderInput={(params) => <TextField {...params} label="Industry" />}
-                                />
-                                <div style={{'margin': '1rem'}}/>
-                                <Autocomplete
-                                    id="free-solo-demo"
-                                    fullWidth
-                                    onChange={(event) => {
-                                        console.log("autocomplete ", event.target.dataset.optionIndex)
-                                        this.handleDepartmentChange(event.target.dataset.optionIndex);
-                                    }}
-                                    options={this.state.jobRoles.map((option) => option)}
-                                    renderInput={(params) => <TextField {...params} label="Department" />}
-                                />
-                            </div>                    
                         </div>
                         <div className='btnOption'>
                         <Button variant='contained' size='medium' onClick={this.submitExperience.bind(this)}>
@@ -422,11 +453,16 @@ class ExperienceModal extends Component {
                     close={this.handleProjectModalClose.bind(this)}
                     addMore={this.handleAddMoreProject.bind(this)} 
                 />}
-              </Box>
+            </Box>
             </Modal>
         </div>
-        ) 
+        )
+       
     }
 };
 
-export default connect(null, actions)(ExperienceModal);
+function mapStateToProps({auth, candidate, skillSet}) {
+    return { auth, candidate, skillSet }
+}
+
+export default connect(mapStateToProps, actions)(ExperienceModal);

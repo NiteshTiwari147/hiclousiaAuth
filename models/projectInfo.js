@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const ProjectInfoSchema = new Schema({
-    googleId: String,
+    hiclousiaID: String,
     email: String,
     department: String,
     description: String,

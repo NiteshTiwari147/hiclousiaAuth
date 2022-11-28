@@ -73,7 +73,7 @@ class EducationListingModal extends Component {
                 sx={{marginRight: '0.5rem'}}>
                     Edit
                 </Button>
-                <Button color='error' variant='contained' onClick={this.handleDelete.bind(this,item.id)}>Delete</Button>
+                <Button color='error' variant='contained' onClick={this.handleDelete.bind(this,item._id)}>Delete</Button>
             </td>
         </tr>
     }

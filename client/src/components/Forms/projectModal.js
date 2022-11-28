@@ -8,15 +8,32 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import Datepicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
+import OutlinedInput from '@mui/material/OutlinedInput';
+import ListItemText from '@mui/material/ListItemText';
+import Checkbox from '@mui/material/Checkbox';
 
 import * as actions from '../../actions';
 import MaterialUIPickers from '../utils/calender';
 import durationCalculator from '../utils/durationCalculator';
 import { skills } from '../../constants/skills'
 import { jobCategory } from '../../constants/jobCategoryAndPositions'
-import './styles.css'
+import './styles.css';
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+const skillStyle = {
+    width: '13rem',
+    marginBottom: '2rem'
+}
 
 const style = {
     position: 'absolute',
@@ -38,8 +55,19 @@ const res = new Set();
 class ProjectModal extends Component {
     constructor(props) {
       super(props);
-      this.state = { fromExp: false,tittle: '', desc: '', startDate: Date.now(),duration: {}, endDate: Date.now(),
-      industry: '', department: '', jobRoles: [],  typeOfProject: 'industry', selectedSkill: [], isError: false}
+      this.state = { fromExp: false,tittle: '', desc: '', startDate: dayjs(Date.now()).format('YYYY-MM-DD'),duration: { year: 0, month: 0, day: 0, hour: 0, minute: 0, second: 0 },
+        endDate: dayjs(Date.now()).format('YYYY-MM-DD'),industry: '',
+        department: '', jobRoles: [],  typeOfProject: 'industry', skillUsed: [], isError: false,
+        skills:  this.props.skillData || []} 
+    }
+
+    handleSKillChange(event) {
+        const {
+            target: { value },
+          } = event;
+          const res = typeof value === 'string' ? value.split(',') : value
+          this.setState({skillUsed: res});
+          this.setState({isError: false});
     }
 
     isValid(obj) {
@@ -68,6 +96,7 @@ class ProjectModal extends Component {
 
     handleStartDateChange(value) {
         this.setState({startDate: value});
+        setTimeout(() =>this.calculateExpDuration(), 2000);
     }
 
     handleEndDateChange(value) {
@@ -112,9 +141,7 @@ class ProjectModal extends Component {
                 duration: this.state.duration,
                 startDate: this.state.startDate,
                 endDate: this.state.endDate,
-                industry: this.state.industry,
-                selectedSkill: Array.from(res),
-                department: this.state.department
+                selectedSkill: this.state.skillUsed,
             }
         }
         if(this.isValid(obj)) {
@@ -122,7 +149,7 @@ class ProjectModal extends Component {
             .then( _ => {
             this.props.sendSkillList({
                 value: {
-                    skillList: Array.from(res),
+                    skillList: this.state.skillUsed,
                     typeOfProject: this.state.typeOfProject,
                     duration: this.state.duration,
                 }
@@ -131,7 +158,7 @@ class ProjectModal extends Component {
             .then( _ => {
                 this.props.fetchSkillSet();
                 this.setState({ tittle: '', desc: '', startDate: Date.now(),duration: {}, endDate: Date.now(),
-                jobRoles: [], selectedSkill: [], isError: false})
+                jobRoles: [], skillUsed: [], isError: false})
                 this.props.fetchProject();
                 this.props.addMore();
             })
@@ -148,9 +175,7 @@ class ProjectModal extends Component {
                 duration: this.state.duration,
                 startDate: this.state.startDate,
                 endDate: this.state.endDate,
-                industry: this.state.industry,
-                selectedSkill: Array.from(res),
-                department: this.state.department
+                selectedSkill: this.state.skillUsed
             }
         }
         if(this.isValid(obj)) {
@@ -158,7 +183,7 @@ class ProjectModal extends Component {
             .then( () => {
                 this.props.sendSkillList({
                     value: {
-                        skillList: Array.from(res),
+                        skillList: this.state.skillUsed,
                         typeOfProject: this.state.typeOfProject,
                         duration: this.state.duration,
                     }
@@ -167,7 +192,7 @@ class ProjectModal extends Component {
             .then(res => {
                 this.props.fetchSkillSet();
                 this.setState({ tittle: '', desc: '', startDate: '',duration: {}, endDate: '',
-                industry: 'industry', department: 'department', jobRoles: [],  typeOfProject: 'industry', selectedSkill: []})
+                industry: 'industry', department: 'department', jobRoles: [],  typeOfProject: 'industry', skillUsed: []})
                 if(this.state.fromExp) {
                     this.props.closeParent();
                 }
@@ -273,7 +298,7 @@ class ProjectModal extends Component {
                                     Start Date
                                 </div>
                                 <div className='formInput'>
-                                    <MaterialUIPickers setTime={this.handleStartDateChange.bind(this)}/>
+                                    <MaterialUIPickers value={this.state.startDate} setTime={this.handleStartDateChange.bind(this)}/>
                                 </div>                    
                         </div>
                         <div className="form_inputBox input-field">
@@ -281,52 +306,35 @@ class ProjectModal extends Component {
                                 End Date
                             </div>
                             <div className='formInput'>
-                                <MaterialUIPickers setTime={this.handleEndDateChange.bind(this)}/>   
+                                <MaterialUIPickers value={this.state.endDate} setTime={this.handleEndDateChange.bind(this)}/>   
                             </div>                    
                         </div>
                       </div>
-                        <div className="form_inputBox input-field" style={{width: '100%'}}>
-                            <Autocomplete
-                                multiple
-                                id="skill adder"                                 
-                                onChange={(event) => {
-                                    console.log(event);
-                                    this.handleSelectedOption(event.target.dataset.optionIndex);
-                                }}
-                                options={skills.map((option) => option)}
-                                getOptionLabel={(option) => option}
-                                renderInput={(params) => {
-                                    this.showSelect({...params})
-                                    return <TextField {...params} label="Skill" />
-                                }}
-                            />
-                        </div>
-                        {!this.props.data && <div className="form_inputBox input-field" style={{width: '100%'}}>
+                      {this.state.skills.length>0 && <div className="form_inputBox input-field" style={{width: '95%'}}>
                             <div className='formLabel_title'>
-                                Industry And Department
+                                Skills Used
                             </div>
-                            <div className='industryAndDepartmentSelect'>
-                            <Autocomplete
-                                id="free-solo-demo"
+                            <div>
+                            <Select
+                                labelId="demo-multiple-checkbox-label"
+                                id="demo-multiple-checkbox"
+                                multiple
                                 fullWidth
-                                onChange={(event) => {
-                                    this.handleIndustryChange(event.target.dataset.optionIndex);
-                                }}
-                                options={jobCategory.map((option) => option.title)}
-                                renderInput={(params) => <TextField {...params} label="Industry" />}
-                            />
-                            <div style={{'margin': '1rem'}}/>
-                            <Autocomplete
-                                id="free-solo-demo"
-                                fullWidth
-                                onChange={(event) => {
-                                    console.log("autocomplete ", event.target.dataset.optionIndex)
-                                    this.handleDepartmentChange(event.target.dataset.optionIndex);
-                                }}
-                                options={this.state.jobRoles.map((option) => option)}
-                                renderInput={(params) => <TextField {...params} label="Department" />}
-                            />
-                            </div>             
+                                value={this.state.skillUsed}
+                                onChange={this.handleSKillChange.bind(this)}
+                                input={<OutlinedInput label="Tag" />}
+                                renderValue={(selected) => selected.join(', ')}
+                                MenuProps={MenuProps}
+                                sx={skillStyle}
+                                >
+                                {this.state.skills.map(({skillName}) => (
+                                    <MenuItem key={skillName} value={skillName}>
+                                    <Checkbox checked={this.state.skillUsed.indexOf(skillName) > -1} />
+                                    <ListItemText primary={skillName} />
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                            </div>
                         </div>}
                         <div className='btnOption'>
                             <Button variant='contained' size='medium' onClick={this.addMoreProject.bind(this)}>
