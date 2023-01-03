@@ -27,14 +27,14 @@ class Dashboard extends Component {
     }
 
     renderATS() {
-        const {project, skillSet, candidate, education, experience, totalExp } = this.props;
+        const {project, skillSet, candidate, education } = this.props;
         var year=0;
         var month=0;
-        if(totalExp) {
-            year = totalExp.year;
-            month = totalExp.month;
+        if(candidate.experience) {
+            year = candidate.experience.year;
+            month = candidate.experience.month;
         } 
-        return <ATS projectLen={project ? project.length : 0} skills={skillSet && skillSet.coreSkills? this.props.skillSet.coreSkills.length : 0} experienceYears={year} experienceMonths={month} />
+        return <ATS projectLen={project ? project.length : 0} department={candidate.expectedDepartment} education={education} experienceYears={year} experienceMonths={month} />
     }
 
     render() {

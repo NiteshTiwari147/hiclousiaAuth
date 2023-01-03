@@ -4,7 +4,9 @@ import './styles.css';
 
 class ATS extends Component {
     render() {
-        const { projectLen, skills, experienceYears ,experienceMonths} = this.props;
+        const { projectLen, education, experienceYears ,experienceMonths, department} = this.props;
+        const { institute, course } = education[0];
+        console.log(education, institute, course);
         return (
             <div className='ATScontainer shadow'>
                 <div className="miniBox">
@@ -17,10 +19,10 @@ class ATS extends Component {
                 </div>
                 <div className="miniBox">
                     <div>
-                        <h6 className="headingATS">Education Compentency</h6> 
+                        <h6 className="headingATS">Highest education</h6> 
                     </div>
                     <h6 className="ATS_score" style={{marginRight: '1rem'}}>
-                        723/1000
+                        {course.toUpperCase()} at {institute.toUpperCase()}
                     </h6>
                 </div>
                 <div className="miniBox">
@@ -33,11 +35,13 @@ class ATS extends Component {
                 </div>
                 <div className="miniBox">
                     <div>
-                        <h6 className="headingATS">Skill Compentency</h6> 
+                        <h6 className="headingATS">Expected Position</h6> 
                     </div>
-                    <h6 className="ATS_score" style={{marginRight: '1rem'}}>
-                        783/1000
-                    </h6>
+                    <div>
+                        {department.map(d => <p className="ATS_score" style={{fontSize: '10px', fontWeight: '500', marginRight: '1rem'}}>
+                            {d}
+                        </p>)}
+                    </div>        
                 </div>
             </div>
         )
