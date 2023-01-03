@@ -146,14 +146,23 @@ export const sendBasicInfo =  (props) => async dispatch => {
     const obj = {
             name: props.value.name,
             age: props.value.age,
-            city: props.value.city,
             gender: props.value.gender,
+            address: props.value.address,
+            currentCity: props.value.currentCity,
+            nationality: props.value.country,
+            phone: props.value.phone,
+            linkedIN: props.value.socialLink,
             role: props.value.role,
+            expectedCities: props.value.expectedCities,
             purpose: props.value.purpose,
             expectedPosition: props.value.expectedPosition,
             expectedSalary: {
                 min: props.value.expectedSalary.min,
                 max: props.value.expectedSalary.max
+            },
+            experience: {
+                year: props.value.experience.year,
+                month: props.value.experience.month
             },
             expectedIndustry: props.value.expectedIndustry,
             expectedDepartment: props.value.expectedDepartment,

@@ -16,13 +16,47 @@ class Onboarding extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            addressOne: '',
+            addressTwo: '',
             buttonClicked: false,
             gender: 'male',
             age: '',
             city: '',
+            country: '',
             name: '',
+            phone: '',
             role: 'candidate'
         }
+    }
+
+    handleCountryChange(event) {
+        this.setState({
+            country: event.target.value
+        })
+    }
+
+    handleCityChange(event) {
+        this.setState({
+            city: event.target.value
+        })
+    }
+
+    handleAddressOneChange(event) {
+        this.setState({
+            addressOne: event.target.value
+        })
+    }
+
+    handleAddressTwoChange(event) {
+        this.setState({
+            addressTwo: event.target.value
+        })
+    }
+
+    handlePhoneChange(event) {
+        this.setState({
+            phone: event.target.value
+        })
     }
 
     handleAgeChange(event) {
@@ -58,14 +92,14 @@ class Onboarding extends Component {
                 <h5>
                     Please fill out your basic information 
                 </h5>
-                <form className="col s16 formContent">
+                <form className="col s12 formContent">
                     <div className="form_inputBox input-field">
                         <div className='formLabel_title'>
                             Please enter your name
                         </div>
                         <div className='formInput'>
                             <input 
-                                placeholder="Enter your age"
+                                placeholder="Enter your name"
                                 value={this.state.name}
                                 onChange={this.handleNameChange.bind(this)}
                             />  
@@ -98,7 +132,66 @@ class Onboarding extends Component {
                             <MenuItem value={'other'}>Other</MenuItem>
                         </Select>
                     </div>
-
+                    <div className="form_inputBox input-field">
+                        <div className='formLabel_title'>
+                            Please enter your phone number
+                        </div>
+                        <div className='formInput'>
+                            <input 
+                                placeholder="Enter your phone number"
+                                value={this.state.phone}
+                                onChange={this.handlePhoneChange.bind(this)}
+                            />  
+                        </div>                    
+                    </div>
+                    <div className="form_inputBox input-field">
+                        <div className='formLabel_title'>
+                            Address Line 1:
+                        </div>
+                        <div className='formInput'>
+                            <input 
+                                placeholder="Enter your address"
+                                value={this.state.addressOne}
+                                onChange={this.handleAddressOneChange.bind(this)}
+                            />  
+                        </div>                    
+                    </div>
+                    <div className="form_inputBox input-field">
+                        <div className='formLabel_title'>
+                            Address Line 2:
+                        </div>
+                        <div className='formInput'>
+                            <input 
+                                placeholder="Enter your address"
+                                value={this.state.addressTwo}
+                                onChange={this.handleAddressTwoChange.bind(this)}
+                            />  
+                        </div>                    
+                    </div>
+                    <div className="form_inputBox input-field">
+                        <div className='formLabel_title'>
+                            City:
+                        </div>
+                        <div className='formInput'>
+                            <input 
+                                placeholder="Enter your current city"
+                                value={this.state.city}
+                                onChange={this.handleCityChange.bind(this)}
+                            />  
+                        </div>                    
+                    </div>
+                    <div className="form_inputBox input-field">
+                        <div className='formLabel_title'>
+                            Nationality:
+                        </div>
+                        <div className='formInput'>
+                            <input 
+                                placeholder="Enter your nationality"
+                                value={this.state.country}
+                                onChange={this.handleCountryChange.bind(this)}
+                            />  
+                        </div>                    
+                    </div>
                     <Button size='large' variant='contained' color='primary' style={{width: '50%', marginTop: '2rem'}} onClick={this.handleCandidateButton.bind(this)}>
                         Save
                     </Button>
@@ -125,7 +218,7 @@ class Onboarding extends Component {
                         <h4 style={{textAlign: 'center', fontFamily: "sans-serif"}}>Hello, {this.state.name} !!</h4>
                     </div>
                     <div className='basicFormPage2'>
-                        <ExpectationForm name={this.state.name} age={this.state.age} gender={this.state.gender} />
+                        <ExpectationForm data={this.state} />
                     </div>
                 </div>
             )}

@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 require('../models/HR/basicInfo');
 require('../models/HR/jobPost');
 require('../models/Talent/talentReq');
-require('../models/BasicInfo');
+require('../models/Talent/BasicInfo');
 require('../models/projectInfo');
 require('../models/educationInfo');
 require('../models/experienceInfo');

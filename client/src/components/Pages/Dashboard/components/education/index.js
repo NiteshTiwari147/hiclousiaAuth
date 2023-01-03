@@ -40,15 +40,15 @@ class Education extends Component {
                 <SchoolIcon sx={{ fontSize: 30 }}/>
             </div>
             <div className='educationInfo'>
-                <div className='educationInstitute'>
+                {institute && <div className='educationInstitute'>
                     {institute.toUpperCase()}
-                </div>
-                <div className='educationCourse'>
+                </div>}
+                {course && <div className='educationCourse'>
                     {course.toUpperCase()}
-                </div>
-                <div className='educationStudy'>
+                </div>}
+                {study && <div className='educationStudy'>
                     {study.toUpperCase()}
-                </div>
+                </div>}
             </div>
             </div>
             <Divider />
@@ -56,9 +56,9 @@ class Education extends Component {
                 <div>
                     Grade:
                 </div>
-                <div className='grade'>
+                {grade && <div className='grade'>
                     {grade}
-                </div>
+                </div>}
             </div>
             <Divider color='skyblue'/>
         </div>

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-require('../models/BasicInfo');
+require('../models/Talent/BasicInfo');
 require('../models/projectInfo');
 require('../models/educationInfo');
 require('../models/experienceInfo');
@@ -122,11 +122,17 @@ module.exports = app => {
         const talentReq = mongoose.model('talentReq');
         try {
             const { name,
+                phone,
+                address,
                 age, 
-                city,
+                expectedCities,
+                linkedIN,
                 gender,
+                nationality,
+                currentCity,
                 role,
                 purpose,
+                experience,
                 expectedPosition,
                 expectedSalary,
                 expectedIndustry,
@@ -135,11 +141,17 @@ module.exports = app => {
             const response = await new basicInfo({hiclousiaID, 
                 email, 
                 name,
+                phone,
+                address,
                 age, 
-                city,
-                purpose,
+                expectedCities,
+                linkedIN,
                 gender,
+                nationality,
+                currentCity,
                 role,
+                purpose,
+                experience,
                 expectedPosition,
                 expectedSalary,
                 expectedIndustry,
@@ -148,7 +160,7 @@ module.exports = app => {
                 hiclousiaID,
                 email, 
                 name,
-                cities: city,
+                cities: expectedCities,
                 gender,
                 skills: null,
                 budget: {
@@ -156,11 +168,8 @@ module.exports = app => {
                    max: expectedSalary.max
                 },
                 experience: {
-                    expList: [],
-                    totalExp: {
-                        mon: '0',
-                        yr: '0'
-                    }
+                    year: experience.year,
+                    month: experience.month
                 },
                 skillScore: 0,
                 educationScore: 0,

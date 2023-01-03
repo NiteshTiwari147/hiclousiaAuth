@@ -44,20 +44,30 @@ class ExpectationForm extends Component {
         super(props);
 
         this.state = {
-            name: this.props.name,
-            age: this.props.age,
-            gender: this.props.gender,
+            name: this.props.data.name,
+            age: this.props.data.age,
+            gender: this.props.data.gender,
+            address: this.props.data.addressOne + this.props.data.addressTwo,
+            currentCity: this.props.data.city,
+            country: this.props.data.country,
+            phone: this.props.data.phone,
+            institute: 'iit' ,
+            course: 'bachelor',
+            socialLink: '',
             role: 'candidate',
             jobRoles: [],
             selectedDepartment: [],
             submitted: false,
             purpose: 'job',
-            cityName: [],
+            position: 'jr',
+            cityName: ['Mumbai'],
             minBudget: '0',
             maxBudget: '0',
             department: 'department',
             industry: 'industry',
             isError: false,
+            expYear: '0',
+            expMonth: '0',
             selectedSkill: [],
             duration: { year: 0, month: 0, day: 0, hour: 0, minute: 0, second: 0 }
         }
@@ -81,6 +91,31 @@ class ExpectationForm extends Component {
         }
         return true;
     }
+
+    handleExpYearChange(event) {
+        this.setState({expYear: event.target.value})
+        this.setState({isError: false});
+    }
+
+    handleExpMonthChange(event) {
+        this.setState({expMonth: event.target.value})
+        this.setState({isError: false});
+    }
+
+    handleSocialLinkChange(event) {
+        this.setState({socialLink: event.target.value})
+        this.setState({isError: false});
+    }
+
+    handleUniversityTypeChange(event) {
+        this.setState({institute: event.target.value})
+        this.setState({isError: false})
+      }
+    
+      handleDegreeTypeChange(event) {
+        this.setState({course: event.target.value})
+        this.setState({isError: false})
+      }
 
     handleSelectedOption(event) {
         let newSkillList = this.state.selectedSkill;
@@ -114,13 +149,23 @@ class ExpectationForm extends Component {
                 value: {
                     name: this.state.name,
                     age: this.state.age,
-                    city: this.state.cityName,
                     gender: this.state.gender,
+                    address: this.state.address,
+                    currentCity: this.state.currentCity,
+                    country: this.state.country,             
+                    phone: this.state.phone,
+                    socialLink: this.state.socialLink,
                     role: this.state.role,
+                    expectedCities: this.state.cityName,
                     purpose: this.state.purpose,
+                    expectedPosition: this.state.position,           
                     expectedSalary: {
                         min: this.state.minBudget,
                         max: this.state.maxBudget
+                    },
+                    experience: {
+                        year: this.state.expYear,
+                        month: this.state.expMonth
                     },
                     expectedIndustry: this.state.industry,
                     expectedDepartment: Array.from(dep)
@@ -132,6 +177,16 @@ class ExpectationForm extends Component {
                         skillList: Array.from(res),
                         typeOfProject: 'industry',
                         duration: this.state.duration,
+                    }
+                })
+                this.props.sendEducationInfo({
+                    value: {
+                        institute: this.state.institute,
+                        course: this.state.course,
+                        field_of_course: null,
+                        startDate: null,
+                        endDate: null,
+                        grade: null
                     }
                 })
             })
@@ -168,11 +223,6 @@ class ExpectationForm extends Component {
 
     handlePositionChange(event) {
         this.setState({position: event.target.value})
-        this.setState({isError: false});
-    }
-
-    handlePurposeChange(event) {
-        this.setState({purpose: event.target.value})
         this.setState({isError: false});
     }
 
@@ -214,14 +264,14 @@ class ExpectationForm extends Component {
     renderRoles() {
         return <Select
                 id="experienceYearsSelect"
-                value={this.state.purpose}
+                value={this.state.position}
                 sx={style}
                 variant="outlined"
-                onChange={this.handlePurposeChange.bind(this)}
+                onChange={this.handlePositionChange.bind(this)}
             >
-                <MenuItem value={'job'}>Finding Job</MenuItem>
-                <MenuItem value={'upgrade'}>Upskilling</MenuItem>
-                <MenuItem value={'both'}>Both</MenuItem>
+                <MenuItem value={'jr'}>Junior</MenuItem>
+                <MenuItem value={'mid'}>Mid</MenuItem>
+                <MenuItem value={'sr'}>Senior</MenuItem>
             </Select>
     }
 
@@ -233,10 +283,39 @@ class ExpectationForm extends Component {
                         <p style={{color: 'red'}}>Please fill correct information</p>
                     </div>}
                     <form className="col s16 formContent">
+                        <div className='inputBoxColumn' style={{'flex-direction': 'column', 'align-items': 'flex-start', width: '95%'}}>
+                            <h6>Select desired industry and job roles you want</h6>
+                            <div className='industryAndDepartmentSelect' style={{marginLeft: '0rem', width: '100%'}}>
+                                <Autocomplete
+                                    id="free-solo-demo"
+                                    fullWidth
+                                    onChange={(event) => {
+                                        this.handleIndustryChange(event.target.dataset.optionIndex);
+                                    }}
+                                    options={jobCategory.map((option) => option.title)}
+                                    renderInput={(params) => <TextField {...params} label="Industry" />}
+                                />
+                                <div style={{'margin': '1rem'}}/>
+                                <Autocomplete
+                                    multiple
+                                    id="department-adder"
+                                    fullWidth
+                                    onChange={(event) => {
+                                        this.handleDepartmentChange(event.target.dataset.optionIndex);
+                                    }}
+                                    options={this.state.jobRoles.map((option) => option)}
+                                    getOptionLabel={(option) => option}
+                                    renderInput={(params) => {
+                                        this.showDepartmentSelect({...params})
+                                        return <TextField {...params} label="Department" />
+                                    }}
+                                />
+                            </div>
+                        </div>
                         <div className='inputBoxColumn' style={{width: '100%'}}>
                             <div className="form_inputBox input-field" >
                                 <div className='formLabel_title' style={{'marginBottom': '1rem'}}>
-                                    <h6>What are you looking for ?</h6>
+                                    <h6>Position you're looking for ?</h6>
                                 </div>
                                 {this.renderRoles()}
                             </div>
@@ -283,38 +362,21 @@ class ExpectationForm extends Component {
                                 }}
                             />
                         </div>
-                        <div className='inputBoxColumn' style={{'flex-direction': 'column', 'align-items': 'flex-start', width: '95%'}}>
-                            <h6>Select desired industry and role</h6>
-                            <div className='industryAndDepartmentSelect' style={{marginLeft: '0rem', width: '100%'}}>
-                                <Autocomplete
-                                    id="free-solo-demo"
-                                    fullWidth
-                                    onChange={(event) => {
-                                        this.handleIndustryChange(event.target.dataset.optionIndex);
-                                    }}
-                                    options={jobCategory.map((option) => option.title)}
-                                    renderInput={(params) => <TextField {...params} label="Industry" />}
-                                />
-                                <div style={{'margin': '1rem'}}/>
-                                <Autocomplete
-                                    multiple
-                                    id="department-adder"
-                                    fullWidth
-                                    onChange={(event) => {
-                                        this.handleDepartmentChange(event.target.dataset.optionIndex);
-                                    }}
-                                    options={this.state.jobRoles.map((option) => option)}
-                                    getOptionLabel={(option) => option}
-                                    renderInput={(params) => {
-                                        this.showDepartmentSelect({...params})
-                                        return <TextField {...params} label="Department" />
-                                    }}
-                                />
+                        <div className='inputBoxColumn' style={{'flex-direction': 'column', 'align-items': 'flex-start', width: '95%', marginTop: '1rem'}}>
+                            <div className='formLabel_title' style={{'marginBottom': '1rem'}}>
+                                Total Experience :
+                            </div>
+                            <div style={{display: 'flex', marginTop: '1rem'}}>
+                                <TextField value={this.state.expYear} label="Min" onChange={this.handleExpYearChange.bind(this)}/>
+                                <p>Years</p>
+                                <div style={{marginLeft: '1rem'}} />
+                                <TextField value={this.state.expMonth} label="Max" onChange={this.handleExpMonthChange.bind(this)} />
+                                <p>Months</p>
                             </div>
                         </div>
-                        {this.state.purpose !='upgrade' && <div className='inputBoxColumn' style={{'flex-direction': 'column', 'align-items': 'flex-start', width: '95%'}}>
+                        {this.state.purpose !='upgrade' && <div className='inputBoxColumn' style={{'flex-direction': 'column', 'align-items': 'flex-start', width: '95%', marginTop: '1rem'}}>
                             <div className='formLabel_title' style={{'marginBottom': '1rem'}}>
-                                Budget :
+                                Expected Salary :
                             </div>
                             <div style={{display: 'flex', marginTop: '1rem'}}>
                                 <TextField value={this.state.minBudget} label="Min" onChange={this.handleMinBudgetChange.bind(this)}/>
@@ -324,6 +386,50 @@ class ExpectationForm extends Component {
                                 <p>LPA</p>
                             </div>
                         </div>}
+                        <div className='inputBoxColumn' style={{'flex-direction': 'column', 'align-items': 'flex-start', width: '95%'}}>
+                            <h6>Please select highest education received</h6>
+                            <div className='industryAndDepartmentSelect' style={{marginLeft: '0rem', width: '100%'}}>
+                                <Select
+                                id="universityTypeSelect"
+                                value={this.state.institute}
+                                fullWidth
+                                variant="outlined"
+                                onChange={this.handleUniversityTypeChange.bind(this)}
+                                >
+                                    <MenuItem value={'iit'}>IITs</MenuItem>
+                                    <MenuItem value={'nit'}>NITs</MenuItem>
+                                    <MenuItem value={'central'}>Central university</MenuItem>
+                                    <MenuItem value={'govt'}>Govt. university</MenuItem>
+                                    <MenuItem value={'private'}>Private</MenuItem>
+                                </Select>
+                                <div style={{marginLeft: '1rem'}}/>
+                                <Select
+                                id="universityTypeSelect"
+                                value={this.state.course}
+                                fullWidth
+                                variant="outlined"
+                                onChange={this.handleDegreeTypeChange.bind(this)}
+                                >
+                                    <MenuItem value={'doctorate'}>Doctrate</MenuItem>
+                                    <MenuItem value={'masters'}>Masters</MenuItem>
+                                    <MenuItem value={'bachelor'}>Bachelor</MenuItem>
+                                    <MenuItem value={'pg diploma'}>PG diploma</MenuItem>
+                                    <MenuItem value={'diploma'}>Diploma</MenuItem>
+                                </Select>
+                            </div>
+                        </div>
+                        <div className='inputBoxColumn' style={{'flex-direction': 'column', 'align-items': 'flex-start', width: '95%', marginTop: '1rem'}}>
+                            <div className='formLabel_title'>
+                                Share Linkedin link :
+                            </div>
+                            <div className='formInput'>
+                                <input 
+                                    placeholder="Enter your linkedIN link"
+                                    value={this.state.socialLink}
+                                    onChange={this.handleSocialLinkChange.bind(this)}
+                                />  
+                            </div>                    
+                        </div>
                         <div style={{'display': 'flex', 'justifyContent': 'center', 'margin': '2rem'}}>
                             <Button size='large' variant='contained' onClick={this.handleSubmit.bind(this)}>
                                 Save

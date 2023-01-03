@@ -4,12 +4,21 @@ const { Schema } = mongoose;
 const BISchema = new Schema({
     hiclousiaID: String,
     email: String,
+    phone: String,
     name: String,
+    address: String,  
     age: String, 
-    city: [String],
+    expectedCities: [String],
+    linkedIN: String,
     gender: String,
+    nationality: String,
+    currentCity: String,
     role: String,
     purpose: String,
+    experience: {
+        year: String,
+        month: String
+    },
     expectedPosition: String,
     expectedSalary: {
         min: String,

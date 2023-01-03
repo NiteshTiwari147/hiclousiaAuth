@@ -2,7 +2,7 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const User = mongoose.model('users');
 const bcrypt = require("bcryptjs");
-require('../models/BasicInfo');
+require('../models/Talent/BasicInfo');
 var customId = require("custom-id");
 
 module.exports = app => {
