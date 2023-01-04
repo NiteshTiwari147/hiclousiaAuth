@@ -218,15 +218,20 @@ export const sendJobPostInfo = (props) => async dispatch => {
 export const sendExperienceInfo = (props) => async dispatch => {
     const obj = {
         company: props.value.company,
-        department: props.value.department,
         designation: props.value.designation,
+        typeOfExperience: props.value.typeOfExperience,
+        isCurrent: props.value.isCurrent, 
         duration: props.value.duration,
-        endDate:  props.value.endDate,
-        industry: props.value.industry,   
-        isCurrent: props.value.isCurrent,
+        industry: props.value.industry, 
+        department: props.value.department,
         startDate: props.value.startDate,
+        endDate:  props.value.endDate,
         skills:  props.value.skills,
-        typeOfExperience: props.value.typeOfExperience,   
+        location: props.value.location,
+        manager: props.value.manager,
+        managerContact: props.value.managerContact,
+        responsibility: props.value.responsibilty
+          
     };
     const res = await axios.post('/create/experience', obj);
 }

@@ -5,8 +5,8 @@ require('../models/HR/jobPost');
 require('../models/Talent/talentReq');
 require('../models/Talent/BasicInfo');
 require('../models/projectInfo');
-require('../models/educationInfo');
-require('../models/experienceInfo');
+require('../models/Talent/educationInfo');
+require('../models/Talent/experienceInfo');
 require('../models/skillSet');
 
 var customId = require("custom-id");

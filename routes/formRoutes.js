@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 
 require('../models/Talent/BasicInfo');
 require('../models/projectInfo');
-require('../models/educationInfo');
-require('../models/experienceInfo');
+require('../models/Talent/educationInfo');
+require('../models/Talent/experienceInfo');
 require('../models/HR/jobPost');
 require('../models/skillSet');
 require('../models/Talent/talentReq');
 var customId = require("custom-id");
 
-const { processSkillData, calculateExperience }  =  require('../services/stats');
+const { processSkillData, calculateExperience, calculateIndustryCompentency }  =  require('../services/stats');
 
 module.exports = app => {
 
@@ -214,7 +214,13 @@ module.exports = app => {
                     const { hiclousiaID, email } = req.user;
                     const response = await new skillList({hiclousiaID, email, processedSKillList}).save();
                     talentReqData.skills = processedSKillList;
-                    talentReqData.skillScore = Math.floor(Math.random() * 100) + 60;
+                    let skillScore = 0;
+                    let skillCount = 0;
+                    processedSKillList.map(skill => {
+                        skillCount++;
+                        skillScore = skillScore + skill.score;
+                    });
+                    talentReqData.skillScore = skillScore/skillCount;
                     const newTalenReq = { $set: talentReqData };
                     await talentReq.updateOne({email: req.user.email}, newTalenReq);
                     res.send({response});
@@ -223,7 +229,14 @@ module.exports = app => {
                     const { hiclousiaID, email } = req.user;
                     var newvalues = { $set: { hiclousiaID, email, processedSKillList} };
                     talentReqData.skills = processedSKillList;
-                    talentReqData.skillScore = Math.floor(Math.random() * 100) + 60;
+                    let skillScore = 0;
+                    let skillCount = 0;
+                    processedSKillList.map(skill => {
+                        skillCount++;
+                        skillScore = skillScore + skill.score;
+                    });
+                    talentReqData.skillScore = skillScore/skillCount;
+                    console.log(skillScore, skillCount, talentReqData.skillScore);
                     const newTalenReq = { $set: talentReqData };
                     const resposne = await skillList.updateOne({hiclousiaID: hiclousiaID}, newvalues);
                     await talentReq.updateOne({email: req.user.email}, newTalenReq);
@@ -267,11 +280,14 @@ module.exports = app => {
         const experience =  mongoose.model('experiences');
         const talentReq = mongoose.model('talentReq');
         try {
-            const { company, designation, duration, isCurrent, endDate, skills, industry, department, typeOfExperience, startDate} = req.body;
+            const { company, designation, duration, isCurrent, endDate, skills, industry, department, typeOfExperience, startDate, location, manager, managerContact, responsibility} = req.body;
             const { hiclousiaID, email } = req.user;
-            const response = await new experience({hiclousiaID, email, company, designation, duration, isCurrent, endDate, skills, industry, department, typeOfExperience, startDate}).save();
+            const response = await new experience({hiclousiaID, email, company, designation, duration, isCurrent, endDate, skills, industry, department, typeOfExperience, startDate, location, manager, managerContact, responsibility}).save();
             const talentReqData = await talentReq.findOne({email: req.user.email});
-            talentReqData.industryScore = Math.floor(Math.random() * 100) + 60;
+            console.log(talentReqData.industryScore, typeOfExperience, duration);
+            const expCompentency = calculateIndustryCompentency(typeOfExperience, duration);
+            talentReqData.industryScore =  talentReqData.industryScore + expCompentency;
+            console.log(talentReqData.industryScore, expCompentency);
             const newTalenReq = { $set: talentReqData };
             await talentReq.updateOne({email: req.user.email}, newTalenReq);
             res.send(response);

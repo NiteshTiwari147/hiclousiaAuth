@@ -76,9 +76,9 @@ class ExperienceTab extends Component {
             <div className='experienceContainer shadow'>
                <div className='educationContainerTitle'>
                     <h6 style={{"color": "#1072EB"}}>Experience</h6>
-                    <Button size='small' onClick={this.handleModalOpen.bind(this)}>
+                    {/* <Button size='small' onClick={this.handleModalOpen.bind(this)}>
                         <EditIcon size='small' />
-                    </Button>
+                    </Button> */}
                 </div>
                 <Divider color='skyblue'/>
                 {experienceList.map(experience => this.renderExperience(

@@ -207,7 +207,6 @@ function processSkillData(oldSkillList, newSkillsData) {
 function calculateSkillCompenency(types) {
     let total = 0;
     types.map(type => {
-        console.log(type);
         let yr = type.duration.year;
         let mn = type.duration.month;
         let dy = type.duration.day;
@@ -222,9 +221,23 @@ function calculateSkillCompenency(types) {
         }
         score = attention*score;
         total = total + score; //15000
-        console.log(total, score);
     })
     return total/150;
 }
 
-module.exports = { processSkillData, calculateExperience }
+function calculateIndustryCompentency(type, duration) {
+    let total = 0;
+    let yr = duration.year;
+    let mn = duration.month;
+    let dy = duration.day;
+    let score = (yr*365) + (mn*30) + dy;
+    let attention = 5;
+    if(type === 'fullTime') {
+        attention = 7.5; //7.5
+    }
+    score = attention*score;
+    total = total + score; //15000
+    return total/150;
+}
+
+module.exports = { processSkillData, calculateExperience, calculateIndustryCompentency }

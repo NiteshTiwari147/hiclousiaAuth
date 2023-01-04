@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import dayjs from 'dayjs';
+
+
 import Modal from '@mui/material/Modal';
 import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
@@ -40,7 +44,7 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%) scale(0.8)',
   width: '60%',
-  height: 'fit-content',
+  height: '100%',
   overflow: 'auto',
   bgcolor: 'background.paper',
   border: '2px solid white',
@@ -48,6 +52,8 @@ const style = {
   boxShadow: '2px 2px #1072EB',
   p: 4,
 };
+
+const dep = new Set();
 
 class ExperienceModal extends Component {
 
@@ -68,6 +74,9 @@ class ExperienceModal extends Component {
             skillUsed: [],
             jobRoles: [],
             current: true, 
+            location: '',
+            managerName: '',
+            managerContact: '',
             industryExperienceYears: 0,
             industryExperienceMonths: 0,
             industry: this.props.data ? this.props.data.industry :'',
@@ -257,12 +266,18 @@ class ExperienceModal extends Component {
                     typeOfExperience: this.state.typeOfExperience,
                     isCurrent: this.state.current,
                     duration: this.state.duration,
+                    industry: this.state.industry,
+                    department: this.state.department,
                     startDate: this.state.startDate,
-                    skills: this.state.skillUsed,
                     endDate: this.state.endDate,
+                    skills: this.state.skillUsed,
                 }
             }
             if(this.isValid(valueObj)) {
+                valueObj.value.location = this.state.location;
+                valueObj.value.manager = this.state.managerName;
+                valueObj.value.managerContact = this.state.managerContact;
+                valueObj.value.responsibilty = this.state.desc;
                 this.props.sendExperienceInfo(valueObj);
                 const type = this.state.typeOfExperience === 'fullTime' ? 'industry': 'intern'
                 this.props.sendSkillList({
@@ -272,9 +287,8 @@ class ExperienceModal extends Component {
                         duration:this.state.duration,
                     }
                 })
+                this.props.fetchExperience();
                 this.props.close();
-                // this.handleAlertModalOpen();
-                // this.setState({childProp: valueObj});
             } else {
                 this.setState({isError: true});
             }       
@@ -317,6 +331,16 @@ class ExperienceModal extends Component {
         this.setState({department: this.state.jobRoles[event]})
         this.setState({isError: false});
     }
+
+    showDepartmentSelect(params) {
+        dep.clear();
+        const final = params?.InputProps?.startAdornment || [];
+        final.map(o => {
+           if(this.state.department.includes(o.props.label)) {
+                dep.add(o.props.label);
+            }
+        });
+    }
  
     render() { 
         return (<div>
@@ -339,6 +363,7 @@ class ExperienceModal extends Component {
                             <div className="form_inputBox input-field">
                                 <div className='formLabel_title'>
                                     Organization
+                                    <span style={{color: 'red'}}>*</span>
                                 </div>
                                 <div className='formInput'>
                                     <input 
@@ -351,6 +376,7 @@ class ExperienceModal extends Component {
                             <div className="form_inputBox input-field">
                                 <div className='formLabel_title'>
                                     Type of Experience
+                                    <span style={{color: 'red'}}>*</span>
                                 </div>
                                 <div className='formInput'>
                                     <Select
@@ -369,7 +395,8 @@ class ExperienceModal extends Component {
                         <div className='inputBoxColumn' style={{width: '80%'}}>
                             <div className="form_inputBox input-field">
                                 <div className='formLabel_title'>
-                                    Designation
+                                    <span>Job Title</span>
+                                    <span style={{color: 'red'}}>*</span>
                                 </div>
                                 <div className='formInput'>
                                     <input 
@@ -382,6 +409,7 @@ class ExperienceModal extends Component {
                             {this.state.skills.length>0 && <div className="form_inputBox input-field">
                                     <div className='formLabel_title'>
                                         Skills Used
+                                        <span style={{color: 'red'}}>*</span>
                                     </div>
                                     <div>
                                     <Select
@@ -409,6 +437,7 @@ class ExperienceModal extends Component {
                             <div className="form_inputBox input-field">
                                 <div className='formLabel_title'>
                                     Start Date
+                                    <span style={{color: 'red'}}>*</span>
                                 </div>
                                 <div className='candidateExperienceSelect'>
                                     <MaterialUIPickers value={this.state.startDate} setTime={this.handleStartDateChange.bind(this)}/>
@@ -417,6 +446,7 @@ class ExperienceModal extends Component {
                             {this.state.current && <div className="form_inputBox input-field">
                                 <div className='formLabel_title'>
                                     Currently Working
+                                    <span style={{color: 'red'}}>*</span>
                                 </div>
                                 <div className='formInput' style={{marginTop: '1rem'}}>
                                     <button className="small btn" style={{'margin-right': '2rem'}} onClick={(event) => { event.preventDefault(); this.setState({current: true})}}>Yes</button>
@@ -426,16 +456,100 @@ class ExperienceModal extends Component {
                             {!this.state.current && <div className="form_inputBox input-field">
                                 <div className='formLabel_title'>
                                     End Date
+                                    <span style={{color: 'red'}}>*</span>
                                 </div>
                                 <div className='candidateExperienceSelect'>
                                     <MaterialUIPickers value={this.state.endDate} setTime={this.handleEndDateChange.bind(this)}/>
                                 </div>
                             </div>}
                         </div>
+                        <div className='inputBoxColumn' style={{'flex-direction': 'column', 'align-items': 'flex-start', width: '75%'}}>
+                            <h6>Select relevant industry and department sector <span style={{color: 'red'}}>*</span></h6>
+                            <div className='industryAndDepartmentSelect' style={{marginLeft: '0rem', width: '100%'}}>
+                                <Autocomplete
+                                    id="free-solo-demo"
+                                    fullWidth
+                                    onChange={(event) => {
+                                        this.handleIndustryChange(event.target.dataset.optionIndex);
+                                    }}
+                                    options={jobCategory.map((option) => option.title)}
+                                    renderInput={(params) => <TextField {...params} label="Industry" />}
+                                />
+                                <div style={{'margin': '1rem'}}/>
+                                <Autocomplete
+                                    id="department-adder"
+                                    fullWidth
+                                    onChange={(event) => {
+                                        this.handleDepartmentChange(event.target.dataset.optionIndex);
+                                    }}
+                                    options={this.state.jobRoles.map((option) => option)}
+                                    getOptionLabel={(option) => option}
+                                    renderInput={(params) => {
+                                        this.showDepartmentSelect({...params})
+                                        return <TextField {...params} label="Department" />
+                                    }}
+                                />
+                            </div>
+                        </div>
+                        <div className='inputBoxColumn' style={{width: '80%'}}>
+                            <div className="form_inputBox input-field">
+                                <div className='formLabel_title'>
+                                    Location
+                                </div>
+                                <div className='formInput'>
+                                    <input 
+                                        placeholder="Enter your designation"
+                                        value={this.state.location}
+                                        onChange={ e => this.setState({ location: e.target.value })}
+                                    />    
+                                </div>                    
+                            </div>
+                            <div className="form_inputBox input-field">
+                                <div className='formLabel_title'>
+                                    Reporting Person
+                                </div>
+                                <div className='formInput'>
+                                    <input 
+                                        placeholder="Enter your manager name"
+                                        value={this.state.managerName}
+                                        onChange={ e => this.setState({ managerName: e.target.value })}
+                                    />    
+                                </div>                    
+                            </div>
+                            <div className="form_inputBox input-field">
+                                <div className='formLabel_title'>
+                                    Reporting person contact
+                                </div>
+                                <div className='formInput'>
+                                    <input 
+                                        placeholder="Enter your manager contact"
+                                        value={this.state.managerContact}
+                                        onChange={ e => this.setState({ managerContact: e.target.value })}
+                                    />    
+                                </div>                    
+                            </div>
+                        </div>
+                        <div className='inputBoxColumn' style={{width: '80%'}}>
+                            <div className="form_inputBox input-field" style={{width: '100%'}}>
+                                <div className='formLabel_title' >
+                                    Responsibilities
+                                </div>
+                                <div className='formInput'>
+                                    <TextField
+                                        id="outlined-multiline-static"
+                                        fullWidth  
+                                        multiline
+                                        rows={4}
+                                        onChange={ e => this.setState({ desc: e.target.value })}
+                                        defaultValue={this.state.desc}
+                                    />
+                                </div>                         
+                            </div>
+                        </div>
                         <div className='btnOption'>
-                        <Button variant='contained' size='medium' onClick={this.submitExperience.bind(this)}>
-                            Save
-                        </Button>
+                            <Button variant='contained' size='medium' onClick={this.submitExperience.bind(this)}>
+                                Save
+                            </Button>
                         </div>
                     </form>
                 </div>

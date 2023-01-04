@@ -60,7 +60,7 @@ class SkillPieChart extends Component {
                 <ResponsivePie
                     data={skillData}
                     margin={{top: 20,right: 30, bottom: 80, left: 30 }}
-                    innerRadius={0.45}
+                    innerRadius={0.25}
                     padAngle={0.7}
                     cornerRadius={3}
                     activeOuterRadiusOffset={8}
@@ -68,7 +68,7 @@ class SkillPieChart extends Component {
                     borderColor={{ from: 'color', modifiers: [ [ 'darker', 0.2 ] ] }}
                     arcLinkLabelsSkipAngle={10}
                     arcLinkLabelsTextColor="#333333"
-                    arcLinkLabelsThickness={2}
+                    arcLinkLabelsThickness={5}
                     arcLinkLabelsColor={{ from: 'color' }}
                     arcLabelsSkipAngle={10}
                     arcLabelsTextColor={{ from: 'color', modifiers: [ [ 'darker', 2 ] ] }}
