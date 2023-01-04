@@ -178,11 +178,13 @@ class ExpectationForm extends Component {
                         typeOfProject: 'industry',
                         duration: this.state.duration,
                     }
-                })
+            })})
+            .then( _ => {
                 this.props.sendEducationInfo({
                     value: {
                         institute: this.state.institute,
                         course: this.state.course,
+                        instituteName: '',
                         field_of_course: null,
                         startDate: null,
                         endDate: null,

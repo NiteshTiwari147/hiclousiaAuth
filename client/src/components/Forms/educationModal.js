@@ -36,9 +36,9 @@ class EducationModal extends Component {
       instituteName: '',
       course: this.props.data ? this.props.data.course : 'bachelor', 
       field_of_course: this.props.data ? this.props.data.field_of_course : '', 
-      start_year: this.props.data ? this.props.data.start_year : Date.now(),  
-      end_year: this.props.data ? this.props.data.end_year : Date.now(),  
-      grade: this.props.data ? this.props.data.grade : '',  
+      grade: this.props.data ? this.props.data.grade : '',
+      start_year: this.props.data ? this.props.data.start_year : '',  
+      end_year: this.props.data ? this.props.data.end_year : '',
       industry: this.props.data ? this.props.data.industry : '',
       isError: false
     }
@@ -145,10 +145,9 @@ class EducationModal extends Component {
                                 variant="outlined"
                                 onChange={this.handleUniversityTypeChange.bind(this)}
                                 >
-                                <MenuItem value={'iit'}>IITs</MenuItem>
-                                <MenuItem value={'nit'}>NITs</MenuItem>
-                                <MenuItem value={'central'}>Central university</MenuItem>
-                                <MenuItem value={'govt'}>Govt. university</MenuItem>
+                                <MenuItem value={'iit'}>IITs/BITS</MenuItem>
+                                <MenuItem value={'nit'}>NI/IIITs/Similar</MenuItem>
+                                <MenuItem value={'central'}>Central/Govt university</MenuItem>
                                 <MenuItem value={'private'}>Private</MenuItem>
                               </Select>  
                             </div>                    
@@ -212,9 +211,10 @@ class EducationModal extends Component {
                                 Year of starting
                             </div>
                             <div className='formInput'>
-                                <Datepicker selected={this.state.start_year} onChange={(date) => this.setState({ start_year: date})} 
-                                    dateFormat='dd/MM/yyyy' isClearable showYearDropdown scrollableYearDropdown placeholderText="DD/MM/YYYY"
-                                />      
+                                <input 
+                                  value={this.state.start_year}
+                                  onChange={(e) => this.setState({ start_year: e.target.value})}
+                                />     
                             </div>                    
                         </div>
                         <div className="form_inputBox input-field">
@@ -222,9 +222,10 @@ class EducationModal extends Component {
                                 Year of ending
                             </div>
                             <div className='formInput'>
-                                <Datepicker selected={this.state.end_year} onChange={(date) => {this.setState({ end_year: date})}} 
-                                    dateFormat='dd/MM/yyyy' isClearable showYearDropdown scrollableYearDropdown placeholderText="DD/MM/YYYY"
-                                />   
+                              <input 
+                                value={this.state.end_year}
+                                onChange={(e) => this.setState({ end_year: e.target.value})}
+                              />
                             </div>                    
                         </div>
                       </div>

@@ -5,6 +5,7 @@ const EducationInfoSchema = new Schema({
     hiclousiaID: String,
     email: String,
     institute: String,
+    institueName: String,
     course: String,
     field_of_course: String,
     start_date: String,

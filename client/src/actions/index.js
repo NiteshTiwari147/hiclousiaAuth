@@ -239,6 +239,7 @@ export const sendExperienceInfo = (props) => async dispatch => {
 export const sendEducationInfo = (props) => async dispatch => {
     const obj = {
         institute: props.value.institute,
+        institueName: props.value.instituteName,
         course: props.value.course,
         field_of_course: props.value.field_of_course,
         start_date: props.value.startDate,

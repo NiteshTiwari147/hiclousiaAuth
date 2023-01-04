@@ -278,17 +278,19 @@ class ExperienceModal extends Component {
                 valueObj.value.manager = this.state.managerName;
                 valueObj.value.managerContact = this.state.managerContact;
                 valueObj.value.responsibilty = this.state.desc;
-                this.props.sendExperienceInfo(valueObj);
-                const type = this.state.typeOfExperience === 'fullTime' ? 'industry': 'intern'
-                this.props.sendSkillList({
-                    value: {
-                        skillList: this.state.skillUsed,
-                        typeOfProject: type,
-                        duration:this.state.duration,
-                    }
+                this.props.sendExperienceInfo(valueObj).then( _ => {
+                    const type = this.state.typeOfExperience === 'fullTime' ? 'industry': 'intern'
+                    this.props.sendSkillList({
+                        value: {
+                            skillList: this.state.skillUsed,
+                            typeOfProject: type,
+                            duration:this.state.duration,
+                        }
+                    })
+                }).then( _ => {
+                    this.props.fetchExperience();
+                    this.props.close();
                 })
-                this.props.fetchExperience();
-                this.props.close();
             } else {
                 this.setState({isError: true});
             }       

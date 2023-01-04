@@ -5,8 +5,10 @@ import './styles.css';
 class ATS extends Component {
     render() {
         const { projectLen, education, experienceYears ,experienceMonths, department} = this.props;
-        const { institute, course } = education[0];
-        console.log(education, institute, course);
+        const { institute, course } = education ? education[0] : {
+            institute: '',
+            course: ''
+        };
         return (
             <div className='ATScontainer shadow'>
                 <div className="miniBox">

@@ -133,6 +133,33 @@ function calculateExperience(experiences) {
     return total;
 }
 
+function calculateEducationCompentency(institute, course) {
+    let score = 0;
+    let theta = 0;
+    let alpha = 0;
+    if(institute==='iit') {
+        theta = 1;
+    } else if(institute==='nit') {
+        theta = 0.8;
+    } else if(institute==='central') {
+        theta = 0.6;
+    } else {
+        theta = 0.4;
+    }
+
+    if(course === 'doctorate') {
+        alpha = 40;
+    } else if(course === 'masters') {
+        alpha = 30;
+    } else if(course === 'bachelor') {
+        alpha = 20;
+    } else {
+        alpha = 10;
+    }
+    score = theta*alpha;
+    return score;
+}
+
 
 function processSkillData(oldSkillList, newSkillsData) {
     const { skillList, duration, typeOfProject } = newSkillsData;
@@ -240,4 +267,4 @@ function calculateIndustryCompentency(type, duration) {
     return total/150;
 }
 
-module.exports = { processSkillData, calculateExperience, calculateIndustryCompentency }
+module.exports = { processSkillData, calculateExperience, calculateIndustryCompentency, calculateEducationCompentency }
