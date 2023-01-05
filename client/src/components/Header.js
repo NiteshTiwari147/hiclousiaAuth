@@ -18,10 +18,10 @@ class Header extends Component {
                 </ul>
             default: 
                 return <ul id="nav-mobile" class="right hide-on-med-and-down">
-                    <li><a className='headerBtn'>Products</a></li>
-                    <li><a className='headerBtn'>About us</a></li>
+                    {/* <li><a className='headerBtn'>Products</a></li>
+                    <li><a className='headerBtn'>About us</a></li> */}
                     {this.props.candidate && this.props.candidate.role === 'candidate' && <li><a className='headerBtn' href="/jobs">Jobs</a></li>}
-                    {this.props.candidate && this.props.candidate.role === 'candidate' && <li><a className='headerBtn' href="/careerprofile">Career Profile</a></li>}
+                    {/* {this.props.candidate && this.props.candidate.role === 'candidate' && <li><a className='headerBtn' href="/careerprofile">Career Profile</a></li>} */}
                     {this.props.candidate && this.props.candidate.role === 'recruiter' && <li><a className='headerBtn' href="/candidates">Talent</a></li>}
                     <li><a className='headerBtn' href="/home">Dashboard</a></li>
                     <li className='headerText' >{this.props.auth.email}</li>

@@ -16,6 +16,7 @@ class GateWay extends Component {
         this.props.fetchEducation();
         this.props.fetchExperience();
         this.props.fetchProject();
+        this.props.fetchCompentency();
         this.props.fetchSkillSet();
     }
 

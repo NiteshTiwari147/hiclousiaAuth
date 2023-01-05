@@ -60,7 +60,7 @@ class FilterPane extends Component {
         this.setState({editModalOpen: false})
     }
     render() {
-        const { expectedIndustry, expectedDepartment, city, expectedSalary} = this.props.data;
+        const { expectedIndustry, expectedDepartment, expectedCities, expectedSalary} = this.props.data;
         return (
             <div className='filterContainer shadow'>
                 <div className='filter'> 
@@ -80,16 +80,16 @@ class FilterPane extends Component {
                 <div style={{'margin': '1rem'}} />
                 <div className='fitler'>
                     <label className='filterTitle'>Preferred Locations</label>
-                    {city && city.map(c => <div>{c}</div>)}
+                    {expectedCities && expectedCities.map(c => <div>{c}</div>)}
                 </div>
-                <Button className='searchBox' variant="contained" onClick={this.handleEditModalOpen.bind(this)}>
+                {/* <Button className='searchBox' variant="contained" onClick={this.handleEditModalOpen.bind(this)}>
                     Edit
                 </Button>
                 <ExpecationModal 
                     open={this.state.editModalOpen}
                     close={this.handleEditModalClose.bind(this)}
                     data={this.props.data}
-                />
+                /> */}
             </div>
         )
     }

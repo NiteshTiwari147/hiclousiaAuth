@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FETCH_USER,FETCH_CANDIDATE,FETCH_EDUCATION,FETCH_EXPERIENCE,FETCH_PROJECT, FETCH_SKILLSET, FETCH_HR, FETCH_JOBS, FETCH_POSTEDJOB, SUGGESTED_TALENT, TALENT_DETAILS, FETCH_RELEVANT_JOBS, TOTAL_EXP } from './types';
+import { FETCH_COMPENTENCY, FETCH_USER,FETCH_CANDIDATE,FETCH_EDUCATION,FETCH_EXPERIENCE,FETCH_PROJECT, FETCH_SKILLSET, FETCH_HR, FETCH_JOBS, FETCH_POSTEDJOB, SUGGESTED_TALENT, TALENT_DETAILS, FETCH_RELEVANT_JOBS, TOTAL_EXP } from './types';
 
 export const fetchUser = () => async dispatch => {
     const res = await axios.get('/api/current_user');
@@ -13,6 +13,15 @@ export const fetchCandidate = () => async dispatch => {
     const res = await axios.get('/fetch/Candidate');
     dispatch({
         type: FETCH_CANDIDATE,
+        payload: res.data
+    });
+}
+
+export const fetchCompentency = () => async dispatch => {
+    const res = await axios.get('/fetch/compentecy');
+    console.log("compentecy ", res);
+    dispatch({
+        type: FETCH_COMPENTENCY,
         payload: res.data
     });
 }
@@ -103,7 +112,6 @@ export const fetchSkillSet = () => async dispatch => {
 
 export const fetchExperience = () => async dispatch => {
     const res = await axios.get('/fetch/Experience');
-    console.log(res);
     dispatch({
         type: FETCH_EXPERIENCE,
         payload: res.data.expData.experiences
@@ -181,16 +189,19 @@ export const sendHRBasicInfo = (props) => async dispatch => {
 
 export const sendProjectInfo = (props) => async dispatch => {
     const obj = {
-        department: props.value.department,
-        description: props.value.desc,
-        duration: props.value.duration,      
-        endDate: props.value.endDate,
-        industry: props.value.industry,
-        startDate: props.value.startDate,
-        skills: props.value.selectedSkill,
         title: props.value.title,
         typeOfProject: props.value.typeOfProject,
-        
+        description: props.value.desc,
+        outcomes: props.value.outcomes,
+        duration: props.value.duration,             
+        industry: props.value.industry,
+        department: props.value.department,
+        startDate: props.value.startDate,
+        endDate: props.value.endDate,
+        skills: props.value.selectedSkill,
+        location: props.value.location,
+        manager: props.value.manager,
+        managerContact: props.value.managerContact
     };
     const res = await axios.post('/create/project', obj);
 }

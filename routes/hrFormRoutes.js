@@ -4,7 +4,7 @@ require('../models/HR/basicInfo');
 require('../models/HR/jobPost');
 require('../models/Talent/talentReq');
 require('../models/Talent/BasicInfo');
-require('../models/projectInfo');
+require('../models/Talent/projectInfo');
 require('../models/Talent/educationInfo');
 require('../models/Talent/experienceInfo');
 require('../models/skillSet');

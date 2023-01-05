@@ -60,9 +60,9 @@ class Dashboard extends Component {
                         <div>
                             <SkillPieChart data={skillSet && skillSet.processedSKillList ? skillSet.processedSKillList : []} />
                             <CompentencyPieChart />
-                            {skillSet && skillSet.processedSKillList ? <Certificate data={skillSet.processedSKillList} isEmpty={false} /> : 
+                            {/* {skillSet && skillSet.processedSKillList ? <Certificate data={skillSet.processedSKillList} isEmpty={false} /> : 
                             <Certificate data={skillSet && skillSet.processedSKillList ? skillSet.processedSKillList : []} isEmpty={true} />
-                            }
+                            } */}
                         </div>
                     </div>
                 </div>

@@ -51,6 +51,7 @@ const style = {
 };
 
 const res = new Set();
+const dep = new Set();
 
 class ProjectModal extends Component {
     constructor(props) {
@@ -58,7 +59,7 @@ class ProjectModal extends Component {
       this.state = { fromExp: false,tittle: '', desc: '', startDate: dayjs(Date.now()).format('YYYY-MM-DD'),duration: { year: 0, month: 0, day: 0, hour: 0, minute: 0, second: 0 },
         endDate: dayjs(Date.now()).format('YYYY-MM-DD'),industry: '',
         department: '', jobRoles: [],  typeOfProject: 'industry', skillUsed: [], isError: false,
-        skills:  this.props.skillData || []} 
+        skills:  this.props.skillData || [], result: '',location: '', managerName: '', managerContact: '',} 
     }
 
     handleSKillChange(event) {
@@ -171,7 +172,10 @@ class ProjectModal extends Component {
             value: {
                 title: this.state.tittle,
                 desc: this.state.desc,
+                outcomes: this.state.result,
                 typeOfProject: this.state.typeOfProject,
+                industry: this.state.industry,
+                department: this.state.department,
                 duration: this.state.duration,
                 startDate: this.state.startDate,
                 endDate: this.state.endDate,
@@ -179,26 +183,15 @@ class ProjectModal extends Component {
             }
         }
         if(this.isValid(obj)) {
+            console.log(obj, this.state);
+            obj.value.location = this.state.location;
+            obj.value.manager = this.state.managerName;
+            obj.value.managerContact = this.state.managerContact;
             this.props.sendProjectInfo(obj)
-            .then( () => {
-                this.props.sendSkillList({
-                    value: {
-                        skillList: this.state.skillUsed,
-                        typeOfProject: this.state.typeOfProject,
-                        duration: this.state.duration,
-                    }
-                });
-            })
-            .then(res => {
-                this.props.fetchSkillSet();
-                this.setState({ tittle: '', desc: '', startDate: '',duration: {}, endDate: '',
-                industry: 'industry', department: 'department', jobRoles: [],  typeOfProject: 'industry', skillUsed: []})
-                if(this.state.fromExp) {
-                    this.props.closeParent();
-                }
-                this.props.close();
-                this.props.fetchProject();
-            })
+            this.setState({ tittle: '', desc: '', startDate: '',duration: {}, endDate: '',result: '',location: '', 
+            industry: 'industry', department: 'department', jobRoles: [],  typeOfProject: 'industry', skillUsed: [], manager: '',managerContact: ''});
+            this.props.close();
+            this.props.fetchProject();
         } else {
             this.setState({isError: true})
         }
@@ -217,6 +210,16 @@ class ProjectModal extends Component {
         this.setState({department: this.state.jobRoles[event]})
     }
 
+    showDepartmentSelect(params) {
+        dep.clear();
+        const final = params?.InputProps?.startAdornment || [];
+        final.map(o => {
+           if(this.state.selectedDepartment.includes(o.props.label)) {
+                dep.add(o.props.label);
+            }
+        });
+    }
+
     addCoreSkill(event) {
         event.preventDefault();
         const skill = this.state.skill;
@@ -225,8 +228,6 @@ class ProjectModal extends Component {
         this.setState({skill: ''})
         this.setState({skills: coreSkills});
     }
-
-
 
     render() {
         return(<div>
@@ -278,7 +279,7 @@ class ProjectModal extends Component {
                       <div className='inputBoxColumn' style={{width: '100%'}}>
                         <div className="form_inputBox input-field" style={{width: '100%'}}>
                             <div className='formLabel_title' >
-                                Description
+                                Responsibilities
                             </div>
                             <div className='formInput'>
                                 <TextField
@@ -288,6 +289,23 @@ class ProjectModal extends Component {
                                     rows={4}
                                     onChange={ e => this.setState({ desc: e.target.value })}
                                     defaultValue={this.state.desc}
+                                />
+                            </div>                         
+                        </div>
+                      </div>
+                      <div className='inputBoxColumn' style={{width: '100%'}}>
+                        <div className="form_inputBox input-field" style={{width: '100%'}}>
+                            <div className='formLabel_title' >
+                                Outcomes
+                            </div>
+                            <div className='formInput'>
+                                <TextField
+                                    id="outlined-multiline-static"
+                                    fullWidth  
+                                    multiline
+                                    rows={4}
+                                    onChange={ e => this.setState({ result: e.target.value })}
+                                    defaultValue={this.state.result}
                                 />
                             </div>                         
                         </div>
@@ -310,6 +328,34 @@ class ProjectModal extends Component {
                             </div>                    
                         </div>
                       </div>
+                      <div className='inputBoxColumn' style={{'flex-direction': 'column', 'align-items': 'flex-start', width: '95%'}}>
+                            <h6>Select relevant industry and department sector</h6>
+                            <div className='industryAndDepartmentSelect' style={{marginLeft: '0rem', width: '100%'}}>
+                                <Autocomplete
+                                    id="free-solo-demo"
+                                    fullWidth
+                                    onChange={(event) => {
+                                        this.handleIndustryChange(event.target.dataset.optionIndex);
+                                    }}
+                                    options={jobCategory.map((option) => option.title)}
+                                    renderInput={(params) => <TextField {...params} label="Industry" />}
+                                />
+                                <div style={{'margin': '1rem'}}/>
+                                <Autocomplete
+                                    id="department-adder"
+                                    fullWidth
+                                    onChange={(event) => {
+                                        this.handleDepartmentChange(event.target.dataset.optionIndex);
+                                    }}
+                                    options={this.state.jobRoles.map((option) => option)}
+                                    getOptionLabel={(option) => option}
+                                    renderInput={(params) => {
+                                        this.showDepartmentSelect({...params})
+                                        return <TextField {...params} label="Department" />
+                                    }}
+                                />
+                            </div>
+                        </div>
                       {this.state.skills.length>0 && <div className="form_inputBox input-field" style={{width: '95%'}}>
                             <div className='formLabel_title'>
                                 Skills Used
@@ -336,13 +382,51 @@ class ProjectModal extends Component {
                             </Select>
                             </div>
                         </div>}
+                        <div className='inputBoxColumn' style={{width: '100%'}}>
+                            <div className="form_inputBox input-field">
+                                <div className='formLabel_title'>
+                                    Location
+                                </div>
+                                <div className='formInput'>
+                                    <input 
+                                        placeholder="Enter your designation"
+                                        value={this.state.location}
+                                        onChange={ e => this.setState({ location: e.target.value })}
+                                    />    
+                                </div>                    
+                            </div>
+                            <div className="form_inputBox input-field">
+                                <div className='formLabel_title'>
+                                    Reporting Person
+                                </div>
+                                <div className='formInput'>
+                                    <input 
+                                        placeholder="Enter your manager name"
+                                        value={this.state.managerName}
+                                        onChange={ e => this.setState({ managerName: e.target.value })}
+                                    />    
+                                </div>                    
+                            </div>
+                            <div className="form_inputBox input-field">
+                                <div className='formLabel_title'>
+                                    Contact
+                                </div>
+                                <div className='formInput'>
+                                    <input 
+                                        placeholder="Enter your manager contact"
+                                        value={this.state.managerContact}
+                                        onChange={ e => this.setState({ managerContact: e.target.value })}
+                                    />    
+                                </div>                    
+                            </div>
+                        </div>
                         <div className='btnOption'>
-                            <Button variant='contained' size='medium' onClick={this.addMoreProject.bind(this)}>
+                            {/* <Button variant='contained' size='medium' onClick={this.addMoreProject.bind(this)}>
                                 Add More
                             </Button>
-                            <div style={{marginRight: '1rem'}} />
+                            <div style={{marginRight: '1rem'}} /> */}
                             <Button variant='contained' size='medium' onClick={this.submitProject.bind(this)}>
-                                Thats all
+                                Save
                             </Button>
                         </div>
                         {this.state.isError && <div className='form_title'>

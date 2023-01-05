@@ -4,15 +4,19 @@ const { Schema } = mongoose;
 const ProjectInfoSchema = new Schema({
     hiclousiaID: String,
     email: String,
-    department: String,
+    title: String,
+    typeOfProject: String,
     description: String,
+    outcomes: String,
     duration: Object,
+    industry: String,
+    department: String,
     startDate: String,
     endDate: String,
     skills: [String],
-    industry: String,
-    title: String,
-    typeOfProject: String
+    location: String,
+    manager: String,
+    managerContact: String
 });
 
 mongoose.model('projects', ProjectInfoSchema);

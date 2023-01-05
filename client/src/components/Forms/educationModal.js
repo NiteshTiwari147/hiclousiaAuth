@@ -75,6 +75,7 @@ class EducationModal extends Component {
         this.props.updateEducationInfo(obj)
         .then(res => {
           this.props.fetchEducation();
+          this.props.fetchCompentency();
           this.props.close();
         });
       } else {
@@ -97,6 +98,7 @@ class EducationModal extends Component {
             industry: ''
           })
           this.props.fetchEducation();
+          this.props.fetchCompentency();
           this.props.close();
         });
       } else {

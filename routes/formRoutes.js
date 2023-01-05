@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 require('../models/Talent/BasicInfo');
-require('../models/projectInfo');
+require('../models/Talent/projectInfo');
 require('../models/Talent/educationInfo');
 require('../models/Talent/experienceInfo');
 require('../models/HR/jobPost');
@@ -46,6 +46,20 @@ module.exports = app => {
         }
         catch (err) {
             console.log("candidate skillset not found ",err);
+            res.send({status: 204})
+        } 
+    })
+
+    app.get('/fetch/compentecy', checkAuthenticated, async function(req, res, done) {
+        const talentReq = mongoose.model('talentReq');
+        try {
+            if(req, req.user && req.user.email) {
+                const compentency = await talentReq.findOne({email: req.user.email});
+                res.send(compentency);
+            } 
+        }
+        catch (err) {
+            console.log("compentency not found ",err);
             res.send({status: 204})
         } 
     })
@@ -187,9 +201,9 @@ module.exports = app => {
         const project =  mongoose.model('projects');
         const talentReq = mongoose.model('talentReq');
         try {
-            const { title, description, typeOfProject,  startDate, endDate, skills, duration, industry, department} = req.body;
+            const { title, description, typeOfProject,outcomes, startDate, endDate, skills, duration, industry, department, location, manager, managerContact} = req.body;
             const { hiclousiaID, email } = req.user;
-            const response = await new project({hiclousiaID, email, title, description, typeOfProject,  startDate, endDate, skills, duration, industry, department}).save();    
+            const response = await new project({hiclousiaID, email, title, description, typeOfProject,outcomes, startDate, endDate, skills, duration, industry, department, location, manager, managerContact}).save();    
             const talentReqData = await talentReq.findOne({email: req.user.email});
             talentReqData.selfScore = Math.floor(Math.random() * 100) + 60;
             const newTalenReq = { $set: talentReqData };

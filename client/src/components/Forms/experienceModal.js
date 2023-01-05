@@ -288,7 +288,25 @@ class ExperienceModal extends Component {
                         }
                     })
                 }).then( _ => {
+                    this.setState({
+                        organization: '',
+                        id: '',
+                        position: '',
+                        desc: '',
+                        start_year: '',
+                        skill: '',
+                        skills:  [],
+                        end_year: '',
+                        jobRoles: [],
+                        current: false, 
+                        industryExperienceYears: 0,
+                        industryExperienceMonths: 0,
+                        industry: 'industry',
+                        department: 'department',
+                        typeOfExperience: 'fullTime'})
                     this.props.fetchExperience();
+                    this.props.fetchSkillSet();
+                    this.props.fetchCompentency();
                     this.props.close();
                 })
             } else {
