@@ -65,6 +65,15 @@ class PostedJobCard extends Component {
     handleModalClose() {
         this.setState({modalOpen: false})
     }
+
+    renderDate(date) {
+        date = Date(date);
+        var date = new Date(date),
+        mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+        day = ("0" + date.getDate()).slice(-2);
+        let res = [date.getFullYear(), mnth, day].join("-");
+        return res;
+    }
     render() {
         const {
             jobID,
@@ -73,6 +82,7 @@ class PostedJobCard extends Component {
             description,
             industry,
             department,
+            postedDate,
             skills,
             cities,
             budget } = this.props.data;
@@ -86,7 +96,7 @@ class PostedJobCard extends Component {
                             </div>
                             <div className='sectionOne' style={{marginRight: '1rem'}}>
                                 <label>Posted Date</label>
-                                <p style={{fontWeight: 500}}>12 Nov 2022</p>
+                                <p style={{fontWeight: 500}}>{this.renderDate(postedDate)}</p>
                             </div>
                         </div>
                         <div style={{display: 'flex'}}>

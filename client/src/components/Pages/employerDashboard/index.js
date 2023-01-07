@@ -20,7 +20,8 @@ class EmployerDashboard extends Component {
                     <EmployerInfo data={hr}/>
                 </div>
                 <div className='dashboardStack'>
-                    <EmployerATS data={jobs}/>
+                    {/* <EmployerATS data={jobs}/> */}
+                    <div style={{marginBottom: '2rem'}}/>
                     <AddJobBar />
                     {jobs.length > 0 && <div className='postedJobCarousel'>
                         <Carousel
@@ -34,7 +35,7 @@ class EmployerDashboard extends Component {
                     </div>}         
                 </div>
                 <div className='dashboardStack'>
-                    <JobView />
+                    <JobView jobs={jobs.length}/>
                 </div>
             </div>
         } else {

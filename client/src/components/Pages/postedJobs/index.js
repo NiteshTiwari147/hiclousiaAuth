@@ -60,7 +60,7 @@ class PostedJob extends Component {
                         </div>
                         <div className="jobDetailRow">
                             <label>Skills:</label>
-                            <div style={{display: 'flex'}}>{skills && skills.map(s => <p style={{marginRight: '5px', border: '1px solid red'}}>{`${s} `}</p>)}</div> 
+                            <div style={{display: 'flex'}}>{skills && skills.map(s => <p style={{marginRight: '5px', border: '1px solid #1072EB', padding: '2px', borderRadius: '5px'}}>{`${s} `}</p>)}</div> 
                         </div>
                         <div className="jobDetailRow">
                             <label>Industry:</label>

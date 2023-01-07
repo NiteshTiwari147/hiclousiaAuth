@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import '../style.css';
 import MatchedSkills from './skillList';
+import LoadingScreen from '../../../utils/loadingScreen';
 import * as actions from '../../../../actions';
 
 var matchedSkill = [];
@@ -24,7 +25,6 @@ class CandidateSuggestion extends Component {
                const found = talentSkills.find(el => el.skillName === skill);
                if(found) {
                 match++;
-                console.log(found);
                 matchedSkill.push(found.skillName);
                }
             })
@@ -51,18 +51,26 @@ class CandidateSuggestion extends Component {
     }
 
     renderCandidateRow(candidate) {
-        console.log(candidate);
         const {
             hiclousiaID,
             name,
             skills,
             budget,
+            cities,
+            experience,
             expectedDepartment,
             skillScore,
             educationScore,
             selfScore,
             industryScore,
         } = candidate;
+        let prefferedCity='';
+        if(cities.length === 1 ) {
+            prefferedCity = cities[0];
+        } else if(cities.length > 1) {
+            prefferedCity = cities[0];
+            prefferedCity = prefferedCity + ' + more'
+        }
         return <div className="suggestedCandidateRow">
             <div style={{width: '20%'}}>
                 <img class="candidateImage" src="https://www.pavilionweb.com/wp-content/uploads/2017/03/man-300x300.png" />
@@ -89,7 +97,7 @@ class CandidateSuggestion extends Component {
                         <div className="candidateRowStatBox">
                             <label >Total Experience</label>
                             <div>
-                                N.A
+                                {experience.year} yrs {experience.month} mnths
                             </div>
                         </div>
                         <div className="candidateRowStatBox">
@@ -103,13 +111,13 @@ class CandidateSuggestion extends Component {
                         <div className="candidateRowStatBox">
                             <label >Skill Compentency</label>
                             <div>
-                                {skillScore}
+                                {Math.ceil(skillScore)}
                             </div>
                         </div>
                         <div className="candidateRowStatBox">
-                            <label >Self Compentency</label>
+                            <label >Preferred Location</label>
                             <div>
-                                {selfScore}
+                                {prefferedCity}
                             </div>
                         </div>
                     </div>
@@ -117,13 +125,13 @@ class CandidateSuggestion extends Component {
                         <div className="candidateRowStatBox">
                             <label >Education Compentency</label>
                             <div>
-                                {educationScore}
+                                {Math.ceil(educationScore)}
                             </div>
                         </div>
                         <div className="candidateRowStatBox">
                             <label >Industry Compentency</label>
                             <div>
-                                {industryScore}
+                                {Math.ceil(industryScore)}
                             </div>
                         </div>
                     </div>
@@ -142,7 +150,7 @@ class CandidateSuggestion extends Component {
                 {candidates.map( candidate => this.renderCandidateRow(candidate))}
         </div>
         } else {
-            return <div>Please wait We are searching</div>
+            return <LoadingScreen />
         }   
     }
 }

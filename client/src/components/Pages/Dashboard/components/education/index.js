@@ -65,7 +65,7 @@ class Education extends Component {
 }
     render() {
         const isEmpty = this.props.isEmpty;
-
+        const isHR = this.props.isHR || false;
         if(isEmpty) {
             return  <div className='educationContainer shadow' >
                 <h5 style={{"color": "#1072EB"}}>Education</h5>
@@ -77,15 +77,33 @@ class Education extends Component {
                 </div>
                 <EducationModal open={this.state.educationModalOpen} close={this.handleEducationModalClose.bind(this)} />
             </div>
+        } else if(isHR) {
+            const educationList = this.props.data
+        return (
+            <div className='educationContainer shadow' >
+                <div className='educationContainerTitle'>
+                    <h6 style={{"color": "#1072EB"}}>Education</h6>
+                </div>
+                <Divider color='skyblue'/>
+                {educationList.map(education => this.renderEducation(education.course,
+                    education.field_of_course,
+                    education.institute,
+                    education.grade))}
+                <EducationListingModal 
+                open={this.state.modalOpen}
+                close={this.handleModalClose.bind(this)}
+                list={educationList}
+                />
+            </div>)
         }
         const educationList = this.props.data
         return (
             <div className='educationContainer shadow' >
                 <div className='educationContainerTitle'>
                     <h6 style={{"color": "#1072EB"}}>Education</h6>
-                    <Button size='small' onClick={this.handleModalOpen.bind(this)}>
+                    {/* <Button size='small' onClick={this.handleModalOpen.bind(this)}>
                         <EditIcon size='small' />
-                    </Button>
+                    </Button> */}
                 </div>
                 <Divider color='skyblue'/>
                 {educationList.map(education => this.renderEducation(education.course,

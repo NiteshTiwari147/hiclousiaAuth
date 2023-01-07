@@ -67,7 +67,7 @@ class Project extends Component {
                 <div className='projectInfoContainer'>
                     <div className='projectHeaderContainer'>
                         <div className='projectTitle'>{title}</div>
-                        <Button size='small' color='error' onClick={this.handleDelete.bind(this, _id)}><DeleteIcon size='small' /></Button>
+                        {/* <Button size='small' color='error' onClick={this.handleDelete.bind(this, _id)}><DeleteIcon size='small' /></Button> */}
                     </div>
                     { skills && <div style={{'fontSize': 'medium'}}>
                         Skills: {skills.length}

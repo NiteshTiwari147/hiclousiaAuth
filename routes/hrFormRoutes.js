@@ -11,6 +11,8 @@ require('../models/skillSet');
 
 var customId = require("custom-id");
 
+const { refineCandidates }  = require('../services/matchingAlgo');
+
 module.exports = app => {
     function checkAuthenticated(req, res, next) {
         if (req.isAuthenticated()) {
@@ -73,6 +75,8 @@ module.exports = app => {
         const {
           industry,
           department,
+          experience,
+          budget
         } = req.query;
 
         const candidates = await talentReq.find({expectedIndustry: industry, expectedDepartment: {
@@ -80,7 +84,8 @@ module.exports = app => {
             $in: department
           }
         }});
-        res.send(candidates);
+        const refinedCandidates = refineCandidates(candidates, experience, budget);
+        res.send(refinedCandidates);
         res.status(200);
 
       } catch(err) {

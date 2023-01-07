@@ -4,7 +4,7 @@ import './styles.css';
 
 class ATS extends Component {
     render() {
-        const { projectLen, education, experienceYears ,experienceMonths, department} = this.props;
+        const { projectLen, education, experienceYears ,experienceMonths, department, cities} = this.props;
         const { institute, course } = education ? education[0] : {
             institute: '',
             course: ''
@@ -13,10 +13,12 @@ class ATS extends Component {
             <div className='ATScontainer shadow'>
                 <div className="miniBox">
                     <div>
-                        <h6 className="headingATS">Total Projects</h6> 
+                        <h6 className="headingATS">Preffered Cities</h6> 
                     </div>
                     <h6 className="ATS_score" style={{marginRight: '1rem'}}>
-                        {projectLen}
+                        {cities.map(c => <p className="ATS_score" style={{fontSize: '10px', fontWeight: '500', marginRight: '1rem'}}>
+                            {c}
+                        </p>)}
                     </h6>
                 </div>
                 <div className="miniBox">

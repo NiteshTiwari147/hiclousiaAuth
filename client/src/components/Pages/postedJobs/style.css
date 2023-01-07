@@ -40,7 +40,7 @@
     margin-bottom: 1rem;
     font-weight:  500;
     background:#e2efff;
-    width: fit-content;
+    min-width: 2rem;
     border-radius: 8px;
 }
 

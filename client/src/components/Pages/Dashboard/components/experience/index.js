@@ -33,7 +33,7 @@ class ExperienceTab extends Component {
         this.setState({modalOpen: false})
     }
 
-    renderExperience(company, designation) {
+    renderExperience(start_date, end_date, company, designation) {
         return <div>
             <div className='experienceContent'>
                 <div className='experienceIcon'>
@@ -47,7 +47,7 @@ class ExperienceTab extends Component {
                     {designation}
                 </div>
                 <div className='experienceDuration'>
-                    2019-Continue
+                    {start_date} to {end_date}
                 </div>
             </div>
             </div>
@@ -56,9 +56,8 @@ class ExperienceTab extends Component {
     }
     render() {
         const isEmpty = this.props.isEmpty;
-        const { skillSet } = this.props;
-        console.log(skillSet);
-        if(isEmpty && skillSet) {
+        const isHR = this.props.isHR || false;
+        if(isEmpty) {
             return <div className='experienceContainer shadow' style={{flexDirection: 'column' ,justifyContent: 'center',
             alignItems: 'center'}}>
             <h5 style={{"color": "#1072EB"}}>Experience</h5>
@@ -70,34 +69,63 @@ class ExperienceTab extends Component {
             </div>
             <ExperienceModal open={this.state.experienceModalOpen} close={this.handleExperienceModalClose.bind(this)} skillData={this.props.skillSet ? this.props.skillSet.processedSKillList : []}/>
         </div>
-        } else if(skillSet) {
+        } else if(isHR) {
             const experienceList = this.props.data;
-        return (
-            <div className='experienceContainer shadow'>
-               <div className='educationContainerTitle'>
-                    <h6 style={{"color": "#1072EB"}}>Experience</h6>
-                    {/* <Button size='small' onClick={this.handleModalOpen.bind(this)}>
-                        <EditIcon size='small' />
-                    </Button> */}
+            console.log("tab ", experienceList);
+            return (
+                <div className='experienceContainer shadow'>
+                <div className='educationContainerTitle'>
+                        <h6 style={{"color": "#1072EB"}}>Experience</h6>
+                        {/* <Button size='small' onClick={this.handleModalOpen.bind(this)}>
+                            <EditIcon size='small' />
+                        </Button> */}
+                    </div>
+                    <Divider color='skyblue'/>
+                    {experienceList.map(experience => this.renderExperience(
+                        experience.startDate,
+                        experience.endDate,
+                        experience.company,
+                        experience.designation
+                    ))}
+                    <ExperienceListingModal 
+                    open={this.state.modalOpen}
+                    close={this.handleModalClose.bind(this)}
+                    list={experienceList}
+                    />
                 </div>
-                <Divider color='skyblue'/>
-                {experienceList.map(experience => this.renderExperience(
-                    experience.company,
-                    experience.designation
-                ))}
-                <ExperienceListingModal 
-                open={this.state.modalOpen}
-                close={this.handleModalClose.bind(this)}
-                list={experienceList}
-                />
-                <div style={{marginTop: '1rem'}}>
-                    <Button variant='contained' color='success' size='medium' onClick={this.handleExperienceModalOpen.bind(this)}>
-                        Add Experience
-                    </Button>
+            )
+        }
+        else {
+            const experienceList = this.props.data;
+            console.log("tab ", experienceList);
+            return (
+                <div className='experienceContainer shadow'>
+                <div className='educationContainerTitle'>
+                        <h6 style={{"color": "#1072EB"}}>Experience</h6>
+                        {/* <Button size='small' onClick={this.handleModalOpen.bind(this)}>
+                            <EditIcon size='small' />
+                        </Button> */}
+                    </div>
+                    <Divider color='skyblue'/>
+                    {experienceList.map(experience => this.renderExperience(
+                        experience.startDate,
+                        experience.endDate,
+                        experience.company,
+                        experience.designation
+                    ))}
+                    <ExperienceListingModal 
+                    open={this.state.modalOpen}
+                    close={this.handleModalClose.bind(this)}
+                    list={experienceList}
+                    />
+                    <div style={{marginTop: '1rem'}}>
+                        <Button variant='contained' color='success' size='medium' onClick={this.handleExperienceModalOpen.bind(this)}>
+                            Add Experience
+                        </Button>
+                    </div>
+                    <ExperienceModal open={this.state.experienceModalOpen} close={this.handleExperienceModalClose.bind(this)} skillData={this.props.skillSet ? this.props.skillSet.processedSKillList : []} />
                 </div>
-                <ExperienceModal open={this.state.experienceModalOpen} close={this.handleExperienceModalClose.bind(this)} skillData={this.props.skillSet ? this.props.skillSet.processedSKillList : []} />
-            </div>
-        )
+            )
         } 
     }
 }

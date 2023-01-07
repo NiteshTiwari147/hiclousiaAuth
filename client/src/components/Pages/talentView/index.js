@@ -22,7 +22,6 @@ class TalentView extends Component {
 
     componentDidMount() {
         const params = new URLSearchParams(this.props.location.search);
-        console.log(params.get('id'))
         this.props.fetchTalentDetail({
             value: {
                 id: params.get('id')
@@ -36,14 +35,19 @@ class TalentView extends Component {
         }
     }
 
-    calculateExperience() {
-        return {yr: 3, mo: 1};
-    }
-
-    renderATS(project, skillSet) {
+    renderATS(project, candidate, education) {
         if(this.props.talentDetail) {
-            const {yr, mo} = this.calculateExperience()
-            return <ATS projectLen={project ? project.length : 0} skills={skillSet && skillSet.coreSkills? skillSet.coreSkills.length : 0} experienceYears={yr} experienceMonths={mo} />
+            var year=0;
+            var month=0;
+            var prefferedCities = [];
+            if(candidate.experience) {
+                year = candidate.experience.year;
+                month = candidate.experience.month;
+            }
+            if(candidate.expectedCities) {
+                prefferedCities = candidate.expectedCities
+            }
+            return <ATS cities={prefferedCities} projectLen={project ? project.length : 0} department={candidate.expectedDepartment} education={education} experienceYears={year} experienceMonths={month} />
         }
         
     }
@@ -51,19 +55,18 @@ class TalentView extends Component {
     render() {
         console.log(this.props.talentDetail);
         if(this.props.talentDetail) {
-            const {project, skillSet, basicInfo, education, experience } = this.props.talentDetail;
-            console.log(project, skillSet, basicInfo, education, experience);
+            const {project, skillSet, basicInfo, education, experience, talentReq } = this.props.talentDetail;
             return (
                 <div className='dashboardLayout'>
                     <div className='dashboardStack'>
                         {this.renderCandidateInfo(basicInfo, experience)}
-                        {experience && experience.length > 0 ? <ExperienceTab data={experience} isEmpty={false} /> : 
-                        <ExperienceTab data={experience} isEmpty={true} />}
-                        {education && education.length > 0 ? <Education data={education} isEmpty={false} /> : 
-                        <Education data={education} isEmpty={true} />}
+                        {experience && experience.length > 0 ? <ExperienceTab data={experience} isEmpty={false} isHR={true} /> : 
+                        null}
+                        {education && education.length > 0 ? <Education data={education} isEmpty={false} isHR={true} /> : 
+                        null}
                     </div>
                     <div className='dashboardStack'>
-                        {this.renderATS(project, skillSet)}
+                        {this.renderATS(project, basicInfo, education)}
                         {project && project.length ? project.map((value,index) => <Project key={index} idx={index} data={value} isEmpty={false} /> ) : 
                          <Project data={null} isEmpty={true} />    
                         }
@@ -71,10 +74,10 @@ class TalentView extends Component {
                     <div className='dashboardStack'>
                         <div>
                             <SkillPieChart data={skillSet && skillSet.processedSKillList ? skillSet.processedSKillList : []} />
-                            <CompentencyPieChart />
-                            {skillSet && skillSet.processedSKillList ? <Certificate data={skillSet.processedSKillList} isEmpty={false} /> : 
+                            <CompentencyPieChart compentencyData={talentReq} />
+                            {/* {skillSet && skillSet.processedSKillList ? <Certificate data={skillSet.processedSKillList} isEmpty={false} /> : 
                             <Certificate data={skillSet && skillSet.processedSKillList ? skillSet.processedSKillList : []} isEmpty={true} />
-                            }
+                            } */}
                         </div>
                     </div>
                 </div>

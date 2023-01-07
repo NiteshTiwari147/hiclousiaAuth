@@ -30,11 +30,15 @@ class Dashboard extends Component {
         const {project, skillSet, candidate, education } = this.props;
         var year=0;
         var month=0;
+        var prefferedCities = [];
         if(candidate.experience) {
             year = candidate.experience.year;
             month = candidate.experience.month;
         } 
-        return <ATS projectLen={project ? project.length : 0} department={candidate.expectedDepartment} education={education} experienceYears={year} experienceMonths={month} />
+        if(candidate.expectedCities) {
+            prefferedCities = candidate.expectedCities
+        }
+        return <ATS cities={prefferedCities} projectLen={project ? project.length : 0} department={candidate.expectedDepartment} education={education} experienceYears={year} experienceMonths={month} />
     }
 
     render() {

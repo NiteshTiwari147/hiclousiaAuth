@@ -73,8 +73,11 @@ export const data = {
   };
 class CompentencyPieChart extends Component {
     render() {
-       const { compentency } = this.props;
-       if(compentency) {
+       let { compentency } = this.props;
+       if(compentency === null) {
+          compentency = this.props.compentencyData
+       }
+       if(compentency ) {
           const data = {
             labels,
             datasets: [
@@ -100,7 +103,7 @@ class CompentencyPieChart extends Component {
               <Divider style={{marginBottom: '2rem'}} color='skyblue'/>
               <Bar height={200} options={options} data={data} />
           </div>
-       }  
+       } 
     }
 };
 
